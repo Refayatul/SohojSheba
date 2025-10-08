@@ -1,4 +1,4 @@
-package com.bonfire.sohojsheba.ui.theme
+package com.bonfire.shohojsheba.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

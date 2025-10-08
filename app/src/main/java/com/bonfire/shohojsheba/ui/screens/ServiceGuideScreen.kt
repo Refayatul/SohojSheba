@@ -1,4 +1,4 @@
-package com.bonfire.sohojsheba.ui.screens
+package com.bonfire.shohojsheba.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

@@ -1,4 +1,4 @@
-package com.bonfire.sohojsheba.ui.theme
+package com.bonfire.shohojsheba.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -11,7 +11,7 @@ private val LightColors = lightColorScheme(
 )
 
 @Composable
-fun SohojShebaTheme(content: @Composable () -> Unit) {
+fun ShohojShebaTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = LightColors,
         typography = Typography,

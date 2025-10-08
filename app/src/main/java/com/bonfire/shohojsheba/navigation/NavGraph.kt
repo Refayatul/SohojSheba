@@ -1,11 +1,15 @@
-package com.bonfire.sohojsheba.navigation
+package com.bonfire.shohojsheba.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.bonfire.sohojsheba.ui.screens.*
+import com.bonfire.shohojsheba.ui.screens.HomeScreen
+import com.bonfire.shohojsheba.ui.screens.OfflineContentScreen
+import com.bonfire.shohojsheba.ui.screens.ServiceGuideScreen
+import com.bonfire.shohojsheba.ui.screens.SettingsScreen
+import com.bonfire.shohojsheba.ui.screens.SplashScreen
 
 @Composable
 fun AppNavGraph() {
