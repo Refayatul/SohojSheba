@@ -1,10 +1,10 @@
 package com.bonfire.shohojsheba.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavItem(
@@ -14,8 +14,8 @@ data class BottomNavItem(
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem("Home", "home", Icons.Default.Home),
-    BottomNavItem("Service Guide", "service_guide", Icons.Outlined.MenuBook),
-    BottomNavItem("Offline", "offline", Icons.Outlined.CloudOff),
-    BottomNavItem("Settings", "settings", Icons.Default.Settings)
+    BottomNavItem("হোম", "home", Icons.Outlined.Home),
+    BottomNavItem("বিভাগ", "departments", Icons.Outlined.Apps),
+    BottomNavItem("অফলাইন", "offline", Icons.Outlined.CloudOff),
+    BottomNavItem("সংরক্ষিত", "saved", Icons.Outlined.BookmarkBorder)
 )
