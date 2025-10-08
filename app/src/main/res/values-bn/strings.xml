@@ -4,7 +4,7 @@
     <string name="app_name">সহজ সেবা</string>
 
     <!-- Splash Screen -->
-    <string name="tagline">সবার জন্য সহজ সরকারী সেবা</string>
+    <string name="tagline">সবার জন্য সহজ সরকারি সেবা</string>
     <string name="version_label">ভার্সন</string>
     <string name="version_number">১.০.০</string>
 
@@ -29,11 +29,11 @@
     <!-- Settings Screen -->
     <string name="settings">সেটিংস</string>
     <string name="section_language">ভাষা</string>
-    <string name="section_support">সাপোর্ট</string>
+    <string name="section_support">সহায়তা</string>
     <string name="section_about">সম্পর্কে</string>
     <string name="language_bangla">বাংলা</string>
     <string name="language_english">English</string>
-    <string name="report_a_problem">সমস্যার রিপোর্ট করুন</string>
+    <string name="report_a_problem">সমস্যা রিপোর্ট করুন</string>
     <string name="provide_feedback">মতামত দিন</string>
     <string name="developers">ডেভেলপারগণ</string>
     <string name="github">গিটহাব</string>
@@ -42,24 +42,58 @@
 
     <!-- Citizen Services Page -->
     <string name="citizen_services_title">নাগরিক সেবা</string>
-    <string name="service_nid_title">জাতীয় পরিচয়পত্র নিবন্ধন</string>
-    <string name="service_nid_subtitle">নতুন জাতীয় পরিচয়পত্র নিবন্ধন করুন</string>
+    <string name="service_nid_title">জাতীয় পরিচয়পত্র নিবন্ধন</string>
+    <string name="service_nid_subtitle">নতুন জাতীয় পরিচয়পত্র নিবন্ধন করুন</string>
+    <string name="service_new_voter_reg_title">নতুন ভোটার নিবন্ধন</string>
+    <string name="service_new_voter_reg_subtitle">নতুন ভোটার নিবন্ধনের ধাপ ও প্রয়োজনীয় কাগজপত্র</string>
+    <string name="service_voter_correction_title">ভোটার সংশোধন</string>
+    <string name="service_voter_correction_subtitle">ভোটার তথ্য সংশোধনের ধাপ ও প্রয়োজনীয় কাগজপত্র</string>
     <string name="service_passport_title">পাসপোর্ট</string>
     <string name="service_passport_subtitle">পাসপোর্ট আবেদন সম্পর্কে জানুন</string>
     <string name="service_birth_cert_title">জন্ম নিবন্ধন</string>
     <string name="service_birth_cert_subtitle">জন্ম নিবন্ধন সংক্রান্ত তথ্য</string>
     <string name="service_driving_license_title">ড্রাইভিং লাইসেন্স</string>
-    <string name="service_driving_license_subtitle">ড্রাইভিং লাইসেন্স পদ্ধতি সম্পর্কে বিস্তারিত</string>
+    <string name="service_driving_license_subtitle">ড্রাইভিং লাইসেন্স প্রক্রিয়া সম্পর্কে বিস্তারিত</string>
     <string name="service_land_reg_title">ভূমি নিবন্ধন</string>
-    <string name="service_land_reg_subtitle">ভূমি নিবন্ধন সম্পর্কে তথ্য</string>
+    <string name="service_land_reg_subtitle">ভূমি নিবন্ধন সম্পর্কিত তথ্য</string>
     <string name="service_marriage_reg_title">বিবাহ নিবন্ধন</string>
     <string name="service_marriage_reg_subtitle">বিবাহ নিবন্ধন সম্পর্কে জানুন</string>
     <string name="service_voter_transfer_title">ভোটার স্থানান্তর</string>
     <string name="service_voter_transfer_subtitle">আপনার ভোট স্থানান্তরের পদ্ধতি</string>
 
+    <!-- Farmer Services -->
+    <string name="service_agri_portal_title">কৃষি বাতায়ন</string>
+    <string name="service_agri_portal_subtitle">জাতীয় কৃষি বাতায়নে প্রবেশ করুন</string>
+    <string name="service_fertilizer_rec_title">সার সুপারিশ</string>
+    <string name="service_fertilizer_rec_subtitle">বৈজ্ঞানিক সার সুপারিশ পান</string>
+    <string name="service_agri_loan_title">কৃষি ঋণ</string>
+    <string name="service_agri_loan_subtitle">কৃষকদের জন্য ঋণ সংক্রান্ত তথ্য</string>
+    <string name="service_seed_cert_title">বীজ প্রত্যয়ন</string>
+    <string name="service_seed_cert_subtitle">বীজ প্রত্যয়ন প্রক্রিয়া সম্পর্কে জানুন</string>
+
+    <!-- Entrepreneur Services -->
+    <string name="service_trade_license_title">ট্রেড লাইসেন্স</string>
+    <string name="service_trade_license_subtitle">ট্রেড লাইসেন্সের জন্য আবেদন বা নবায়ন করুন</string>
+    <string name="service_company_reg_title">কোম্পানি নিবন্ধন</string>
+    <string name="service_company_reg_subtitle">আরজেএসসি-এর সাথে নতুন কোম্পানি নিবন্ধন করুন</string>
+    <string name="service_tin_cert_title">টিআইএন সার্টিফিকেট</string>
+    <string name="service_tin_cert_subtitle">আপনার করদাতা শনাক্তকরণ নম্বর নিন</string>
+    <string name="service_vat_reg_title">ভ্যাট নিবন্ধন</string>
+    <string name="service_vat_reg_subtitle">অনলাইন ভ্যাট নিবন্ধনের বিস্তারিত</string>
+
+    <!-- Govt Office Services -->
+    <string name="service_power_div_title">বিদ্যুৎ বিভাগ সেবা</string>
+    <string name="service_power_div_subtitle">বিদ্যুৎ বিল প্রদান ও তথ্য</string>
+    <string name="service_brta_title">বিআরটিএ সেবা</string>
+    <string name="service_brta_subtitle">যানবাহন নিবন্ধন ও কর প্রদান</string>
+    <string name="service_education_board_title">শিক্ষা বোর্ডের ফলাফল</string>
+    <string name="service_education_board_subtitle">পাবলিক পরীক্ষার ফলাফল দেখুন</string>
+    <string name="service_public_procurement_title">সরকারি ক্রয় (ই-জিপি)</string>
+    <string name="service_public_procurement_subtitle">জাতীয় ই-গভর্নমেন্ট প্রকিউরমেন্ট পোর্টালে প্রবেশ করুন</string>
+
     <!-- Service Detail Page -->
     <string name="service_detail_steps">%1$d/%2$d ধাপ</string>
-    <string name="service_detail_visual_aid">ভিজ্যুয়াল এইড দেখুন</string>
+    <string name="service_detail_visual_aid">ভিজ্যুয়াল সহায়তা দেখুন</string>
 
     <!-- Other Screens -->
     <string name="departments_page_title">বিভাগ</string>

@@ -28,6 +28,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bonfire.shohojsheba.ui.screens.CitizenServicesScreen
 import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
+import com.bonfire.shohojsheba.ui.screens.EntrepreneurServicesScreen
+import com.bonfire.shohojsheba.ui.screens.FarmerServicesScreen
+import com.bonfire.shohojsheba.ui.screens.GovtOfficeServicesScreen
 import com.bonfire.shohojsheba.ui.screens.HomeScreen
 import com.bonfire.shohojsheba.ui.screens.OfflineScreen
 import com.bonfire.shohojsheba.ui.screens.SavedScreen
@@ -91,6 +94,9 @@ fun AppNavGraph() {
             composable("saved") { SavedScreen(navController) }
             composable("settings") { SettingsScreen(navController) }
             composable("citizen_services") { CitizenServicesScreen(navController) }
+            composable("farmer_services") { FarmerServicesScreen(navController) }
+            composable("entrepreneur_services") { EntrepreneurServicesScreen(navController) }
+            composable("govt_office_services") { GovtOfficeServicesScreen(navController) }
             composable(
                 route = "service_detail/{serviceId}",
                 arguments = listOf(navArgument("serviceId") { type = NavType.StringType })

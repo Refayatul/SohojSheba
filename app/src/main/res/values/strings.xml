@@ -44,6 +44,10 @@
     <string name="citizen_services_title">Citizen Services</string>
     <string name="service_nid_title">National ID Card Registration</string>
     <string name="service_nid_subtitle">Register for a new National ID card</string>
+    <string name="service_new_voter_reg_title">New Voter Registration</string>
+    <string name="service_new_voter_reg_subtitle">Steps and required documents for new voter registration</string>
+    <string name="service_voter_correction_title">Voter Correction</string>
+    <string name="service_voter_correction_subtitle">Steps and required documents for voter information correction</string>
     <string name="service_passport_title">Passport</string>
     <string name="service_passport_subtitle">Find out about passport application</string>
     <string name="service_birth_cert_title">Birth Certificate</string>
@@ -56,6 +60,36 @@
     <string name="service_marriage_reg_subtitle">Learn about marriage registration</string>
     <string name="service_voter_transfer_title">Voter Transfer</string>
     <string name="service_voter_transfer_subtitle">Procedure for transferring your vote</string>
+
+    <!-- Farmer Services -->
+    <string name="service_agri_portal_title">Krishi Batayan</string>
+    <string name="service_agri_portal_subtitle">Access the national agriculture portal</string>
+    <string name="service_fertilizer_rec_title">Fertilizer Recommendation</string>
+    <string name="service_fertilizer_rec_subtitle">Get scientific fertilizer recommendations</string>
+    <string name="service_agri_loan_title">Agricultural Loan</string>
+    <string name="service_agri_loan_subtitle">Information on loans for farmers</string>
+    <string name="service_seed_cert_title">Seed Certification</string>
+    <string name="service_seed_cert_subtitle">Learn about the seed certification process</string>
+
+    <!-- Entrepreneur Services -->
+    <string name="service_trade_license_title">Trade License</string>
+    <string name="service_trade_license_subtitle">Apply for or renew your trade license</string>
+    <string name="service_company_reg_title">Company Registration</string>
+    <string name="service_company_reg_subtitle">Register your new company with RJSC</string>
+    <string name="service_tin_cert_title">TIN Certificate</string>
+    <string name="service_tin_cert_subtitle">Get your Taxpayer\'s Identification Number</string>
+    <string name="service_vat_reg_title">VAT Registration</string>
+    <string name="service_vat_reg_subtitle">Online VAT registration details</string>
+
+    <!-- Govt Office Services -->
+    <string name="service_power_div_title">Power Division Services</string>
+    <string name="service_power_div_subtitle">Electricity bill payments and information</string>
+    <string name="service_brta_title">BRTA Services</string>
+    <string name="service_brta_subtitle">Vehicle registration and tax payment</string>
+    <string name="service_education_board_title">Education Board Results</string>
+    <string name="service_education_board_subtitle">Check public examination results</string>
+    <string name="service_public_procurement_title">Public Procurement (e-GP)</string>
+    <string name="service_public_procurement_subtitle">Access the national e-Government Procurement portal</string>
 
     <!-- Service Detail Page -->
     <string name="service_detail_steps">%1$d/%2$d Steps</string>

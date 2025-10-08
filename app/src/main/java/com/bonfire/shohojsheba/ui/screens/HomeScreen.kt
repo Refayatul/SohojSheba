@@ -130,7 +130,7 @@ fun HomeScreen(navController: NavController) {
                         icon = Icons.Outlined.Agriculture,
                         iconBackgroundColor = IconBgLightBlue,
                         iconTintColor = IconTintDarkBlue,
-                        onClick = {}
+                        onClick = { navController.navigate("farmer_services") }
                     )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -140,7 +140,7 @@ fun HomeScreen(navController: NavController) {
                         icon = Icons.Outlined.Storefront,
                         iconBackgroundColor = IconBgLightPurple,
                         iconTintColor = IconTintDarkPurple,
-                        onClick = {}
+                        onClick = { navController.navigate("entrepreneur_services") }
                     )
                     CategoryCard(
                         modifier = Modifier.weight(1f),
@@ -148,7 +148,7 @@ fun HomeScreen(navController: NavController) {
                         icon = Icons.Outlined.Apartment,
                         iconBackgroundColor = IconBgLightYellow,
                         iconTintColor = IconTintDarkYellow,
-                        onClick = {}
+                        onClick = { navController.navigate("govt_office_services") }
                     )
                 }
             }
