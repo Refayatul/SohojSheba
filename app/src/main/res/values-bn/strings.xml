@@ -40,6 +40,27 @@
     <string name="dev_dialog_title">আমাদের টিম</string>
     <string name="dialog_close">বন্ধ করুন</string>
 
+    <!-- Citizen Services Page -->
+    <string name="citizen_services_title">নাগরিক সেবা</string>
+    <string name="service_nid_title">জাতীয় পরিচয়পত্র নিবন্ধন</string>
+    <string name="service_nid_subtitle">নতুন জাতীয় পরিচয়পত্র নিবন্ধন করুন</string>
+    <string name="service_passport_title">পাসপোর্ট</string>
+    <string name="service_passport_subtitle">পাসপোর্ট আবেদন সম্পর্কে জানুন</string>
+    <string name="service_birth_cert_title">জন্ম নিবন্ধন</string>
+    <string name="service_birth_cert_subtitle">জন্ম নিবন্ধন সংক্রান্ত তথ্য</string>
+    <string name="service_driving_license_title">ড্রাইভিং লাইসেন্স</string>
+    <string name="service_driving_license_subtitle">ড্রাইভিং লাইসেন্স পদ্ধতি সম্পর্কে বিস্তারিত</string>
+    <string name="service_land_reg_title">ভূমি নিবন্ধন</string>
+    <string name="service_land_reg_subtitle">ভূমি নিবন্ধন সম্পর্কে তথ্য</string>
+    <string name="service_marriage_reg_title">বিবাহ নিবন্ধন</string>
+    <string name="service_marriage_reg_subtitle">বিবাহ নিবন্ধন সম্পর্কে জানুন</string>
+    <string name="service_voter_transfer_title">ভোটার স্থানান্তর</string>
+    <string name="service_voter_transfer_subtitle">আপনার ভোট স্থানান্তরের পদ্ধতি</string>
+
+    <!-- Service Detail Page -->
+    <string name="service_detail_steps">%1$d/%2$d ধাপ</string>
+    <string name="service_detail_visual_aid">ভিজ্যুয়াল এইড দেখুন</string>
+
     <!-- Other Screens -->
     <string name="departments_page_title">বিভাগ</string>
     <string name="offline_page_title">অফলাইন</string>

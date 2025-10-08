@@ -40,6 +40,27 @@
     <string name="dev_dialog_title">Our Team</string>
     <string name="dialog_close">Close</string>
 
+    <!-- Citizen Services Page -->
+    <string name="citizen_services_title">Citizen Services</string>
+    <string name="service_nid_title">National ID Card Registration</string>
+    <string name="service_nid_subtitle">Register for a new National ID card</string>
+    <string name="service_passport_title">Passport</string>
+    <string name="service_passport_subtitle">Find out about passport application</string>
+    <string name="service_birth_cert_title">Birth Certificate</string>
+    <string name="service_birth_cert_subtitle">Information on birth registration</string>
+    <string name="service_driving_license_title">Driving License</string>
+    <string name="service_driving_license_subtitle">Details on driving license procedures</string>
+    <string name="service_land_reg_title">Land Registration</string>
+    <string name="service_land_reg_subtitle">Information about land registration</string>
+    <string name="service_marriage_reg_title">Marriage Registration</string>
+    <string name="service_marriage_reg_subtitle">Learn about marriage registration</string>
+    <string name="service_voter_transfer_title">Voter Transfer</string>
+    <string name="service_voter_transfer_subtitle">Procedure for transferring your vote</string>
+
+    <!-- Service Detail Page -->
+    <string name="service_detail_steps">%1$d/%2$d Steps</string>
+    <string name="service_detail_visual_aid">See Visual Aid</string>
+
     <!-- Other Screens -->
     <string name="departments_page_title">Departments</string>
     <string name="offline_page_title">Offline</string>

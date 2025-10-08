@@ -122,7 +122,7 @@ fun HomeScreen(navController: NavController) {
                         icon = Icons.Outlined.Person,
                         iconBackgroundColor = IconBgLightGreen,
                         iconTintColor = IconTintDarkGreen,
-                        onClick = {}
+                        onClick = { navController.navigate("citizen_services") }
                     )
                     CategoryCard(
                         modifier = Modifier.weight(1f),

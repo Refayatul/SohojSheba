@@ -20,14 +20,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.bonfire.shohojsheba.ui.screens.CitizenServicesScreen
 import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
 import com.bonfire.shohojsheba.ui.screens.HomeScreen
 import com.bonfire.shohojsheba.ui.screens.OfflineScreen
 import com.bonfire.shohojsheba.ui.screens.SavedScreen
+import com.bonfire.shohojsheba.ui.screens.ServiceDetailScreen
 import com.bonfire.shohojsheba.ui.screens.SettingsScreen
 import com.bonfire.shohojsheba.ui.screens.SplashScreen
 
@@ -86,6 +90,16 @@ fun AppNavGraph() {
             composable("offline") { OfflineScreen(navController) }
             composable("saved") { SavedScreen(navController) }
             composable("settings") { SettingsScreen(navController) }
+            composable("citizen_services") { CitizenServicesScreen(navController) }
+            composable(
+                route = "service_detail/{serviceId}",
+                arguments = listOf(navArgument("serviceId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                ServiceDetailScreen(
+                    navController = navController,
+                    serviceId = backStackEntry.arguments?.getString("serviceId")
+                )
+            }
         }
     }
 }
