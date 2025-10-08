@@ -11,8 +11,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColors = lightColorScheme(
-    primary = GreenPrimary,
-    background = LightBackground
+    primary = AccentBlue, // A strong color for selected items
+    background = PrimaryBackground, // The main app background
+    onBackground = PrimaryTextColor, // The color for text on the background
+    surface = Color.White, // The color for surfaces like Cards
+    onSurface = PrimaryTextColor, // The color for text on surfaces
+    secondary = SecondaryTextColor // A secondary color for less important text/icons
 )
 
 @Composable
@@ -27,7 +31,6 @@ fun ShohojShebaTheme(content: @Composable () -> Unit) {
             window.navigationBarColor = Color.Transparent.toArgb()
 
             // Set system bar icon colors
-            // Since the app background is light, we need dark icons.
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
             WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = true
         }

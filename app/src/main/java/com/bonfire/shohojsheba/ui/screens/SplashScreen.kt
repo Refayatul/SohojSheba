@@ -1,21 +1,37 @@
 package com.bonfire.shohojsheba.ui.screens
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.center
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.ui.theme.SplashGradientEnd
+import com.bonfire.shohojsheba.ui.theme.SplashGradientStart
+import com.bonfire.shohojsheba.ui.theme.SplashLogoGreen
+import com.bonfire.shohojsheba.ui.theme.SplashTextTeal
 import kotlinx.coroutines.delay
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun SplashScreen(navController: NavController) {
@@ -26,17 +42,102 @@ fun SplashScreen(navController: NavController) {
         }
     }
 
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(SplashGradientStart, SplashGradientEnd)
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE8F5E9)),
+            .background(gradientBrush),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(painter = painterResource(id = R.drawable.ic_logo), contentDescription = "Logo")
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("সহজ সেবা", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
-            Text("সবার জন্য সহজ সরকারী সেবা", fontSize = 16.sp, color = Color.Gray)
+        // Main content column (Logo, Name, Tagline)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Box to stack the Canvas logo and the Text on top
+            Box(contentAlignment = Alignment.Center) {
+                AppLogoCanvas(modifier = Modifier.size(150.dp))
+                Text(
+                    text = "সেবা",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "সহজ সেবা",
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Bold,
+                color = SplashTextTeal,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "সবার জন্য সহজ সেবা",
+                fontSize = 16.sp,
+                color = SplashTextTeal,
+                textAlign = TextAlign.Center
+            )
         }
+
+        // Version number aligned to the bottom
+        Text(
+            text = "সংস্করণ ১.০.০",
+            fontSize = 14.sp,
+            color = SplashTextTeal,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 32.dp)
+        )
+    }
+}
+
+
+@Composable
+fun AppLogoCanvas(modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier) {
+        val strokeWidth = size.width * 0.06f
+
+        // Outer green ring
+        drawCircle(
+            color = SplashLogoGreen,
+            style = Stroke(width = strokeWidth)
+        )
+
+        // Inner white circle background
+        drawCircle(
+            color = Color.White,
+            radius = (size.width / 2) - (strokeWidth / 2) // Overlap slightly for seamlessness
+        )
+
+        // Green pentagon path
+        val pentagonSize = size.width * 0.6f
+        val pentagonPath = Path().apply {
+            val angle = 2 * Math.PI / 5
+            val radius = pentagonSize / 2
+            val cx = size.center.x
+            val cy = size.center.y
+            
+            moveTo(
+                x = cx + radius * cos(-Math.PI / 2).toFloat(),
+                y = cy + radius * sin(-Math.PI / 2).toFloat()
+            )
+            for (i in 1..4) {
+                lineTo(
+                    x = cx + radius * cos(-Math.PI / 2 + angle * i).toFloat(),
+                    y = cy + radius * sin(-Math.PI / 2 + angle * i).toFloat()
+                )
+            }
+            close()
+        }
+        drawPath(path = pentagonPath, color = SplashLogoGreen)
     }
 }

@@ -8,18 +8,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Agriculture
 import androidx.compose.material.icons.outlined.Apartment
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material.icons.outlined.TwoWheeler
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -38,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.ui.components.CategoryCard
 import com.bonfire.shohojsheba.ui.components.ServiceListItem
+import com.bonfire.shohojsheba.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +54,7 @@ fun HomeScreen(navController: NavController) {
                 title = { 
                     Text(
                         text = "সহজ সেবা", 
-                        color = Color(0xFF212121),
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold
                     ) 
                 },
@@ -59,22 +63,23 @@ fun HomeScreen(navController: NavController) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Settings",
-                            tint = Color(0xFF757575)
+                            tint = MaterialTheme.colorScheme.secondary
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         },
-        containerColor = Color(0xFFFAFAFA)
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             TextField(
                 value = query,
@@ -82,17 +87,17 @@ fun HomeScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(50),
                 leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = Color.Gray)
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.secondary)
                 },
                 placeholder = {
-                    Text(text = "সেবা খুঁজুন...", color = Color.Gray)
+                    Text(text = "সেবা খুঁজুন...", color = MaterialTheme.colorScheme.secondary)
                 },
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedContainerColor = Color(0xFFF1F1F1),
-                    focusedContainerColor = Color(0xFFF1F1F1)
+                    unfocusedContainerColor = SearchBarBackground,
+                    focusedContainerColor = SearchBarBackground
                 )
             )
 
@@ -100,7 +105,7 @@ fun HomeScreen(navController: NavController) {
 
             Text(
                 text = "সেবার বিভাগ",
-                color = Color(0xFF212121),
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -109,54 +114,57 @@ fun HomeScreen(navController: NavController) {
 
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        CategoryCard(
-                            title = "নাগরিক",
-                            icon = Icons.Outlined.Person,
-                            iconBackgroundColor = Color(0xFFE8F5E9),
-                            iconTintColor = Color(0xFF2E7D32),
-                            onClick = {}
-                        )
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        CategoryCard(
-                            title = "কৃষক",
-                            icon = Icons.Outlined.TwoWheeler,
-                            iconBackgroundColor = Color(0xFFE3F2FD),
-                            iconTintColor = Color(0xFF1976D2),
-                            onClick = {}
-                        )
-                    }
+                    CategoryCard(
+                        modifier = Modifier.weight(1f),
+                        title = "নাগরিক",
+                        icon = Icons.Outlined.Person,
+                        iconBackgroundColor = IconBgLightGreen,
+                        iconTintColor = IconTintDarkGreen,
+                        onClick = {}
+                    )
+                    CategoryCard(
+                        modifier = Modifier.weight(1f),
+                        title = "কৃষক",
+                        icon = Icons.Outlined.Agriculture,
+                        iconBackgroundColor = IconBgLightBlue,
+                        iconTintColor = IconTintDarkBlue,
+                        onClick = {}
+                    )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        CategoryCard(
-                            title = "উদ্যোক্তা",
-                            icon = Icons.Outlined.Storefront,
-                            iconBackgroundColor = Color(0xFFFFEBEE),
-                            iconTintColor = Color(0xFFD32F2F),
-                            onClick = {}
-                        )
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        CategoryCard(
-                            title = "সরকারি অফিস",
-                            icon = Icons.Outlined.Apartment,
-                            iconBackgroundColor = Color(0xFFFFFDE7),
-                            iconTintColor = Color(0xFFF9A825),
-                            onClick = {}
-                        )
-                    }
+                    CategoryCard(
+                        modifier = Modifier.weight(1f),
+                        title = "উদ্যোক্তা",
+                        icon = Icons.Outlined.Storefront,
+                        iconBackgroundColor = IconBgLightPurple,
+                        iconTintColor = IconTintDarkPurple,
+                        onClick = {}
+                    )
+                    CategoryCard(
+                        modifier = Modifier.weight(1f),
+                        title = "সরকারি অফিস",
+                        icon = Icons.Outlined.Apartment,
+                        iconBackgroundColor = IconBgLightYellow,
+                        iconTintColor = IconTintDarkYellow,
+                        onClick = {}
+                    )
                 }
             }
             
             Spacer(modifier = Modifier.height(24.dp))
-            
-            ServiceListItem(
-                title = "সাম্প্রতিক সেবা", 
-                subtitle = "আপনি সম্প্রতি যা দেখেছেন", 
-                onClick = { /*TODO*/ }
-            )
+
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                ServiceListItem(
+                    title = "সাম্প্রতিক সেবা",
+                    subtitle = "আপনি সম্প্রতি যা দেখেছেন",
+                    onClick = { /* Handle navigation to recent services */ }
+                )
+                ServiceListItem(
+                    title = "জনপ্রিয় সেবা",
+                    subtitle = "সবচেয়ে বেশি ব্যবহৃত সেবা",
+                    onClick = { /* Handle navigation to popular services */ }
+                )
+            }
         }
     }
 }

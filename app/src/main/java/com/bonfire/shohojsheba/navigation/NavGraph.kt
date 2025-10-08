@@ -2,6 +2,7 @@ package com.bonfire.shohojsheba.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -60,10 +61,10 @@ fun AppNavGraph() {
                                 }
                             },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Color(0xFFD32F2F),
-                                selectedTextColor = Color(0xFFD32F2F),
-                                unselectedIconColor = Color.Gray,
-                                unselectedTextColor = Color.Gray,
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                unselectedIconColor = MaterialTheme.colorScheme.secondary,
+                                unselectedTextColor = MaterialTheme.colorScheme.secondary,
                                 indicatorColor = Color.Transparent
                             )
                         )
