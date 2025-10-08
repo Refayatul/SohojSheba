@@ -20,11 +20,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.theme.SplashGradientEnd
 import com.bonfire.shohojsheba.ui.theme.SplashGradientStart
 import com.bonfire.shohojsheba.ui.theme.SplashLogoGreen
@@ -61,7 +63,7 @@ fun SplashScreen(navController: NavController) {
             Box(contentAlignment = Alignment.Center) {
                 AppLogoCanvas(modifier = Modifier.size(150.dp))
                 Text(
-                    text = "সেবা",
+                    text = "সেবা", // This is part of the logo, so it doesn't need to be translated
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
@@ -71,7 +73,7 @@ fun SplashScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "সহজ সেবা",
+                text = stringResource(id = R.string.app_name),
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
                 color = SplashTextTeal,
@@ -81,7 +83,7 @@ fun SplashScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "সবার জন্য সহজ সেবা",
+                text = stringResource(id = R.string.tagline),
                 fontSize = 16.sp,
                 color = SplashTextTeal,
                 textAlign = TextAlign.Center
@@ -90,7 +92,7 @@ fun SplashScreen(navController: NavController) {
 
         // Version number aligned to the bottom
         Text(
-            text = "সংস্করণ ১.০.০",
+            text = "${stringResource(id = R.string.version_label)} ${stringResource(id = R.string.version_number)}",
             fontSize = 14.sp,
             color = SplashTextTeal,
             modifier = Modifier

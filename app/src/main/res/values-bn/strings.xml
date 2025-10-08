@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">সহজ সেবা</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">সবার জন্য সহজ সরকারী সেবা</string>
+    <string name="version_label">ভার্সন</string>
+    <string name="version_number">১.০.০</string>
+
+    <!-- Home Screen -->
+    <string name="search_hint">সেবা খুঁজুন...</string>
+    <string name="service_categories">সেবার বিভাগ</string>
+    <string name="category_citizen">নাগরিক</string>
+    <string name="category_farmer">কৃষক</string>
+    <string name="category_entrepreneur">উদ্যোক্তা</string>
+    <string name="category_govt_office">সরকারি অফিস</string>
+    <string name="recent_services_title">সাম্প্রতিক সেবা</string>
+    <string name="recent_services_subtitle">আপনি সম্প্রতি যা দেখেছেন</string>
+    <string name="popular_services_title">জনপ্রিয় সেবা</string>
+    <string name="popular_services_subtitle">সবচেয়ে বেশি ব্যবহৃত সেবা</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">হোম</string>
+    <string name="nav_departments">ক্যাটাগরি</string>
+    <string name="nav_offline">অফলাইন</string>
+    <string name="nav_saved">সংরক্ষিত</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">সেটিংস</string>
+    <string name="section_language">ভাষা</string>
+    <string name="section_support">সাপোর্ট</string>
+    <string name="section_about">সম্পর্কে</string>
+    <string name="language_bangla">বাংলা</string>
+    <string name="language_english">English</string>
+    <string name="report_a_problem">সমস্যার রিপোর্ট করুন</string>
+    <string name="provide_feedback">মতামত দিন</string>
+    <string name="developers">ডেভেলপারগণ</string>
+    <string name="github">গিটহাব</string>
+    <string name="dev_dialog_title">আমাদের টিম</string>
+    <string name="dialog_close">বন্ধ করুন</string>
+
+    <!-- Other Screens -->
+    <string name="departments_page_title">বিভাগ</string>
+    <string name="offline_page_title">অফলাইন</string>
+    <string name="saved_page_title">সংরক্ষিত</string>
+    <string name="settings_page_title">সেটিংস</string>
+
+    <!-- Offline Content Screen -->
+    <string name="offline_content_title">এই সেবা অফলাইনে ব্যবহারযোগ্য</string>
+    <string name="offline_content_button">সেবা প্যাক ডাউনলোড করুন</string>
+</resources>

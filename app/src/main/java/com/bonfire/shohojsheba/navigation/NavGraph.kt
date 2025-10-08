@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -23,9 +24,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
 import com.bonfire.shohojsheba.ui.screens.HomeScreen
-import com.bonfire.shohojsheba.ui.screens.OfflineContentScreen
-import com.bonfire.shohojsheba.ui.screens.ServiceGuideScreen
+import com.bonfire.shohojsheba.ui.screens.OfflineScreen
+import com.bonfire.shohojsheba.ui.screens.SavedScreen
 import com.bonfire.shohojsheba.ui.screens.SettingsScreen
 import com.bonfire.shohojsheba.ui.screens.SplashScreen
 
@@ -48,7 +50,7 @@ fun AppNavGraph() {
                     bottomNavItems.forEachIndexed { index, screen ->
                         NavigationBarItem(
                             icon = { Icon(screen.icon, contentDescription = null) },
-                            label = { Text(screen.title) },
+                            label = { Text(stringResource(id = screen.title)) },
                             selected = selectedItem == index,
                             onClick = {
                                 selectedItem = index
@@ -80,11 +82,9 @@ fun AppNavGraph() {
         ) {
             composable("splash") { SplashScreen(navController) }
             composable("home") { HomeScreen(navController) }
-            // These routes are not in the new bottom nav, but we'll keep them for now
-            composable("service_guide") { ServiceGuideScreen(navController) }
-            composable("departments") { /* Replace with Departments Screen */ }
-            composable("saved") { /* Replace with Saved Screen */ }
-            composable("offline") { OfflineContentScreen(navController) }
+            composable("departments") { DepartmentsScreen(navController) }
+            composable("offline") { OfflineScreen(navController) }
+            composable("saved") { SavedScreen(navController) }
             composable("settings") { SettingsScreen(navController) }
         }
     }

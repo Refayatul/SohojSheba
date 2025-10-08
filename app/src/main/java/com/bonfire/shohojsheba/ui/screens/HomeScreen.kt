@@ -35,10 +35,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.components.CategoryCard
 import com.bonfire.shohojsheba.ui.components.ServiceListItem
 import com.bonfire.shohojsheba.ui.theme.*
@@ -53,7 +55,7 @@ fun HomeScreen(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = { 
                     Text(
-                        text = "সহজ সেবা", 
+                        text = stringResource(id = R.string.app_name), 
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold
                     ) 
@@ -62,7 +64,7 @@ fun HomeScreen(navController: NavController) {
                     IconButton(onClick = { navController.navigate("settings") }) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
-                            contentDescription = "Settings",
+                            contentDescription = stringResource(id = R.string.settings),
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
@@ -90,7 +92,7 @@ fun HomeScreen(navController: NavController) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.secondary)
                 },
                 placeholder = {
-                    Text(text = "সেবা খুঁজুন...", color = MaterialTheme.colorScheme.secondary)
+                    Text(text = stringResource(id = R.string.search_hint), color = MaterialTheme.colorScheme.secondary)
                 },
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
@@ -104,7 +106,7 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "সেবার বিভাগ",
+                text = stringResource(id = R.string.service_categories),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
@@ -116,7 +118,7 @@ fun HomeScreen(navController: NavController) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     CategoryCard(
                         modifier = Modifier.weight(1f),
-                        title = "নাগরিক",
+                        title = stringResource(id = R.string.category_citizen),
                         icon = Icons.Outlined.Person,
                         iconBackgroundColor = IconBgLightGreen,
                         iconTintColor = IconTintDarkGreen,
@@ -124,7 +126,7 @@ fun HomeScreen(navController: NavController) {
                     )
                     CategoryCard(
                         modifier = Modifier.weight(1f),
-                        title = "কৃষক",
+                        title = stringResource(id = R.string.category_farmer),
                         icon = Icons.Outlined.Agriculture,
                         iconBackgroundColor = IconBgLightBlue,
                         iconTintColor = IconTintDarkBlue,
@@ -134,7 +136,7 @@ fun HomeScreen(navController: NavController) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     CategoryCard(
                         modifier = Modifier.weight(1f),
-                        title = "উদ্যোক্তা",
+                        title = stringResource(id = R.string.category_entrepreneur),
                         icon = Icons.Outlined.Storefront,
                         iconBackgroundColor = IconBgLightPurple,
                         iconTintColor = IconTintDarkPurple,
@@ -142,7 +144,7 @@ fun HomeScreen(navController: NavController) {
                     )
                     CategoryCard(
                         modifier = Modifier.weight(1f),
-                        title = "সরকারি অফিস",
+                        title = stringResource(id = R.string.category_govt_office),
                         icon = Icons.Outlined.Apartment,
                         iconBackgroundColor = IconBgLightYellow,
                         iconTintColor = IconTintDarkYellow,
@@ -155,13 +157,13 @@ fun HomeScreen(navController: NavController) {
 
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 ServiceListItem(
-                    title = "সাম্প্রতিক সেবা",
-                    subtitle = "আপনি সম্প্রতি যা দেখেছেন",
+                    title = stringResource(id = R.string.recent_services_title),
+                    subtitle = stringResource(id = R.string.recent_services_subtitle),
                     onClick = { /* Handle navigation to recent services */ }
                 )
                 ServiceListItem(
-                    title = "জনপ্রিয় সেবা",
-                    subtitle = "সবচেয়ে বেশি ব্যবহৃত সেবা",
+                    title = stringResource(id = R.string.popular_services_title),
+                    subtitle = stringResource(id = R.string.popular_services_subtitle),
                     onClick = { /* Handle navigation to popular services */ }
                 )
             }
