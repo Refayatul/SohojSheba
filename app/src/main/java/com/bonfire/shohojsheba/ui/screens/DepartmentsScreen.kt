@@ -4,8 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Agriculture
 import androidx.compose.material.icons.outlined.Apartment
@@ -19,42 +20,62 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.models.Service
-import com.bonfire.shohojsheba.ui.components.ServiceRow
+import com.bonfire.shohojsheba.ui.components.CategoryCard
+import com.bonfire.shohojsheba.ui.theme.IconBgLightBlue
+import com.bonfire.shohojsheba.ui.theme.IconBgLightGreen
+import com.bonfire.shohojsheba.ui.theme.IconBgLightPurple
+import com.bonfire.shohojsheba.ui.theme.IconBgLightYellow
+import com.bonfire.shohojsheba.ui.theme.IconTintDarkBlue
+import com.bonfire.shohojsheba.ui.theme.IconTintDarkGreen
+import com.bonfire.shohojsheba.ui.theme.IconTintDarkPurple
+import com.bonfire.shohojsheba.ui.theme.IconTintDarkYellow
+
+private data class DepartmentCategory(
+    val route: String,
+    val titleRes: Int,
+    val icon: ImageVector,
+    val iconBackgroundColor: androidx.compose.ui.graphics.Color,
+    val iconTintColor: androidx.compose.ui.graphics.Color
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepartmentsScreen(navController: NavController) {
 
     val departmentCategories = listOf(
-        Service(
-            id = "citizen_services",
-            icon = Icons.Outlined.Person,
+        DepartmentCategory(
+            route = "citizen_services",
             titleRes = R.string.category_citizen,
-            subtitleRes = R.string.citizen_services_title
+            icon = Icons.Outlined.Person,
+            iconBackgroundColor = IconBgLightGreen,
+            iconTintColor = IconTintDarkGreen
         ),
-        Service(
-            id = "farmer_services",
-            icon = Icons.Outlined.Agriculture,
+        DepartmentCategory(
+            route = "farmer_services",
             titleRes = R.string.category_farmer,
-            subtitleRes = R.string.service_agri_portal_subtitle
+            icon = Icons.Outlined.Agriculture,
+            iconBackgroundColor = IconBgLightBlue,
+            iconTintColor = IconTintDarkBlue
         ),
-        Service(
-            id = "entrepreneur_services",
-            icon = Icons.Outlined.Storefront,
+        DepartmentCategory(
+            route = "entrepreneur_services",
             titleRes = R.string.category_entrepreneur,
-            subtitleRes = R.string.service_trade_license_subtitle
+            icon = Icons.Outlined.Storefront,
+            iconBackgroundColor = IconBgLightPurple,
+            iconTintColor = IconTintDarkPurple
         ),
-        Service(
-            id = "govt_office_services",
-            icon = Icons.Outlined.Apartment,
+        DepartmentCategory(
+            route = "govt_office_services",
             titleRes = R.string.category_govt_office,
-            subtitleRes = R.string.service_public_procurement_subtitle
+            icon = Icons.Outlined.Apartment,
+            iconBackgroundColor = IconBgLightYellow,
+            iconTintColor = IconTintDarkYellow
         )
     )
 
@@ -75,17 +96,23 @@ fun DepartmentsScreen(navController: NavController) {
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(departmentCategories) { service ->
-                ServiceRow(service = service) {
-                    navController.navigate(service.id)
-                }
+            items(departmentCategories) { category ->
+                CategoryCard(
+                    title = stringResource(id = category.titleRes),
+                    icon = category.icon,
+                    iconBackgroundColor = category.iconBackgroundColor,
+                    iconTintColor = category.iconTintColor,
+                    onClick = { navController.navigate(category.route) }
+                )
             }
         }
     }

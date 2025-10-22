@@ -7,14 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,34 +29,23 @@ import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.ui.components.ServiceRow
-import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
-import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.UserDataUiState
+import com.bonfire.shohojsheba.ui.viewmodels.UserDataViewModel
+import com.bonfire.shohojsheba.ui.viewmodels.UserDataViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceListScreen(
-    navController: NavController, 
-    category: String, 
-    title: Int
-) {
+fun FavoritesScreen(navController: NavController) {
     val context = LocalContext.current
     val repository = RepositoryProvider.getRepository(context)
-    val viewModel: ServicesViewModel = viewModel(
-        factory = ServicesViewModelFactory(repository, context)
+    val viewModel: UserDataViewModel = viewModel(
+        factory = UserDataViewModelFactory(repository)
     )
-
-    viewModel.loadServicesByCategory(category)
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(id = title), fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
+                title = { Text(stringResource(id = R.string.favorites_page_title), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
                 )
@@ -68,7 +53,7 @@ fun ServiceListScreen(
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
-        val uiState by viewModel.uiState.collectAsState()
+        val uiState by viewModel.favoritesUiState.collectAsState()
 
         Box(
             modifier = Modifier
@@ -76,19 +61,19 @@ fun ServiceListScreen(
                 .padding(padding)
         ) {
             when (val state = uiState) {
-                is ServicesUiState.Loading -> {
+                is UserDataUiState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-                is ServicesUiState.Success -> {
-                    if (state.services.isEmpty()) {
-                        Text("No services found.", modifier = Modifier.align(Alignment.Center))
+                is UserDataUiState.Favorites -> {
+                    if (state.favorites.isEmpty()) {
+                        Text("No favorites yet.", modifier = Modifier.align(Alignment.Center))
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(state.services) { service ->
+                            items(state.favorites) { service ->
                                 ServiceRow(service = service) {
                                     navController.navigate("service_detail/${service.id}")
                                 }
@@ -96,12 +81,13 @@ fun ServiceListScreen(
                         }
                     }
                 }
-                is ServicesUiState.Error -> {
+                is UserDataUiState.Error -> {
                     Text(state.message, modifier = Modifier.align(Alignment.Center))
-                    Button(onClick = { viewModel.loadServicesByCategory(category) }) {
+                    Button(onClick = { /* Implement retry logic */ }) {
                         Text("Retry")
                     }
                 }
+                else -> {}
             }
         }
     }

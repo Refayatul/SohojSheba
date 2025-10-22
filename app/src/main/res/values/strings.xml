@@ -101,6 +101,7 @@
     <string name="history_page_title">History</string>
     <string name="saved_page_title">Saved</string>
     <string name="settings_page_title">Settings</string>
+    <string name="favorites_page_title">Favorites</string>
 
     <!-- History Content Screen -->
     <string name="clear_history_title">Clear all history</string>

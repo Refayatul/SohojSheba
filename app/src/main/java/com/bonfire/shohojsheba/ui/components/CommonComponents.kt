@@ -28,11 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bonfire.shohojsheba.models.Service
+import com.bonfire.shohojsheba.data.database.entities.Service
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,7 @@ fun CategoryCard(
         onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -69,7 +70,7 @@ fun CategoryCard(
             Text(
                 text = title,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF212121),
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 14.sp
             )
         }
@@ -83,7 +84,7 @@ fun ServiceListItem(title: String, subtitle: String, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -95,18 +96,18 @@ fun ServiceListItem(title: String, subtitle: String, onClick: () -> Unit) {
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = Color(0xFF212121)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = subtitle,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = Color.Gray
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -138,8 +139,8 @@ fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Serv
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = service.icon, // Use service.icon
-                    contentDescription = null,
+                    painter = painterResource(id = service.iconRes),
+                    contentDescription = stringResource(id = service.titleRes),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(28.dp)
                 )
@@ -147,13 +148,13 @@ fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Serv
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(id = service.titleRes), // Use service.titleRes
+                    text = stringResource(id = service.titleRes),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = stringResource(id = service.subtitleRes), // Use service.subtitleRes
+                    text = stringResource(id = service.subtitleRes),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

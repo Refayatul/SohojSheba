@@ -27,13 +27,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.citizenServices
-import com.bonfire.shohojsheba.data.entrepreneurServices
-import com.bonfire.shohojsheba.data.farmerServices
-import com.bonfire.shohojsheba.data.govtOfficeServices
 import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
-import com.bonfire.shohojsheba.ui.screens.HomeScreen
+import com.bonfire.shohojsheba.ui.screens.FavoritesScreen
 import com.bonfire.shohojsheba.ui.screens.HistoryScreen
+import com.bonfire.shohojsheba.ui.screens.HomeScreen
 import com.bonfire.shohojsheba.ui.screens.SavedScreen
 import com.bonfire.shohojsheba.ui.screens.ServiceDetailScreen
 import com.bonfire.shohojsheba.ui.screens.ServiceListScreen
@@ -93,34 +90,35 @@ fun AppNavGraph() {
             composable("home") { HomeScreen(navController) }
             composable("departments") { DepartmentsScreen(navController) }
             composable("history") { HistoryScreen(navController) }
+            composable("favorites") { FavoritesScreen(navController) }
             composable("saved") { SavedScreen(navController) }
             composable("settings") { SettingsScreen(navController) }
             composable("citizen_services") { 
                 ServiceListScreen(
                     navController = navController, 
-                    title = R.string.category_citizen,
-                    services = citizenServices
+                    category = "citizen",
+                    title = R.string.category_citizen
                 ) 
             }
             composable("farmer_services") { 
                 ServiceListScreen(
                     navController = navController, 
-                    title = R.string.category_farmer,
-                    services = farmerServices
+                    category = "farmer",
+                    title = R.string.category_farmer
                 ) 
             }
             composable("entrepreneur_services") { 
                 ServiceListScreen(
                     navController = navController, 
-                    title = R.string.category_entrepreneur,
-                    services = entrepreneurServices
+                    category = "entrepreneur",
+                    title = R.string.category_entrepreneur
                 ) 
             }
             composable("govt_office_services") { 
                 ServiceListScreen(
                     navController = navController, 
-                    title = R.string.category_govt_office,
-                    services = govtOfficeServices
+                    category = "govt_office",
+                    title = R.string.category_govt_office
                 ) 
             }
             composable(
