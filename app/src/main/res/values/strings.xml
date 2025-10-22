@@ -18,14 +18,14 @@
     <string name="category_govt_office">Govt. Office</string>
     <string name="recent_services_title">Recent Services</string>
     <string name="recent_services_subtitle">What you have seen recently</string>
-    <string name="popular_services_title">Popular Services</string>
-    <string name="popular_services_subtitle">Most used services</string>
+    <string name="favorite_services_title">Favorite Services</string>
+    <string name="favorite_services_subtitle">Your favorite services</string>
 
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_departments">Categories</string>
     <string name="nav_history">History</string>
-    <string name="nav_saved">Saved</string>
+    <string name="nav_favorites">Favorites</string>
 
     <!-- Settings Screen -->
     <string name="settings">Settings</string>
@@ -71,6 +71,10 @@
     <string name="service_agri_loan_subtitle">Information on loans for farmers</string>
     <string name="service_seed_cert_title">Seed Certification</string>
     <string name="service_seed_cert_subtitle">Learn about the seed certification process</string>
+    <string name="service_fisheries_reg_title">Fisheries Registration</string>
+    <string name="service_fisheries_reg_subtitle">Register as a commercial fisherman</string>
+    <string name="service_livestock_reg_title">Livestock Registration</string>
+    <string name="service_livestock_reg_subtitle">Register your commercial livestock farm</string>
 
     <!-- Entrepreneur Services -->
     <string name="service_trade_license_title">Trade License</string>
@@ -81,6 +85,10 @@
     <string name="service_tin_cert_subtitle">Get your Taxpayer\'s Identification Number</string>
     <string name="service_vat_reg_title">VAT Registration</string>
     <string name="service_vat_reg_subtitle">Online VAT registration details</string>
+    <string name="service_import_reg_title">Import Registration</string>
+    <string name="service_import_reg_subtitle">IRC for commercial importers</string>
+    <string name="service_export_reg_title">Export Registration</string>
+    <string name="service_export_reg_subtitle">ERC for commercial exporters</string>
 
     <!-- Govt Office Services -->
     <string name="service_power_div_title">Power Division Services</string>
@@ -91,6 +99,10 @@
     <string name="service_education_board_subtitle">Check public examination results</string>
     <string name="service_public_procurement_title">Public Procurement (e-GP)</string>
     <string name="service_public_procurement_subtitle">Access the national e-Government Procurement portal</string>
+    <string name="service_land_tax_title">Land Tax Payment</string>
+    <string name="service_land_tax_subtitle">Pay your land development tax online</string>
+    <string name="service_mutation_title">Land Mutation</string>
+    <string name="service_mutation_subtitle">Apply for land mutation online</string>
 
     <!-- Service Detail Page -->
     <string name="service_detail_steps">%1$d/%2$d Steps</string>

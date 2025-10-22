@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,8 +41,8 @@ private data class DepartmentCategory(
     val route: String,
     val titleRes: Int,
     val icon: ImageVector,
-    val iconBackgroundColor: androidx.compose.ui.graphics.Color,
-    val iconTintColor: androidx.compose.ui.graphics.Color
+    val iconBackgroundColor: Color,
+    val iconTintColor: Color
 )
 
 @OptIn(ExperimentalMaterial3Api::class)

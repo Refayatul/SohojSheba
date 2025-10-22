@@ -114,8 +114,9 @@ fun HomeScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(24.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         ServiceListItem(title = stringResource(id = R.string.recent_services_title), subtitle = stringResource(id = R.string.recent_services_subtitle), onClick = { navController.navigate("history") })
-                        ServiceListItem(title = stringResource(id = R.string.popular_services_title), subtitle = stringResource(id = R.string.popular_services_subtitle), onClick = { navController.navigate("favorites") })
+                        ServiceListItem(title = stringResource(id = R.string.favorite_services_title), subtitle = stringResource(id = R.string.favorite_services_subtitle), onClick = { navController.navigate("favorites") })
                     }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             } else {
                 when(val state = uiState) {

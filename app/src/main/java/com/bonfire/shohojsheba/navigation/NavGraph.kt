@@ -31,7 +31,6 @@ import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
 import com.bonfire.shohojsheba.ui.screens.FavoritesScreen
 import com.bonfire.shohojsheba.ui.screens.HistoryScreen
 import com.bonfire.shohojsheba.ui.screens.HomeScreen
-import com.bonfire.shohojsheba.ui.screens.SavedScreen
 import com.bonfire.shohojsheba.ui.screens.ServiceDetailScreen
 import com.bonfire.shohojsheba.ui.screens.ServiceListScreen
 import com.bonfire.shohojsheba.ui.screens.SettingsScreen
@@ -91,7 +90,6 @@ fun AppNavGraph() {
             composable("departments") { DepartmentsScreen(navController) }
             composable("history") { HistoryScreen(navController) }
             composable("favorites") { FavoritesScreen(navController) }
-            composable("saved") { SavedScreen(navController) }
             composable("settings") { SettingsScreen(navController) }
             composable("citizen_services") { 
                 ServiceListScreen(
