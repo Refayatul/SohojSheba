@@ -7,6 +7,7 @@
     <string name="tagline">সবার জন্য সহজ সরকারি সেবা</string>
     <string name="version_label">ভার্সন</string>
     <string name="version_number">১.০.০</string>
+    <string name="version_name">বেটা</string>
 
     <!-- Home Screen -->
     <string name="search_hint">সেবা খুঁজুন...</string>

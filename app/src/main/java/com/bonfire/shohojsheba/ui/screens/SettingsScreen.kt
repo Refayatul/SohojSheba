@@ -41,7 +41,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -164,6 +169,15 @@ private fun AboutSection() {
         DeveloperDialog(onDismiss = { showDevDialog = false })
     }
 
+    val versionNumber = stringResource(id = R.string.version_number)
+    val versionName = stringResource(id = R.string.version_name)
+    val annotatedVersionString = buildAnnotatedString {
+        append(versionNumber)
+        withStyle(style = SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 12.sp)) {
+            append(versionName)
+        }
+    }
+
     Column {
         SectionTitle(title = stringResource(id = R.string.section_about))
         Spacer(modifier = Modifier.height(8.dp))
@@ -181,7 +195,7 @@ private fun AboutSection() {
             Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF1F1F1))
             SettingsRow(title = stringResource(id = R.string.developers), onClick = { showDevDialog = true })
             Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF1F1F1))
-            SettingsInfoRow(label = stringResource(id = R.string.version_label), value = stringResource(id = R.string.version_number))
+            SettingsInfoRowWithAnnotatedValue(label = stringResource(id = R.string.version_label), value = annotatedVersionString)
         }
     }
 }
@@ -224,6 +238,20 @@ private fun SettingsRow(title: String, onClick: () -> Unit) {
 
 @Composable
 private fun SettingsInfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = label, fontSize = 18.sp)
+        Text(text = value, fontSize = 18.sp, color = MaterialTheme.colorScheme.secondary)
+    }
+}
+
+@Composable
+private fun SettingsInfoRowWithAnnotatedValue(label: String, value: AnnotatedString) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

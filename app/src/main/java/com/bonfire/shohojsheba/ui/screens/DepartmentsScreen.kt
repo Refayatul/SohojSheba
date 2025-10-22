@@ -24,35 +24,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.models.Service
+import com.bonfire.shohojsheba.ui.components.ServiceRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepartmentsScreen(navController: NavController) {
 
     val departmentCategories = listOf(
-        CitizenServiceItem(
+        Service(
+            id = "citizen_services",
             icon = Icons.Outlined.Person,
             titleRes = R.string.category_citizen,
-            subtitleRes = R.string.citizen_services_title,
-            onClick = { navController.navigate("citizen_services") }
+            subtitleRes = R.string.citizen_services_title
         ),
-        CitizenServiceItem(
+        Service(
+            id = "farmer_services",
             icon = Icons.Outlined.Agriculture,
             titleRes = R.string.category_farmer,
-            subtitleRes = R.string.service_agri_portal_subtitle,
-            onClick = { navController.navigate("farmer_services") }
+            subtitleRes = R.string.service_agri_portal_subtitle
         ),
-        CitizenServiceItem(
+        Service(
+            id = "entrepreneur_services",
             icon = Icons.Outlined.Storefront,
             titleRes = R.string.category_entrepreneur,
-            subtitleRes = R.string.service_trade_license_subtitle,
-            onClick = { navController.navigate("entrepreneur_services") }
+            subtitleRes = R.string.service_trade_license_subtitle
         ),
-        CitizenServiceItem(
+        Service(
+            id = "govt_office_services",
             icon = Icons.Outlined.Apartment,
             titleRes = R.string.category_govt_office,
-            subtitleRes = R.string.service_public_procurement_subtitle,
-            onClick = { navController.navigate("govt_office_services") }
+            subtitleRes = R.string.service_public_procurement_subtitle
         )
     )
 
@@ -81,7 +83,9 @@ fun DepartmentsScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(departmentCategories) { service ->
-                ServiceRow(service = service)
+                ServiceRow(service = service) {
+                    navController.navigate(service.id)
+                }
             }
         }
     }

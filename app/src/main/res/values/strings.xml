@@ -7,6 +7,7 @@
     <string name="tagline">Easy government services for everyone</string>
     <string name="version_label">Version</string>
     <string name="version_number">1.0.0</string>
+    <string name="version_name">ᴮᵉᵗᵃ</string>
 
     <!-- Home Screen -->
     <string name="search_hint">Search for services…</string>

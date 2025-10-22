@@ -1,6 +1,7 @@
 package com.bonfire.shohojsheba.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,45 +36,47 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.data.allServices
 import com.bonfire.shohojsheba.ui.components.CategoryCard
 import com.bonfire.shohojsheba.ui.components.ServiceListItem
+import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
     var query by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    val filteredServices = remember(query, allServices) {
+        if (query.isBlank()) {
+            emptyList()
+        } else {
+            allServices.filter { service ->
+                val title = context.getString(service.titleRes).lowercase()
+                val subtitle = context.getString(service.subtitleRes).lowercase()
+                val q = query.lowercase()
+                title.contains(q) || subtitle.contains(q)
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { 
-                    Text(
-                        text = stringResource(id = R.string.app_name), 
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold
-                    ) 
-                },
-                actions = {
-                    IconButton(onClick = { navController.navigate("settings") }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Settings,
-                            contentDescription = stringResource(id = R.string.settings),
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
+                title = { Text(text = stringResource(id = R.string.app_name), color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold) },
+                actions = { IconButton(onClick = { navController.navigate("settings") }) { Icon(imageVector = Icons.Outlined.Settings, contentDescription = stringResource(id = R.string.settings), tint = MaterialTheme.colorScheme.secondary) } },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -80,92 +85,56 @@ fun HomeScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp)
         ) {
             TextField(
                 value = query,
                 onValueChange = { query = it },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 shape = RoundedCornerShape(50),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.secondary)
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.search_hint), color = MaterialTheme.colorScheme.secondary)
-                },
+                leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.secondary) },
+                placeholder = { Text(text = stringResource(id = R.string.search_hint), color = MaterialTheme.colorScheme.secondary) },
                 colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    unfocusedContainerColor = SearchBarBackground,
-                    focusedContainerColor = SearchBarBackground
+                    focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent, disabledIndicatorColor = Color.Transparent,
+                    unfocusedContainerColor = SearchBarBackground, focusedContainerColor = SearchBarBackground
                 )
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(id = R.string.service_categories),
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    CategoryCard(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(id = R.string.category_citizen),
-                        icon = Icons.Outlined.Person,
-                        iconBackgroundColor = IconBgLightGreen,
-                        iconTintColor = IconTintDarkGreen,
-                        onClick = { navController.navigate("citizen_services") }
-                    )
-                    CategoryCard(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(id = R.string.category_farmer),
-                        icon = Icons.Outlined.Agriculture,
-                        iconBackgroundColor = IconBgLightBlue,
-                        iconTintColor = IconTintDarkBlue,
-                        onClick = { navController.navigate("farmer_services") }
-                    )
+            if (query.isBlank()) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Spacer(modifier = Modifier.height(40.dp))
+                    Text(text = stringResource(id = R.string.service_categories), color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            CategoryCard(modifier = Modifier.weight(1f), title = stringResource(id = R.string.category_citizen), icon = Icons.Outlined.Person, iconBackgroundColor = IconBgLightGreen, iconTintColor = IconTintDarkGreen, onClick = { navController.navigate("citizen_services") })
+                            CategoryCard(modifier = Modifier.weight(1f), title = stringResource(id = R.string.category_farmer), icon = Icons.Outlined.Agriculture, iconBackgroundColor = IconBgLightBlue, iconTintColor = IconTintDarkBlue, onClick = { navController.navigate("farmer_services") })
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            CategoryCard(modifier = Modifier.weight(1f), title = stringResource(id = R.string.category_entrepreneur), icon = Icons.Outlined.Storefront, iconBackgroundColor = IconBgLightPurple, iconTintColor = IconTintDarkPurple, onClick = { navController.navigate("entrepreneur_services") })
+                            CategoryCard(modifier = Modifier.weight(1f), title = stringResource(id = R.string.category_govt_office), icon = Icons.Outlined.Apartment, iconBackgroundColor = IconBgLightYellow, iconTintColor = IconTintDarkYellow, onClick = { navController.navigate("govt_office_services") })
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        ServiceListItem(title = stringResource(id = R.string.recent_services_title), subtitle = stringResource(id = R.string.recent_services_subtitle), onClick = { /* TODO */ })
+                        ServiceListItem(title = stringResource(id = R.string.popular_services_title), subtitle = stringResource(id = R.string.popular_services_subtitle), onClick = { /* TODO */ })
+                    }
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    CategoryCard(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(id = R.string.category_entrepreneur),
-                        icon = Icons.Outlined.Storefront,
-                        iconBackgroundColor = IconBgLightPurple,
-                        iconTintColor = IconTintDarkPurple,
-                        onClick = { navController.navigate("entrepreneur_services") }
-                    )
-                    CategoryCard(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(id = R.string.category_govt_office),
-                        icon = Icons.Outlined.Apartment,
-                        iconBackgroundColor = IconBgLightYellow,
-                        iconTintColor = IconTintDarkYellow,
-                        onClick = { navController.navigate("govt_office_services") }
-                    )
+            } else {
+                if (filteredServices.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize().padding(top = 32.dp), contentAlignment = Alignment.TopCenter) {
+                        Text("No services found for \"$query\"")
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(filteredServices) { service ->
+                            ServiceRow(service = service) {
+                                navController.navigate("service_detail/${service.id}")
+                            }
+                        }
+                    }
                 }
-            }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                ServiceListItem(
-                    title = stringResource(id = R.string.recent_services_title),
-                    subtitle = stringResource(id = R.string.recent_services_subtitle),
-                    onClick = { /* Handle navigation to recent services */ }
-                )
-                ServiceListItem(
-                    title = stringResource(id = R.string.popular_services_title),
-                    subtitle = stringResource(id = R.string.popular_services_subtitle),
-                    onClick = { /* Handle navigation to popular services */ }
-                )
             }
         }
     }
