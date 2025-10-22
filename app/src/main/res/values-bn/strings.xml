@@ -23,7 +23,7 @@
     <!-- Bottom Navigation -->
     <string name="nav_home">হোম</string>
     <string name="nav_departments">ক্যাটাগরি</string>
-    <string name="nav_offline">অফলাইন</string>
+    <string name="nav_history">হিস্টোরি</string>
     <string name="nav_saved">সংরক্ষিত</string>
 
     <!-- Settings Screen -->
@@ -97,11 +97,11 @@
 
     <!-- Other Screens -->
     <string name="departments_page_title">বিভাগ</string>
-    <string name="offline_page_title">অফলাইন</string>
+    <string name="history_page_title">হিস্টোরি</string>
     <string name="saved_page_title">সংরক্ষিত</string>
     <string name="settings_page_title">সেটিংস</string>
 
-    <!-- Offline Content Screen -->
-    <string name="offline_content_title">এই সেবা অফলাইনে ব্যবহারযোগ্য</string>
-    <string name="offline_content_button">সেবা প্যাক ডাউনলোড করুন</string>
+    <!-- History Content Screen -->
+    <string name="clear_history_title">হিস্টোরি মুছে ফেলুন</string>
+    <string name="clear_history_button">হিস্টোরি মুছুন</string>
 </resources>

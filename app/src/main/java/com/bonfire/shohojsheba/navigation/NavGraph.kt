@@ -32,7 +32,7 @@ import com.bonfire.shohojsheba.ui.screens.EntrepreneurServicesScreen
 import com.bonfire.shohojsheba.ui.screens.FarmerServicesScreen
 import com.bonfire.shohojsheba.ui.screens.GovtOfficeServicesScreen
 import com.bonfire.shohojsheba.ui.screens.HomeScreen
-import com.bonfire.shohojsheba.ui.screens.OfflineScreen
+import com.bonfire.shohojsheba.ui.screens.HistoryScreen
 import com.bonfire.shohojsheba.ui.screens.SavedScreen
 import com.bonfire.shohojsheba.ui.screens.ServiceDetailScreen
 import com.bonfire.shohojsheba.ui.screens.SettingsScreen
@@ -90,7 +90,7 @@ fun AppNavGraph() {
             composable("splash") { SplashScreen(navController) }
             composable("home") { HomeScreen(navController) }
             composable("departments") { DepartmentsScreen(navController) }
-            composable("offline") { OfflineScreen(navController) }
+            composable("history") { HistoryScreen(navController) }
             composable("saved") { SavedScreen(navController) }
             composable("settings") { SettingsScreen(navController) }
             composable("citizen_services") { CitizenServicesScreen(navController) }

@@ -19,13 +19,13 @@ import com.bonfire.shohojsheba.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OfflineScreen(navController: NavController) {
+fun HistoryScreen(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.offline_page_title),
+                        text = stringResource(id = R.string.history_page_title),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold
                     )
@@ -43,7 +43,7 @@ fun OfflineScreen(navController: NavController) {
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-            Text(stringResource(id = R.string.offline_page_title))
+            Text(stringResource(id = R.string.history_page_title))
         }
     }
 }

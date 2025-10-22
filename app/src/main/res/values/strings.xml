@@ -23,7 +23,7 @@
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_departments">Categories</string>
-    <string name="nav_offline">Offline</string>
+    <string name="nav_history">History</string>
     <string name="nav_saved">Saved</string>
 
     <!-- Settings Screen -->
@@ -97,11 +97,11 @@
 
     <!-- Other Screens -->
     <string name="departments_page_title">Departments</string>
-    <string name="offline_page_title">Offline</string>
+    <string name="history_page_title">History</string>
     <string name="saved_page_title">Saved</string>
     <string name="settings_page_title">Settings</string>
 
-    <!-- Offline Content Screen -->
-    <string name="offline_content_title">This service is available offline</string>
-    <string name="offline_content_button">Download Service Pack</string>
+    <!-- History Content Screen -->
+    <string name="clear_history_title">Clear all history</string>
+    <string name="clear_history_button">Clear History</string>
 </resources>
