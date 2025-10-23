@@ -7,12 +7,13 @@ import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.repositories.Repository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 
 sealed class ServicesUiState {
     object Loading : ServicesUiState()
@@ -23,44 +24,44 @@ sealed class ServicesUiState {
 @OptIn(FlowPreview::class)
 class ServicesViewModel(private val repository: Repository, private val context: Context) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ServicesUiState>(ServicesUiState.Loading)
-    val uiState: StateFlow<ServicesUiState> = _uiState.asStateFlow()
-
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    init {
-        val allServicesFlow = repository.getAllServices()
+    private val _category = MutableStateFlow<String?>(null)
 
-        _searchQuery
-            .debounce(300)
-            .combine(allServicesFlow) { query, services ->
+    val uiState: StateFlow<ServicesUiState> = _category
+        .flatMapLatest { category ->
+            val servicesFlow = if (category == null) {
+                repository.getAllServices()
+            } else {
+                repository.getServicesByCategory(category)
+            }
+
+            _searchQuery.debounce(300).combine(servicesFlow) { query, services ->
                 if (query.isBlank()) {
-                    services // Return all services if query is blank
+                    ServicesUiState.Success(services)
                 } else {
-                    services.filter { service ->
+                    val filteredList = services.filter { service ->
                         val title = context.getString(service.titleRes).lowercase()
                         val subtitle = context.getString(service.subtitleRes).lowercase()
                         val q = query.lowercase()
                         title.contains(q) || subtitle.contains(q)
                     }
+                    ServicesUiState.Success(filteredList)
                 }
             }
-            .onEach { filteredServices ->
-                _uiState.value = ServicesUiState.Success(filteredServices)
-            }
-            .launchIn(viewModelScope)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = ServicesUiState.Loading
+        )
+
+    fun loadServicesByCategory(category: String) {
+        _category.value = category
     }
 
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
-    }
-    
-    fun loadServicesByCategory(category: String) {
-        repository.getServicesByCategory(category)
-            .onEach { services ->
-                _uiState.value = ServicesUiState.Success(services)
-            }
-            .launchIn(viewModelScope)
     }
 }
