@@ -48,6 +48,7 @@ fun ServiceListScreen(
     val context = LocalContext.current
     val repository = RepositoryProvider.getRepository(context)
     val viewModel: ServicesViewModel = viewModel(
+        key = category, // Ensures a new ViewModel instance for each category
         factory = ServicesViewModelFactory(repository, context)
     )
 
