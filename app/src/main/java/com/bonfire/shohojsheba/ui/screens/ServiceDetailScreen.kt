@@ -38,6 +38,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.ui.components.HtmlText
 import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
@@ -113,17 +115,24 @@ fun ServiceDetailScreen(navController: NavController, serviceId: String?) {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        state.serviceDetail?.let {
+                        state.serviceDetail?.let { detail ->
                             Text("Instructions:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(it.instructions, style = MaterialTheme.typography.bodyMedium)
+                            // Using the dynamic data from the ViewModel
+                            HtmlText(html = detail.instructions)
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            Image(painter = painterResource(id = it.imageRes), contentDescription = null, modifier = Modifier.fillMaxWidth())
-                            Spacer(modifier = Modifier.height(16.dp))
+                            val imageResNames = detail.imageRes.split(",").map { it.trim() }
+                            imageResNames.forEach { resName ->
+                                val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)
+                                if (resId != 0) {
+                                    Image(painter = painterResource(id = resId), contentDescription = null, modifier = Modifier.fillMaxWidth())
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                }
+                            }
 
-                            if (!it.youtubeLink.isNullOrBlank()) {
+                            if (!detail.youtubeLink.isNullOrBlank()) {
                                 Button(onClick = { 
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtubeLink))
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(detail.youtubeLink))
                                     context.startActivity(intent)
                                 }) {
                                     Text("Watch on YouTube")
@@ -132,15 +141,16 @@ fun ServiceDetailScreen(navController: NavController, serviceId: String?) {
                             }
 
                             Text("Required Documents:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(it.requiredDocuments, style = MaterialTheme.typography.bodyMedium)
+                            // Using the dynamic data from the ViewModel
+                            HtmlText(html = detail.requiredDocuments)
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Text("Processing Time:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(it.processingTime, style = MaterialTheme.typography.bodyMedium)
+                            Text(detail.processingTime, style = MaterialTheme.typography.bodyMedium)
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Text("Contact Info:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(it.contactInfo, style = MaterialTheme.typography.bodyMedium)
+                            Text(detail.contactInfo, style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }

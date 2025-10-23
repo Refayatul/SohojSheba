@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
 data class ServiceDetail(
     @PrimaryKey val serviceId: String,
     val instructions: String,
-    val imageRes: Int,
+    val imageRes: String, // Changed to String to store a comma-separated list of drawable names
     val youtubeLink: String?,
     val requiredDocuments: String,
     val processingTime: String,

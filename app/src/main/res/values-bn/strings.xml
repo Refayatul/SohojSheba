@@ -18,14 +18,14 @@
     <string name="category_govt_office">সরকারি অফিস</string>
     <string name="recent_services_title">সাম্প্রতিক সেবা</string>
     <string name="recent_services_subtitle">আপনি সম্প্রতি যা দেখেছেন</string>
-    <string name="popular_services_title">জনপ্রিয় সেবা</string>
-    <string name="popular_services_subtitle">সবচেয়ে বেশি ব্যবহৃত সেবা</string>
+    <string name="favorite_services_title">প্রিয় সেবা</string>
+    <string name="favorite_services_subtitle">আপনার প্রিয় সেবা</string>
 
     <!-- Bottom Navigation -->
     <string name="nav_home">হোম</string>
     <string name="nav_departments">ক্যাটাগরি</string>
     <string name="nav_history">হিস্টোরি</string>
-    <string name="nav_saved">সংরক্ষিত</string>
+    <string name="nav_favorites">প্রিয়</string>
 
     <!-- Settings Screen -->
     <string name="settings">সেটিংস</string>
@@ -41,68 +41,134 @@
     <string name="dev_dialog_title">আমাদের টিম</string>
     <string name="dialog_close">বন্ধ করুন</string>
 
-    <!-- Citizen Services Page -->
-    <string name="citizen_services_title">নাগরিক সেবা</string>
-    <string name="service_nid_title">জাতীয় পরিচয়পত্র নিবন্ধন</string>
-    <string name="service_nid_subtitle">নতুন জাতীয় পরিচয়পত্র নিবন্ধন করুন</string>
-    <string name="service_new_voter_reg_title">নতুন ভোটার নিবন্ধন</string>
-    <string name="service_new_voter_reg_subtitle">নতুন ভোটার নিবন্ধনের ধাপ ও প্রয়োজনীয় কাগজপত্র</string>
-    <string name="service_voter_correction_title">ভোটার সংশোধন</string>
-    <string name="service_voter_correction_subtitle">ভোটার তথ্য সংশোধনের ধাপ ও প্রয়োজনীয় কাগজপত্র</string>
-    <string name="service_passport_title">পাসপোর্ট</string>
-    <string name="service_passport_subtitle">পাসপোর্ট আবেদন সম্পর্কে জানুন</string>
-    <string name="service_birth_cert_title">জন্ম নিবন্ধন</string>
-    <string name="service_birth_cert_subtitle">জন্ম নিবন্ধন সংক্রান্ত তথ্য</string>
-    <string name="service_driving_license_title">ড্রাইভিং লাইসেন্স</string>
-    <string name="service_driving_license_subtitle">ড্রাইভিং লাইসেন্স প্রক্রিয়া সম্পর্কে বিস্তারিত</string>
-    <string name="service_land_reg_title">ভূমি নিবন্ধন</string>
-    <string name="service_land_reg_subtitle">ভূমি নিবন্ধন সম্পর্কিত তথ্য</string>
-    <string name="service_marriage_reg_title">বিবাহ নিবন্ধন</string>
-    <string name="service_marriage_reg_subtitle">বিবাহ নিবন্ধন সম্পর্কে জানুন</string>
-    <string name="service_voter_transfer_title">ভোটার স্থানান্তর</string>
-    <string name="service_voter_transfer_subtitle">আপনার ভোট স্থানান্তরের পদ্ধতি</string>
-
-    <!-- Farmer Services -->
-    <string name="service_agri_portal_title">কৃষি বাতায়ন</string>
-    <string name="service_agri_portal_subtitle">জাতীয় কৃষি বাতায়নে প্রবেশ করুন</string>
-    <string name="service_fertilizer_rec_title">সার সুপারিশ</string>
-    <string name="service_fertilizer_rec_subtitle">বৈজ্ঞানিক সার সুপারিশ পান</string>
-    <string name="service_agri_loan_title">কৃষি ঋণ</string>
-    <string name="service_agri_loan_subtitle">কৃষকদের জন্য ঋণ সংক্রান্ত তথ্য</string>
-    <string name="service_seed_cert_title">বীজ প্রত্যয়ন</string>
-    <string name="service_seed_cert_subtitle">বীজ প্রত্যয়ন প্রক্রিয়া সম্পর্কে জানুন</string>
-
-    <!-- Entrepreneur Services -->
-    <string name="service_trade_license_title">ট্রেড লাইসেন্স</string>
-    <string name="service_trade_license_subtitle">ট্রেড লাইসেন্সের জন্য আবেদন বা নবায়ন করুন</string>
-    <string name="service_company_reg_title">কোম্পানি নিবন্ধন</string>
-    <string name="service_company_reg_subtitle">আরজেএসসি-এর সাথে নতুন কোম্পানি নিবন্ধন করুন</string>
-    <string name="service_tin_cert_title">টিআইএন সার্টিফিকেট</string>
-    <string name="service_tin_cert_subtitle">আপনার করদাতা শনাক্তকরণ নম্বর নিন</string>
-    <string name="service_vat_reg_title">ভ্যাট নিবন্ধন</string>
-    <string name="service_vat_reg_subtitle">অনলাইন ভ্যাট নিবন্ধনের বিস্তারিত</string>
-
-    <!-- Govt Office Services -->
-    <string name="service_power_div_title">বিদ্যুৎ বিভাগ সেবা</string>
-    <string name="service_power_div_subtitle">বিদ্যুৎ বিল প্রদান ও তথ্য</string>
-    <string name="service_brta_title">বিআরটিএ সেবা</string>
-    <string name="service_brta_subtitle">যানবাহন নিবন্ধন ও কর প্রদান</string>
-    <string name="service_education_board_title">শিক্ষা বোর্ডের ফলাফল</string>
-    <string name="service_education_board_subtitle">পাবলিক পরীক্ষার ফলাফল দেখুন</string>
-    <string name="service_public_procurement_title">সরকারি ক্রয় (ই-জিপি)</string>
-    <string name="service_public_procurement_subtitle">জাতীয় ই-গভর্নমেন্ট প্রকিউরমেন্ট পোর্টালে প্রবেশ করুন</string>
-
-    <!-- Service Detail Page -->
-    <string name="service_detail_steps">%1$d/%2$d ধাপ</string>
-    <string name="service_detail_visual_aid">ভিজ্যুয়াল সহায়তা দেখুন</string>
-
     <!-- Other Screens -->
     <string name="departments_page_title">বিভাগ</string>
     <string name="history_page_title">হিস্টোরি</string>
-    <string name="saved_page_title">সংরক্ষিত</string>
+    <string name="favorites_page_title">প্রিয়</string>
     <string name="settings_page_title">সেটিংস</string>
 
     <!-- History Content Screen -->
     <string name="clear_history_title">হিস্টোরি মুছে ফেলুন</string>
     <string name="clear_history_button">হিস্টোরি মুছুন</string>
+
+    <!-- ==================================================== -->
+    <!-- ==              SERVICE DEFINITIONS                 == -->
+    <!-- ==================================================== -->
+
+    <!-- Citizen Services -->
+    <string name="service_citizen_apply_nid_title">এনআইডি আবেদন</string>
+    <string name="service_citizen_apply_nid_subtitle">এনআইডি তৈরি করুন</string>
+    <string name="service_citizen_renew_passport_title">পাসপোর্ট নবায়ন</string>
+    <string name="service_citizen_renew_passport_subtitle">পাসপোর্ট নবায়ন</string>
+    <string name="service_citizen_file_gd_title">অনলাইন জিডি</string>
+    <string name="service_citizen_file_gd_subtitle">অনলাইন জিডি করুন</string>
+    <string name="service_citizen_driving_license_title">ড্রাইভিং লাইসেন্স</string>
+    <string name="service_citizen_driving_license_subtitle">ড্রাইভিং লাইসেন্স নিন</string>
+    <string name="service_citizen_register_birth_title">জন্ম নিবন্ধন</string>
+    <string name="service_citizen_register_birth_subtitle">জন্ম নিবন্ধন</string>
+    <string name="service_citizen_old_age_allowance_title">বয়স্কভাতা</string>
+    <string name="service_citizen_old_age_allowance_subtitle">বয়স্কভাতা আবেদন</string>
+    <string name="service_citizen_check_voter_status_title">ভোটার তথ্য যাচাই</string>
+    <string name="service_citizen_check_voter_status_subtitle">ভোটার অবস্থা যাচাই</string>
+    <string name="service_citizen_police_clearance_title">পুলিশ ক্লিয়ারেন্স</string>
+    <string name="service_citizen_police_clearance_subtitle">পুলিশ ক্লিয়ারেন্স</string>
+    <string name="service_citizen_new_electricity_title">নতুন বিদ্যুৎ সংযোগ</string>
+    <string name="service_citizen_new_electricity_subtitle">নতুন বিদ্যুৎ সংযোগ</string>
+    <string name="service_citizen_traffic_fines_title">ট্রাফিক জরিমানা প্রদান</string>
+    <string name="service_citizen_traffic_fines_subtitle">ট্রাফিক জরিমানা পরিশোধ</string>
+    <string name="service_citizen_register_marriage_title">বিবাহ নিবন্ধন</string>
+    <string name="service_citizen_register_marriage_subtitle">বিবাহ নিবন্ধন</string>
+
+    <!-- Farmer Services -->
+    <string name="service_farmer_soil_advice_title">মাটি ও সার সুপারিশ</string>
+    <string name="service_farmer_soil_advice_subtitle">মাটি ও সারের পরামর্শ</string>
+    <string name="service_farmer_agri_loan_title">কৃষি ঋণ নির্দেশিকা</string>
+    <string name="service_farmer_agri_loan_subtitle">কৃষি ঋণের গাইড</string>
+    <string name="service_farmer_crop_disease_title">ফসলের রোগ নির্ণয়</string>
+    <string name="service_farmer_crop_disease_subtitle">ফসলের রোগ চেনা</string>
+    <string name="service_farmer_market_prices_title">লাইভ বাজার দর</string>
+    <string name="service_farmer_market_prices_subtitle">সর্বশেষ বাজার দাম</string>
+    <string name="service_farmer_id_card_title">কৃষক আইডি কার্ড</string>
+    <string name="service_farmer_id_card_subtitle">কৃষক আইডি কার্ড</string>
+    <string name="service_farmer_certified_seeds_title">প্রত্যয়িত বীজ</string>
+    <string name="service_farmer_certified_seeds_subtitle">প্রত্যয়িত বীজ</string>
+    <string name="service_farmer_irrigation_guide_title">সেচ নির্দেশিকা</string>
+    <string name="service_farmer_irrigation_guide_subtitle">সেচ ব্যবস্থাপনা</string>
+    <string name="service_farmer_machinery_subsidy_title">যন্ত্রপাতি ভর্তুকি</string>
+    <string name="service_farmer_machinery_subsidy_subtitle">কৃষি যন্ত্রপাতি ভর্তুকি</string>
+    <string name="service_farmer_rice_farming_title">আধুনিক ধান চাষ</string>
+    <string name="service_farmer_rice_farming_subtitle">আধুনিক ধান চাষ</string>
+    <string name="service_farmer_crop_insurance_title">ফসল বীমা</string>
+    <string name="service_farmer_crop_insurance_subtitle">ফসল বীমা</string>
+    <string name="service_farmer_poultry_farming_title">হাঁস-মুরগি খামার</string>
+    <string name="service_farmer_poultry_farming_subtitle">হাঁস-মুরগি খামার</string>
+
+    <!-- Entrepreneur Services -->
+    <string name="service_entrepreneur_trade_license_title">ট্রেড লাইসেন্স</string>
+    <string name="service_entrepreneur_trade_license_subtitle">ট্রেড লাইসেন্স নিন</string>
+    <string name="service_entrepreneur_ebin_register_title">ই-বিআইএন নিবন্ধন</string>
+    <string name="service_entrepreneur_ebin_register_subtitle">ই-বিন নিবন্ধন</string>
+    <string name="service_entrepreneur_register_company_title">কোম্পানি নিবন্ধন</string>
+    <string name="service_entrepreneur_register_company_subtitle">কোম্পানি নিবন্ধন</string>
+    <string name="service_entrepreneur_irc_apply_title">আইআরসি আবেদন</string>
+    <string name="service_entrepreneur_irc_apply_subtitle">আইআরসি আবেদন</string>
+    <string name="service_entrepreneur_erc_apply_title">ইআরসি আবেদন</string>
+    <string name="service_entrepreneur_erc_apply_subtitle">ইআরসি আবেদন</string>
+    <string name="service_entrepreneur_vat_return_title">ভ্যাট রিটার্ন দাখিল</string>
+    <string name="service_entrepreneur_vat_return_subtitle">ভ্যাট রিটার্ন জমা</string>
+    <string name="service_entrepreneur_fire_license_title">ফায়ার লাইসেন্স</string>
+    <string name="service_entrepreneur_fire_license_subtitle">ফায়ার লাইসেন্স নিন</string>
+    <string name="service_entrepreneur_tin_cert_title">টিন সার্টিফিকেট</string>
+    <string name="service_entrepreneur_tin_cert_subtitle">টিন সার্টিফিকেট নিন</string>
+    <string name="service_entrepreneur_trademark_reg_title">ট্রেডমার্ক নিবন্ধন</string>
+    <string name="service_entrepreneur_trademark_reg_subtitle">ট্রেডমার্ক নিবন্ধন</string>
+    <string name="service_entrepreneur_egp_bid_title">ই-জিপিতে দরপত্র দাখিল</string>
+    <string name="service_entrepreneur_egp_bid_subtitle">ই-জিপিতে দরদাখিল</string>
+    <string name="service_entrepreneur_sme_loan_title">এসএমই ঋণ নির্দেশিকা</string>
+    <string name="service_entrepreneur_sme_loan_subtitle">এসএমই ঋণ গাইড</string>
+
+    <!-- Government Office Services -->
+    <string name="service_govt_egp_use_title">ই-জিপি ব্যবহার</string>
+    <string name="service_govt_egp_use_subtitle">ই-জিপি ব্যবহার</string>
+    <string name="service_govt_brta_services_title">বিআরটিএ সেবা</string>
+    <string name="service_govt_brta_services_subtitle">বিআরটিএ সেবা</string>
+    <string name="service_govt_board_results_title">বোর্ড পরীক্ষার ফলাফল</string>
+    <string name="service_govt_board_results_subtitle">বোর্ড রেজাল্ট দেখুন</string>
+    <string name="service_govt_nid_server_title">এনআইডি সার্ভার ব্যবহার</string>
+    <string name="service_govt_nid_server_subtitle">এনআইডি সার্ভার ব্যবহার</string>
+    <string name="service_govt_health_services_title">স্বাস্থ্য সেবা তথ্য</string>
+    <string name="service_govt_health_services_subtitle">স্বাস্থ্য সেবা তথ্য</string>
+    <string name="service_govt_local_forms_title">স্থানীয় সরকার ফর্ম</string>
+    <string name="service_govt_local_forms_subtitle">স্থানীয় সরকার ফর্ম</string>
+    <string name="service_govt_btrc_report_title">বিটিআরসিতে অভিযোগ</string>
+    <string name="service_govt_btrc_report_subtitle">বিটিআরসিতে রিপোর্ট</string>
+    <string name="service_govt_env_clearance_title">পরিবেশ ছাড়পত্র</string>
+    <string name="service_govt_env_clearance_subtitle">পরিবেশ ছাড়পত্র</string>
+    <string name="service_govt_mygov_track_title">মাইগভ-এ ট্র্যাক</string>
+    <string name="service_govt_mygov_track_subtitle">মাইগভে ট্র্যাক করুন</string>
+    <string name="service_govt_power_outage_title">বিদ্যুৎ বিভ্রাট ম্যাপ</string>
+    <string name="service_govt_power_outage_subtitle">বিদ্যুৎ বিচ্ছিন্নতা ম্যাপ</string>
+    <string name="service_govt_nbr_portal_title">এনবিআর পোর্টাল ব্যবহার</string>
+    <string name="service_govt_nbr_portal_subtitle">এনবিআর পোর্টাল ব্যবহার</string>
+
+    <string name="brta_vehicle_reg_instructions"><![CDATA[
+        <p><b>ধাপ ১:</b> ডকুমেন্ট প্রস্তুতি: সকল প্রয়োজনীয় কাগজপত্র সংগ্রহ করুন।</p>
+        <p><b>ধাপ ২:</b> বিআরটিএ অফিস ভিজিট: সংশ্লিষ্ট বিআরটিএ অফিসে গিয়ে আবেদনপত্র জমা দিন। অফিস আবেদন যাচাই করে পেমেন্ট স্লিপ দেবে।</p>
+        <p><b>ধাপ ৩:</b> ফি প্রদান: নির্ধারিত ব্যাংকে সমস্ত ফি প্রদান করুন।</p>
+        <p><b>ধাপ ৪:</b> গাড়ি পরীক্ষা: নির্ধারিত তারিখে গাড়ি নিয়ে বিআরটিএতে আসুন। পরিদর্শক গাড়ির অবস্থা, চেসিস ও ইঞ্জিন নম্বর পরীক্ষা করবেন।</p>
+        <p><b>ধাপ ৫:</b> ডেটা এন্ট্রি: পরীক্ষা সফল হলে গাড়ির তথ্য সিস্টেমে ভরতি হবে এবং নিবন্ধন অনুমোদিত হবে।</p>
+        <p><b>ধাপ ৬:</b> অস্থায়ী কাগজপত্র: সাথে সাথে স্বীকৃতি স্লিপ, ফিটনেস সার্টিফিকেট ও ট্যাক্স টোকেন পাবেন।</p>
+        <p><b>ধাপ ৭:</b> বায়োমেট্রিক: এসএমএস পেলে অফিসে গিয়ে ছবি, স্বাক্ষর ও আঙুলের ছাপ দিন।</p>
+        <p><b>ধাপ ৮:</b> চূড়ান্ত কাগজপত্র: ডিজিটাল রেজিস্ট্রেশন সার্টিফিকেট ও নম্বর প্লেট প্রস্তুত হলে সংগ্রহ করুন। সাধারণত ১৫ থেকে ৩০ দিন সময় লাগে।</p>
+    ]]></string>
+    <string name="brta_vehicle_reg_required_documents"><![CDATA[
+        <ul>
+            <li>পরিচয় প্রমাণ: জাতীয় পরিচয়পত্র, পাসপোর্ট বা জন্ম সনদ</li>
+            <li>ক্রয় প্রমাণ: শোরুমের ইনভয়েস, বিল অফ এন্ট্রি (আমদানি গাড়ির জন্য)</li>
+            <li>ট্যাক্স কাগজ: টিআইএন সার্টিফিকেট ও আয়কর প্রদানের প্রমাণ</li>
+            <li>গাড়ির কাগজ: পুরানো গাড়ির জন্য ডি-রেজিস্ট্রেশন সার্টিফিকেট</li>
+            <li>অন্যান্য ফর্ম: পূরণকৃত আবেদনপত্র ও মেডিকেল সার্টিফিকেট</li>
+        </ul>
+    ]]></string>
+
 </resources>

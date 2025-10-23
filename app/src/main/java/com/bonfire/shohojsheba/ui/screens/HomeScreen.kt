@@ -33,8 +33,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,8 +68,12 @@ fun HomeScreen(navController: NavController) {
         factory = ServicesViewModelFactory(repository, context)
     )
 
-    val searchQuery by viewModel.searchQuery.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(searchQuery) {
+        viewModel.searchServices(searchQuery)
+    }
 
     Scaffold(
         topBar = {
@@ -85,7 +93,7 @@ fun HomeScreen(navController: NavController) {
         ) {
             TextField(
                 value = searchQuery,
-                onValueChange = { viewModel.onSearchQueryChanged(it) },
+                onValueChange = { searchQuery = it },
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 shape = RoundedCornerShape(50),
                 leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.secondary) },

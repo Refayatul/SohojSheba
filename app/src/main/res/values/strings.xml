@@ -80,7 +80,7 @@
     <string name="service_citizen_register_marriage_subtitle">বিবাহ নিবন্ধন</string>
 
     <!-- Farmer Services -->
-    <string name="service_farmer_soil_advice_title">Soil &amp; Fertilizer Advice</string>
+    <string name="service_farmer_soil_advice_title">Soil and Fertilizer Advice</string>
     <string name="service_farmer_soil_advice_subtitle">মাটি ও সারের পরামর্শ</string>
     <string name="service_farmer_agri_loan_title">Agri Loan Guide</string>
     <string name="service_farmer_agri_loan_subtitle">কৃষি ঋণের গাইড</string>
@@ -150,4 +150,8 @@
     <string name="service_govt_power_outage_subtitle">বিদ্যুৎ বিচ্ছিন্নতা ম্যাপ</string>
     <string name="service_govt_nbr_portal_title">Use NBR Portal</string>
     <string name="service_govt_nbr_portal_subtitle">এনবিআর পোর্টাল ব্যবহার</string>
+
+    <string name="brta_vehicle_reg_instructions">BRTA Vehicle Registration Instructions</string>
+    <string name="brta_vehicle_reg_required_documents">BRTA Vehicle Registration Required Documents</string>
+
 </resources>

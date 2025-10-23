@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [Service::class, ServiceDetail::class, UserFavorite::class, UserHistory::class],
-    version = 1,
+    version = 2, // Incremented version number
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -61,10 +61,10 @@ private class AppDatabaseCallback(private val context: Context) : RoomDatabase.C
 // Sample migration from version 1 to 2
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        // Example migration logic. For now, we just clear and re-create.
-        database.execSQL("DROP TABLE IF EXISTS services")
+        // For this change, we'll just drop and recreate the table.
+        // In a real production app, you would want to create a more sophisticated migration.
         database.execSQL("DROP TABLE IF EXISTS service_details")
-        // onCreate will be called again to pre-populate
+        database.execSQL("CREATE TABLE `service_details` (`serviceId` TEXT NOT NULL, `instructions` TEXT NOT NULL, `imageRes` TEXT NOT NULL, `youtubeLink` TEXT, `requiredDocuments` TEXT NOT NULL, `processingTime` TEXT NOT NULL, `contactInfo` TEXT NOT NULL, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`serviceId`), FOREIGN KEY(`serviceId`) REFERENCES `services`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
     }
 }
 
@@ -125,14 +125,34 @@ suspend fun prePopulateDatabase(context: Context, serviceDao: ServiceDao) {
     )
 
     val serviceDetails = services.map { service ->
+        val imagePath: String
+        var instructions: String
+        var requiredDocuments: String
+        var processingTime: String
+        var contactInfo: String
+
+        if (service.id == "govt_brta_services") {
+            imagePath = "govt_office_brta_services_registration_step_1"
+            instructions = context.getString(R.string.brta_vehicle_reg_instructions)
+            requiredDocuments = context.getString(R.string.brta_vehicle_reg_required_documents)
+            processingTime = "15-30 business days"
+            contactInfo = "BRTA Head Office, Mirpur, Dhaka"
+        } else {
+            imagePath = "img_step_placeholder_1,img_step_placeholder_2"
+            instructions = "Dummy instructions for ${context.getString(service.titleRes)}..."
+            requiredDocuments = "- Dummy Document 1\n- Dummy Document 2"
+            processingTime = "5-10 business days"
+            contactInfo = "Contact the relevant government office."
+        }
+
         ServiceDetail(
             serviceId = service.id,
-            instructions = "Dummy instructions for ${context.getString(service.titleRes)}...",
-            imageRes = R.drawable.ic_launcher_background, // Placeholder image
+            instructions = instructions,
+            imageRes = imagePath,
             youtubeLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Placeholder link
-            requiredDocuments = "- Dummy Document 1\n- Dummy Document 2",
-            processingTime = "5-10 business days",
-            contactInfo = "Contact the relevant government office.",
+            requiredDocuments = requiredDocuments,
+            processingTime = processingTime,
+            contactInfo = contactInfo,
             lastUpdated = 1
         )
     }

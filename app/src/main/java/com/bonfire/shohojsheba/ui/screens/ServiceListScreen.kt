@@ -52,6 +52,7 @@ fun ServiceListScreen(
         factory = ServicesViewModelFactory(repository, context)
     )
 
+    // Load the data for the specific category when the screen is first composed.
     LaunchedEffect(category) {
         viewModel.loadServicesByCategory(category)
     }
