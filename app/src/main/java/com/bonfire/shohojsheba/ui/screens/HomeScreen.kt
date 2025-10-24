@@ -13,9 +13,11 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,7 +34,7 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModelFactory
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -48,12 +50,19 @@ fun HomeScreen(
 
     val uiState by viewModel.uiState.collectAsState()
     val aiResponse by viewModel.aiResponse.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(searchQuery) {
         if (searchQuery.isNotBlank()) {
             viewModel.searchServices(searchQuery)
         } else {
             viewModel.clearSearch()
+        }
+    }
+
+    LaunchedEffect(aiResponse) {
+        if (aiResponse != null) {
+            keyboardController?.hide()
         }
     }
 
@@ -178,26 +187,28 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(top = 32.dp),
+                                .padding(top = 32.dp)
+                                .verticalScroll(rememberScrollState()),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("No services found for \"$searchQuery\"")
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Button(onClick = { viewModel.searchWithAI(searchQuery) }) {
-                                Text("Search with AI")
-                            }
-
                             aiResponse?.let {
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    text = "AI Suggestion:",
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
                                 Text(
                                     text = it,
                                     modifier = Modifier.padding(top = 8.dp)
                                 )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = "AI-generated. Verify critical info with official sources.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+
+                            } ?: run {
+                                Text("No services found for \"$searchQuery\"")
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Button(onClick = { viewModel.searchWithAI(searchQuery) }) {
+                                    Text("Search with AI")
+                                }
                             }
                         }
                     } else {

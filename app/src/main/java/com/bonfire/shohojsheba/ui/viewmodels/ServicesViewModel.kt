@@ -50,6 +50,8 @@ class ServicesViewModel(private val repository: Repository, private val context:
     }
 
     fun searchServices(query: String) {
+        // Clear previous AI response when a new search starts
+        _aiResponse.value = null
         repository.getAllServices()
             .onEach { services ->
                 val filteredList = if (query.isBlank()) {
@@ -85,7 +87,7 @@ class ServicesViewModel(private val repository: Repository, private val context:
                     modelName = "gemini-2.5-flash-lite",
                     apiKey = apiKey
                 )
-                val prompt = "Find Bangladesh government or citizen services related to: $query"
+                val prompt = "Provide a detailed, step-by-step guide for the following service: '$query'. Assume the service is for Bangladesh unless another country is specified. Respond in the same language as the query. Do not use any markdown formatting like asterisks. Use new lines for clear spacing on a mobile screen. Do not introduce yourself as an AI. Just provide the steps."
                 val response = generativeModel.generateContent(prompt)
                 _aiResponse.value = response.text
                 _uiState.value = ServicesUiState.Success(emptyList())
