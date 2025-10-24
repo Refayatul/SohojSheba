@@ -10,7 +10,16 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bonfire.shohojsheba.navigation.AppNavGraph
 import com.bonfire.shohojsheba.navigation.BottomNavBar
@@ -27,6 +39,7 @@ import com.bonfire.shohojsheba.utils.LocalOnLocaleChange
 import com.bonfire.shohojsheba.utils.ProvideLocale
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +57,6 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val navController = rememberNavController()
 
-            // Move the launcher here in MainActivity's composable scope
             val voiceLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) { result ->
@@ -61,10 +73,29 @@ class MainActivity : ComponentActivity() {
                     LocalOnLocaleChange provides onLocaleChange
                 ) {
                     ProvideLocale(locale = locale) {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentRoute = navBackStackEntry?.destination?.route
+
                         Scaffold(
+                            topBar = {
+                                if (currentRoute == "home") {
+                                    CenterAlignedTopAppBar(
+                                        title = { Text(text = stringResource(id = R.string.app_name), color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold) },
+                                        actions = {
+                                            IconButton(onClick = { navController.navigate("settings") }) {
+                                                Icon(
+                                                    imageVector = Icons.Outlined.Settings,
+                                                    contentDescription = stringResource(id = R.string.settings),
+                                                    tint = MaterialTheme.colorScheme.secondary
+                                                )
+                                            }
+                                        },
+                                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
+                                    )
+                                }
+                            },
                             bottomBar = { BottomNavBar(navController = navController) }
                         ) { paddingValues ->
-                            // Pass the launcher down to HomeScreen via AppNavGraph
                             AppNavGraph(
                                 modifier = Modifier.padding(paddingValues),
                                 navController = navController,

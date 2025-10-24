@@ -6,16 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.BuildConfig
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.repositories.Repository
+import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import org.json.JSONObject
 
 sealed class ServicesUiState {
     object Loading : ServicesUiState()
@@ -84,57 +81,13 @@ class ServicesViewModel(private val repository: Repository, private val context:
             }
 
             try {
-                val url =
-                    URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey")
-
-                val jsonRequest = JSONObject().apply {
-                    put(
-                        "contents",
-                        listOf(
-                            mapOf(
-                                "parts" to listOf(
-                                    mapOf(
-                                        "text" to "Find Bangladesh government or citizen services related to: $query"
-                                    )
-                                )
-                            )
-                        )
-                    )
-                }
-
-                val connection = (url.openConnection() as HttpURLConnection).apply {
-                    requestMethod = "POST"
-                    doOutput = true
-                    setRequestProperty("Content-Type", "application/json")
-                    connectTimeout = 7000
-                    readTimeout = 7000
-                }
-
-                connection.outputStream.use { os ->
-                    os.write(jsonRequest.toString().toByteArray())
-                }
-
-                val responseCode = connection.responseCode
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    throw IOException("AI API error: $responseCode")
-                }
-
-                val response =
-                    connection.inputStream.bufferedReader().use { it.readText() }
-                val json = JSONObject(response)
-                val text = json.optJSONArray("candidates")
-                    ?.optJSONObject(0)
-                    ?.optJSONObject("content")
-                    ?.optJSONArray("parts")
-                    ?.optJSONObject(0)
-                    ?.optString("text")
-                    ?: "No AI response available."
-
-                _aiResponse.value = text
-                _uiState.value = ServicesUiState.Success(emptyList())
-
-            } catch (e: IOException) {
-                _aiResponse.value = "🌐 No internet connection. Try again later."
+                val generativeModel = GenerativeModel(
+                    modelName = "gemini-2.5-flash-lite",
+                    apiKey = apiKey
+                )
+                val prompt = "Find Bangladesh government or citizen services related to: $query"
+                val response = generativeModel.generateContent(prompt)
+                _aiResponse.value = response.text
                 _uiState.value = ServicesUiState.Success(emptyList())
             } catch (e: Exception) {
                 _aiResponse.value = "⚠️ Something went wrong: ${e.localizedMessage ?: "Unknown error"}"

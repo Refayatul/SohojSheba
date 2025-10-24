@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
 import com.bonfire.shohojsheba.ui.screens.FavoritesScreen
 import com.bonfire.shohojsheba.ui.screens.HistoryScreen
 import com.bonfire.shohojsheba.ui.screens.HomeScreen
@@ -24,9 +25,9 @@ fun AppNavGraph(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = "home"
+        startDestination = Routes.HOME
     ) {
-        composable("home") {
+        composable(Routes.HOME) {
             HomeScreen(
                 navController = navController,
                 searchQuery = searchQuery,
@@ -34,28 +35,31 @@ fun AppNavGraph(
                 onVoiceSearchClick = onVoiceSearchClick
             )
         }
-        composable("citizen_services") {
+        composable(Routes.DEPARTMENTS) {
+            DepartmentsScreen(navController = navController)
+        }
+        composable(Routes.CITIZEN_SERVICES) {
             ServiceListScreen(navController = navController, category = "citizen", title = R.string.category_citizen)
         }
-        composable("farmer_services") {
+        composable(Routes.FARMER_SERVICES) {
             ServiceListScreen(navController = navController, category = "farmer", title = R.string.category_farmer)
         }
-        composable("entrepreneur_services") {
+        composable(Routes.ENTREPRENEUR_SERVICES) {
             ServiceListScreen(navController = navController, category = "entrepreneur", title = R.string.category_entrepreneur)
         }
-        composable("govt_office_services") {
+        composable(Routes.GOVT_OFFICE_SERVICES) {
             ServiceListScreen(navController = navController, category = "govt_office", title = R.string.category_govt_office)
         }
-        composable("service_detail/{serviceId}") {
+        composable("${Routes.SERVICE_DETAIL}/{serviceId}") {
             ServiceDetailScreen(navController = navController, serviceId = it.arguments?.getString("serviceId"))
         }
-        composable("history") {
+        composable(Routes.HISTORY) {
             HistoryScreen(navController = navController)
         }
-        composable("favorites") {
+        composable(Routes.FAVORITES) {
             FavoritesScreen(navController = navController)
         }
-        composable("settings") {
+        composable(Routes.SETTINGS) {
             SettingsScreen(navController = navController)
         }
     }
