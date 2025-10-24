@@ -151,7 +151,16 @@
     <string name="service_govt_nbr_portal_title">Use NBR Portal</string>
     <string name="service_govt_nbr_portal_subtitle">এনবিআর পোর্টাল ব্যবহার</string>
 
-    <string name="brta_vehicle_reg_instructions">BRTA Vehicle Registration Instructions</string>
-    <string name="brta_vehicle_reg_required_documents">BRTA Vehicle Registration Required Documents</string>
+    <string name="brta_vehicle_reg_instructions"><![CDATA[
+        <p><b>Step 1:</b> Document Preparation<br/>The user collects all required documents.</p>
+        <p><b>Step 2:</b> BRTA Office Visit<br/>The user visits the relevant BRTA circle office...</p>
+    ]]></string>
+    <string name="brta_vehicle_reg_required_documents"><![CDATA[
+        <ul>
+            <li>National ID Copy</li>
+            <li>Tax Token</li>
+            <li>Car Fitness Report</li>
+        </ul>
+    ]]></string>
 
 </resources>

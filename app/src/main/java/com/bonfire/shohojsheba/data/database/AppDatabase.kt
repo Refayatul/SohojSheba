@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.data.database.dao.ServiceDao
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [Service::class, ServiceDetail::class, UserFavorite::class, UserHistory::class],
-    version = 2, // Incremented version number
+    version = 1, // Start with version 1 and use fallback to destructive migration
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -38,9 +37,18 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "shohoj_sheba_database"
                 )
-                    .addCallback(AppDatabaseCallback(context))
-                    .addMigrations(MIGRATION_1_2)
-                    .fallbackToDestructiveMigration() // Added for development, should be removed for production
+                    .fallbackToDestructiveMigration() // Handles schema changes by recreating the DB
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            // Pre-populate in a coroutine after the DB is created
+                            CoroutineScope(Dispatchers.IO).launch {
+                                INSTANCE?.let { database ->
+                                    prePopulateDatabase(context, database.serviceDao())
+                                }
+                            }
+                        }
+                    })
                     .build()
                 INSTANCE = instance
                 instance
@@ -49,33 +57,16 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-private class AppDatabaseCallback(private val context: Context) : RoomDatabase.Callback() {
-    override fun onCreate(db: SupportSQLiteDatabase) {
-        super.onCreate(db)
-        CoroutineScope(Dispatchers.IO).launch {
-            prePopulateDatabase(context, AppDatabase.getDatabase(context).serviceDao())
-        }
-    }
-}
-
-// Sample migration from version 1 to 2
-val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        // For this change, we'll just drop and recreate the table.
-        // In a real production app, you would want to create a more sophisticated migration.
-        database.execSQL("DROP TABLE IF EXISTS service_details")
-        database.execSQL("CREATE TABLE `service_details` (`serviceId` TEXT NOT NULL, `instructions` TEXT NOT NULL, `imageRes` TEXT NOT NULL, `youtubeLink` TEXT, `requiredDocuments` TEXT NOT NULL, `processingTime` TEXT NOT NULL, `contactInfo` TEXT NOT NULL, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`serviceId`), FOREIGN KEY(`serviceId`) REFERENCES `services`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
-    }
-}
-
-
 suspend fun prePopulateDatabase(context: Context, serviceDao: ServiceDao) {
+    // Check if data already exists to prevent re-populating on every app start
+    if (serviceDao.getServiceCount() > 0) return
+
     val services = listOf(
         // Citizen Services
         Service("citizen_apply_nid", R.string.service_citizen_apply_nid_title, R.string.service_citizen_apply_nid_subtitle, R.drawable.ic_citizen_apply_nid, "citizen", 1),
         Service("citizen_renew_passport", R.string.service_citizen_renew_passport_title, R.string.service_citizen_renew_passport_subtitle, R.drawable.ic_citizen_renew_passport, "citizen", 1),
         Service("citizen_file_gd", R.string.service_citizen_file_gd_title, R.string.service_citizen_file_gd_subtitle, R.drawable.ic_citizen_file_gd, "citizen", 1),
-        Service("citizen_driving_license", R.string.service_citizen_driving_license_title, R.string.service_citizen_driving_license_subtitle, R.drawable.ic_citizen_driving_license, "citizen", 1),
+        Service("citizen_driving_license", R.string.service_citizen_driving_license_title, R.string.service_citizen_driving_license_subtitle, R.drawable.ic_citizen_driving_license, "citizen", 1), // Corrected drawable name
         Service("citizen_register_birth", R.string.service_citizen_register_birth_title, R.string.service_citizen_register_birth_subtitle, R.drawable.ic_citizen_register_birth, "citizen", 1),
         Service("citizen_old_age_allowance", R.string.service_citizen_old_age_allowance_title, R.string.service_citizen_old_age_allowance_subtitle, R.drawable.ic_citizen_old_age_allowance, "citizen", 1),
         Service("citizen_check_voter_status", R.string.service_citizen_check_voter_status_title, R.string.service_citizen_check_voter_status_subtitle, R.drawable.ic_citizen_check_voter_status, "citizen", 1),
@@ -126,10 +117,10 @@ suspend fun prePopulateDatabase(context: Context, serviceDao: ServiceDao) {
 
     val serviceDetails = services.map { service ->
         val imagePath: String
-        var instructions: String
-        var requiredDocuments: String
-        var processingTime: String
-        var contactInfo: String
+        val instructions: String
+        val requiredDocuments: String
+        val processingTime: String
+        val contactInfo: String
 
         if (service.id == "govt_brta_services") {
             imagePath = "govt_office_brta_services_registration_step_1"
