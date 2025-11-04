@@ -7,6 +7,7 @@
     <string name="tagline">Easy government services for everyone</string>
     <string name="version_label">Version</string>
     <string name="version_number">1.0.0</string>
+    <string name="version_name">ᴮᵉᵗᵃ</string>
 
     <!-- Home Screen -->
     <string name="search_hint">Search for services…</string>
@@ -17,14 +18,14 @@
     <string name="category_govt_office">Govt. Office</string>
     <string name="recent_services_title">Recent Services</string>
     <string name="recent_services_subtitle">What you have seen recently</string>
-    <string name="popular_services_title">Popular Services</string>
-    <string name="popular_services_subtitle">Most used services</string>
+    <string name="favorite_services_title">Favorite Services</string>
+    <string name="favorite_services_subtitle">Your favorite services</string>
 
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_departments">Categories</string>
     <string name="nav_history">History</string>
-    <string name="nav_saved">Saved</string>
+    <string name="nav_favorites">Favorites</string>
 
     <!-- Settings Screen -->
     <string name="settings">Settings</string>
@@ -40,68 +41,126 @@
     <string name="dev_dialog_title">Our Team</string>
     <string name="dialog_close">Close</string>
 
-    <!-- Citizen Services Page -->
-    <string name="citizen_services_title">Citizen Services</string>
-    <string name="service_nid_title">National ID Card Registration</string>
-    <string name="service_nid_subtitle">Register for a new National ID card</string>
-    <string name="service_new_voter_reg_title">New Voter Registration</string>
-    <string name="service_new_voter_reg_subtitle">Steps and required documents for new voter registration</string>
-    <string name="service_voter_correction_title">Voter Correction</string>
-    <string name="service_voter_correction_subtitle">Steps and required documents for voter information correction</string>
-    <string name="service_passport_title">Passport</string>
-    <string name="service_passport_subtitle">Find out about passport application</string>
-    <string name="service_birth_cert_title">Birth Certificate</string>
-    <string name="service_birth_cert_subtitle">Information on birth registration</string>
-    <string name="service_driving_license_title">Driving License</string>
-    <string name="service_driving_license_subtitle">Details on driving license procedures</string>
-    <string name="service_land_reg_title">Land Registration</string>
-    <string name="service_land_reg_subtitle">Information about land registration</string>
-    <string name="service_marriage_reg_title">Marriage Registration</string>
-    <string name="service_marriage_reg_subtitle">Learn about marriage registration</string>
-    <string name="service_voter_transfer_title">Voter Transfer</string>
-    <string name="service_voter_transfer_subtitle">Procedure for transferring your vote</string>
-
-    <!-- Farmer Services -->
-    <string name="service_agri_portal_title">Krishi Batayan</string>
-    <string name="service_agri_portal_subtitle">Access the national agriculture portal</string>
-    <string name="service_fertilizer_rec_title">Fertilizer Recommendation</string>
-    <string name="service_fertilizer_rec_subtitle">Get scientific fertilizer recommendations</string>
-    <string name="service_agri_loan_title">Agricultural Loan</string>
-    <string name="service_agri_loan_subtitle">Information on loans for farmers</string>
-    <string name="service_seed_cert_title">Seed Certification</string>
-    <string name="service_seed_cert_subtitle">Learn about the seed certification process</string>
-
-    <!-- Entrepreneur Services -->
-    <string name="service_trade_license_title">Trade License</string>
-    <string name="service_trade_license_subtitle">Apply for or renew your trade license</string>
-    <string name="service_company_reg_title">Company Registration</string>
-    <string name="service_company_reg_subtitle">Register your new company with RJSC</string>
-    <string name="service_tin_cert_title">TIN Certificate</string>
-    <string name="service_tin_cert_subtitle">Get your Taxpayer\'s Identification Number</string>
-    <string name="service_vat_reg_title">VAT Registration</string>
-    <string name="service_vat_reg_subtitle">Online VAT registration details</string>
-
-    <!-- Govt Office Services -->
-    <string name="service_power_div_title">Power Division Services</string>
-    <string name="service_power_div_subtitle">Electricity bill payments and information</string>
-    <string name="service_brta_title">BRTA Services</string>
-    <string name="service_brta_subtitle">Vehicle registration and tax payment</string>
-    <string name="service_education_board_title">Education Board Results</string>
-    <string name="service_education_board_subtitle">Check public examination results</string>
-    <string name="service_public_procurement_title">Public Procurement (e-GP)</string>
-    <string name="service_public_procurement_subtitle">Access the national e-Government Procurement portal</string>
-
-    <!-- Service Detail Page -->
-    <string name="service_detail_steps">%1$d/%2$d Steps</string>
-    <string name="service_detail_visual_aid">See Visual Aid</string>
-
     <!-- Other Screens -->
     <string name="departments_page_title">Departments</string>
     <string name="history_page_title">History</string>
-    <string name="saved_page_title">Saved</string>
+    <string name="favorites_page_title">Favorites</string>
     <string name="settings_page_title">Settings</string>
 
     <!-- History Content Screen -->
     <string name="clear_history_title">Clear all history</string>
     <string name="clear_history_button">Clear History</string>
+
+    <!-- ==================================================== -->
+    <!-- ==              SERVICE DEFINITIONS                 == -->
+    <!-- ==================================================== -->
+
+    <!-- Citizen Services -->
+    <string name="service_citizen_apply_nid_title">Apply for NID</string>
+    <string name="service_citizen_apply_nid_subtitle">এনআইডি তৈরি করুন</string>
+    <string name="service_citizen_renew_passport_title">Renew Passport</string>
+    <string name="service_citizen_renew_passport_subtitle">পাসপোর্ট নবায়ন</string>
+    <string name="service_citizen_file_gd_title">File Online GD</string>
+    <string name="service_citizen_file_gd_subtitle">অনলাইন জিডি করুন</string>
+    <string name="service_citizen_driving_license_title">Get Driving License</string>
+    <string name="service_citizen_driving_license_subtitle">ড্রাইভিং লাইসেন্স নিন</string>
+    <string name="service_citizen_register_birth_title">Register Birth</string>
+    <string name="service_citizen_register_birth_subtitle">জন্ম নিবন্ধন</string>
+    <string name="service_citizen_old_age_allowance_title">Old Age Allowance</string>
+    <string name="service_citizen_old_age_allowance_subtitle">বয়স্কভাতা আবেদন</string>
+    <string name="service_citizen_check_voter_status_title">Check Voter Status</string>
+    <string name="service_citizen_check_voter_status_subtitle">ভোটার অবস্থা যাচাই</string>
+    <string name="service_citizen_police_clearance_title">Police Clearance</string>
+    <string name="service_citizen_police_clearance_subtitle">পুলিশ ক্লিয়ারেন্স</string>
+    <string name="service_citizen_new_electricity_title">New Electricity Connection</string>
+    <string name="service_citizen_new_electricity_subtitle">নতুন বিদ্যুৎ সংযোগ</string>
+    <string name="service_citizen_traffic_fines_title">Pay Traffic Fines</string>
+    <string name="service_citizen_traffic_fines_subtitle">ট্রাফিক জরিমানা পরিশোধ</string>
+    <string name="service_citizen_register_marriage_title">Register Marriage</string>
+    <string name="service_citizen_register_marriage_subtitle">বিবাহ নিবন্ধন</string>
+
+    <!-- Farmer Services -->
+    <string name="service_farmer_soil_advice_title">Soil and Fertilizer Advice</string>
+    <string name="service_farmer_soil_advice_subtitle">মাটি ও সারের পরামর্শ</string>
+    <string name="service_farmer_agri_loan_title">Agri Loan Guide</string>
+    <string name="service_farmer_agri_loan_subtitle">কৃষি ঋণের গাইড</string>
+    <string name="service_farmer_crop_disease_title">Crop Disease ID</string>
+    <string name="service_farmer_crop_disease_subtitle">ফসলের রোগ চেনা</string>
+    <string name="service_farmer_market_prices_title">Live Market Prices</string>
+    <string name="service_farmer_market_prices_subtitle">সর্বশেষ বাজার দাম</string>
+    <string name="service_farmer_id_card_title">Farmer ID Card</string>
+    <string name="service_farmer_id_card_subtitle">কৃষক আইডি কার্ড</string>
+    <string name="service_farmer_certified_seeds_title">Certified Seeds</string>
+    <string name="service_farmer_certified_seeds_subtitle">প্রত্যয়িত বীজ</string>
+    <string name="service_farmer_irrigation_guide_title">Irrigation Guide</string>
+    <string name="service_farmer_irrigation_guide_subtitle">সেচ ব্যবস্থাপনা</string>
+    <string name="service_farmer_machinery_subsidy_title">Machinery Subsidy</string>
+    <string name="service_farmer_machinery_subsidy_subtitle">কৃষি যন্ত্রপাতি ভর্তুকি</string>
+    <string name="service_farmer_rice_farming_title">Modern Rice Farming</string>
+    <string name="service_farmer_rice_farming_subtitle">আধুনিক ধান চাষ</string>
+    <string name="service_farmer_crop_insurance_title">Crop Insurance</string>
+    <string name="service_farmer_crop_insurance_subtitle">ফসল বীমা</string>
+    <string name="service_farmer_poultry_farming_title">Poultry Farming</string>
+    <string name="service_farmer_poultry_farming_subtitle">হাঁস-মুরগি খামার</string>
+
+    <!-- Entrepreneur Services -->
+    <string name="service_entrepreneur_trade_license_title">Get Trade License</string>
+    <string name="service_entrepreneur_trade_license_subtitle">ট্রেড লাইসেন্স নিন</string>
+    <string name="service_entrepreneur_ebin_register_title">Register for e-BIN</string>
+    <string name="service_entrepreneur_ebin_register_subtitle">ই-বিন নিবন্ধন</string>
+    <string name="service_entrepreneur_register_company_title">Register Company</string>
+    <string name="service_entrepreneur_register_company_subtitle">কোম্পানি নিবন্ধন</string>
+    <string name="service_entrepreneur_irc_apply_title">Apply for IRC</string>
+    <string name="service_entrepreneur_irc_apply_subtitle">আইআরসি আবেদন</string>
+    <string name="service_entrepreneur_erc_apply_title">Apply for ERC</string>
+    <string name="service_entrepreneur_erc_apply_subtitle">ইআরসি আবেদন</string>
+    <string name="service_entrepreneur_vat_return_title">File VAT Return</string>
+    <string name="service_entrepreneur_vat_return_subtitle">ভ্যাট রিটার্ন জমা</string>
+    <string name="service_entrepreneur_fire_license_title">Get Fire License</string>
+    <string name="service_entrepreneur_fire_license_subtitle">ফায়ার লাইসেন্স নিন</string>
+    <string name="service_entrepreneur_tin_cert_title">Get TIN Certificate</string>
+    <string name="service_entrepreneur_tin_cert_subtitle">টিন সার্টিফিকেট নিন</string>
+    <string name="service_entrepreneur_trademark_reg_title">Register Trademark</string>
+    <string name="service_entrepreneur_trademark_reg_subtitle">ট্রেডমার্ক নিবন্ধন</string>
+    <string name="service_entrepreneur_egp_bid_title">Bid on e-GP</string>
+    <string name="service_entrepreneur_egp_bid_subtitle">ই-জিপিতে দরদাখিল</string>
+    <string name="service_entrepreneur_sme_loan_title">SME Loan Guide</string>
+    <string name="service_entrepreneur_sme_loan_subtitle">এসএমই ঋণ গাইড</string>
+
+    <!-- Government Office Services -->
+    <string name="service_govt_egp_use_title">Use e-GP</string>
+    <string name="service_govt_egp_use_subtitle">ই-জিপি ব্যবহার</string>
+    <string name="service_govt_brta_services_title">Use BRTA Services</string>
+    <string name="service_govt_brta_services_subtitle">বিআরটিএ সেবা</string>
+    <string name="service_govt_board_results_title">Check Board Results</string>
+    <string name="service_govt_board_results_subtitle">বোর্ড রেজাল্ট দেখুন</string>
+    <string name="service_govt_nid_server_title">Use NID Server</string>
+    <string name="service_govt_nid_server_subtitle">এনআইডি সার্ভার ব্যবহার</string>
+    <string name="service_govt_health_services_title">Health Services Info</string>
+    <string name="service_govt_health_services_subtitle">স্বাস্থ্য সেবা তথ্য</string>
+    <string name="service_govt_local_forms_title">Local Govt. Forms</string>
+    <string name="service_govt_local_forms_subtitle">স্থানীয় সরকার ফর্ম</string>
+    <string name="service_govt_btrc_report_title">Report to BTRC</string>
+    <string name="service_govt_btrc_report_subtitle">বিটিআরসিতে রিপোর্ট</string>
+    <string name="service_govt_env_clearance_title">Environment Clearance</string>
+    <string name="service_govt_env_clearance_subtitle">পরিবেশ ছাড়পত্র</string>
+    <string name="service_govt_mygov_track_title">Track on MyGov</string>
+    <string name="service_govt_mygov_track_subtitle">মাইগভে ট্র্যাক করুন</string>
+    <string name="service_govt_power_outage_title">Power Outage Map</string>
+    <string name="service_govt_power_outage_subtitle">বিদ্যুৎ বিচ্ছিন্নতা ম্যাপ</string>
+    <string name="service_govt_nbr_portal_title">Use NBR Portal</string>
+    <string name="service_govt_nbr_portal_subtitle">এনবিআর পোর্টাল ব্যবহার</string>
+
+    <string name="brta_vehicle_reg_instructions"><![CDATA[
+        <p><b>Step 1:</b> Document Preparation<br/>The user collects all required documents.</p>
+        <p><b>Step 2:</b> BRTA Office Visit<br/>The user visits the relevant BRTA circle office...</p>
+    ]]></string>
+    <string name="brta_vehicle_reg_required_documents"><![CDATA[
+        <ul>
+            <li>National ID Copy</li>
+            <li>Tax Token</li>
+            <li>Car Fitness Report</li>
+        </ul>
+    ]]></string>
+
 </resources>

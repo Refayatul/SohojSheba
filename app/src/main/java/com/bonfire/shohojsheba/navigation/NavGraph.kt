@@ -1,111 +1,66 @@
 package com.bonfire.shohojsheba.navigation
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.bonfire.shohojsheba.ui.screens.CitizenServicesScreen
+import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
-import com.bonfire.shohojsheba.ui.screens.EntrepreneurServicesScreen
-import com.bonfire.shohojsheba.ui.screens.FarmerServicesScreen
-import com.bonfire.shohojsheba.ui.screens.GovtOfficeServicesScreen
-import com.bonfire.shohojsheba.ui.screens.HomeScreen
+import com.bonfire.shohojsheba.ui.screens.FavoritesScreen
 import com.bonfire.shohojsheba.ui.screens.HistoryScreen
-import com.bonfire.shohojsheba.ui.screens.SavedScreen
+import com.bonfire.shohojsheba.ui.screens.HomeScreen
 import com.bonfire.shohojsheba.ui.screens.ServiceDetailScreen
+import com.bonfire.shohojsheba.ui.screens.ServiceListScreen
 import com.bonfire.shohojsheba.ui.screens.SettingsScreen
-import com.bonfire.shohojsheba.ui.screens.SplashScreen
 
 @Composable
-fun AppNavGraph() {
-    val navController: NavHostController = rememberNavController()
-    var selectedItem by remember { mutableStateOf(0) }
-
-    Scaffold(
-        bottomBar = {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-            val showBottomBar = bottomNavItems.any { it.route == currentDestination?.route }
-
-            if (showBottomBar) {
-                NavigationBar(
-                    containerColor = Color.White,
-                    tonalElevation = 4.dp
-                ) {
-                    bottomNavItems.forEachIndexed { index, screen ->
-                        NavigationBarItem(
-                            icon = { Icon(screen.icon, contentDescription = null) },
-                            label = { Text(stringResource(id = screen.title)) },
-                            selected = selectedItem == index,
-                            onClick = {
-                                selectedItem = index
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                selectedTextColor = MaterialTheme.colorScheme.primary,
-                                unselectedIconColor = MaterialTheme.colorScheme.secondary,
-                                unselectedTextColor = MaterialTheme.colorScheme.secondary,
-                                indicatorColor = Color.Transparent
-                            )
-                        )
-                    }
-                }
-            }
+fun AppNavGraph(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onVoiceSearchClick: () -> Unit
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Routes.HOME
+    ) {
+        composable(Routes.HOME) {
+            HomeScreen(
+                navController = navController,
+                searchQuery = searchQuery,
+                onSearchQueryChange = onSearchQueryChange,
+                onVoiceSearchClick = onVoiceSearchClick
+            )
         }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController, 
-            startDestination = "splash", 
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("splash") { SplashScreen(navController) }
-            composable("home") { HomeScreen(navController) }
-            composable("departments") { DepartmentsScreen(navController) }
-            composable("history") { HistoryScreen(navController) }
-            composable("saved") { SavedScreen(navController) }
-            composable("settings") { SettingsScreen(navController) }
-            composable("citizen_services") { CitizenServicesScreen(navController) }
-            composable("farmer_services") { FarmerServicesScreen(navController) }
-            composable("entrepreneur_services") { EntrepreneurServicesScreen(navController) }
-            composable("govt_office_services") { GovtOfficeServicesScreen(navController) }
-            composable(
-                route = "service_detail/{serviceId}",
-                arguments = listOf(navArgument("serviceId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                ServiceDetailScreen(
-                    navController = navController,
-                    serviceId = backStackEntry.arguments?.getString("serviceId")
-                )
-            }
+        composable(Routes.DEPARTMENTS) {
+            DepartmentsScreen(navController = navController)
+        }
+        composable(Routes.CITIZEN_SERVICES) {
+            ServiceListScreen(navController = navController, category = "citizen", title = R.string.category_citizen)
+        }
+        composable(Routes.FARMER_SERVICES) {
+            ServiceListScreen(navController = navController, category = "farmer", title = R.string.category_farmer)
+        }
+        composable(Routes.ENTREPRENEUR_SERVICES) {
+            ServiceListScreen(navController = navController, category = "entrepreneur", title = R.string.category_entrepreneur)
+        }
+        composable(Routes.GOVT_OFFICE_SERVICES) {
+            ServiceListScreen(navController = navController, category = "govt_office", title = R.string.category_govt_office)
+        }
+        composable("${Routes.SERVICE_DETAIL}/{serviceId}") {
+            ServiceDetailScreen(navController = navController, serviceId = it.arguments?.getString("serviceId"))
+        }
+        composable(Routes.HISTORY) {
+            HistoryScreen(navController = navController)
+        }
+        composable(Routes.FAVORITES) {
+            FavoritesScreen(navController = navController)
+        }
+        composable(Routes.SETTINGS) {
+            SettingsScreen(navController = navController)
         }
     }
 }

@@ -21,8 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -91,8 +95,16 @@ fun SplashScreen(navController: NavController) {
         }
 
         // Version number aligned to the bottom
+        val versionNumber = stringResource(id = R.string.version_number)
+        val versionName = stringResource(id = R.string.version_name)
+        val annotatedString = buildAnnotatedString {
+            append("${stringResource(id = R.string.version_label)} $versionNumber")
+            withStyle(style = SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 10.sp)) {
+                append(versionName)
+            }
+        }
         Text(
-            text = "${stringResource(id = R.string.version_label)} ${stringResource(id = R.string.version_number)}",
+            text = annotatedString,
             fontSize = 14.sp,
             color = SplashTextTeal,
             modifier = Modifier

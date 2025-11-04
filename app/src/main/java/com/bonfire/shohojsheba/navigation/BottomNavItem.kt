@@ -16,8 +16,8 @@ data class BottomNavItem(
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem(R.string.nav_home, "home", Icons.Outlined.Home),
-    BottomNavItem(R.string.nav_departments, "departments", Icons.Outlined.Apps),
-    BottomNavItem(R.string.nav_history, "history", Icons.Outlined.History),
-    BottomNavItem(R.string.nav_saved, "saved", Icons.Outlined.BookmarkBorder)
+    BottomNavItem(R.string.nav_home, Routes.HOME, Icons.Outlined.Home),
+    BottomNavItem(R.string.nav_departments, Routes.DEPARTMENTS, Icons.Outlined.Apps),
+    BottomNavItem(R.string.nav_history, Routes.HISTORY, Icons.Outlined.History),
+    BottomNavItem(R.string.nav_favorites, Routes.FAVORITES, Icons.Outlined.BookmarkBorder)
 )
