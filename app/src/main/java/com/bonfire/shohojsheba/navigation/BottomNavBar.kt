@@ -24,13 +24,10 @@ fun BottomNavBar(navController: NavController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-                        // This will pop all destinations above the first one in your graph
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
-                        // Don't add to back stack if it's already there
                         launchSingleTop = true
-                        // Don't restore state for bottom nav items - this might be causing the issue
                         restoreState = false
                     }
                 }

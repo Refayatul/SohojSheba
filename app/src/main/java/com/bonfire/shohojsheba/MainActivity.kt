@@ -11,20 +11,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -68,19 +58,28 @@ class MainActivity : ComponentActivity() {
             }
 
             ShohojShebaTheme {
-                CompositionLocalProvider(
-                    LocalLocale provides locale,
-                    LocalOnLocaleChange provides onLocaleChange
-                ) {
-                    ProvideLocale(locale = locale) {
+                ProvideLocale(locale = locale) {
+                    CompositionLocalProvider(
+                        LocalLocale provides locale,
+                        LocalOnLocaleChange provides onLocaleChange
+                    ) {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentRoute = navBackStackEntry?.destination?.route
+
+                        // Hide bottom nav on Settings and Service Detail screens
+                        val showBottomNav = currentRoute != "settings" && currentRoute?.startsWith("service_detail") != true
 
                         Scaffold(
                             topBar = {
                                 if (currentRoute == "home") {
                                     CenterAlignedTopAppBar(
-                                        title = { Text(text = stringResource(id = R.string.app_name), color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold) },
+                                        title = {
+                                            Text(
+                                                text = stringResource(id = R.string.app_name),
+                                                color = MaterialTheme.colorScheme.onBackground,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        },
                                         actions = {
                                             IconButton(onClick = { navController.navigate("settings") }) {
                                                 Icon(
@@ -90,11 +89,13 @@ class MainActivity : ComponentActivity() {
                                                 )
                                             }
                                         },
-                                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
+                                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                            containerColor = MaterialTheme.colorScheme.surface
+                                        )
                                     )
                                 }
                             },
-                            bottomBar = { BottomNavBar(navController = navController) }
+                            bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) }
                         ) { paddingValues ->
                             AppNavGraph(
                                 modifier = Modifier.padding(paddingValues),

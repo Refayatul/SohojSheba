@@ -6,13 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.ui.screens.DepartmentsScreen
-import com.bonfire.shohojsheba.ui.screens.FavoritesScreen
-import com.bonfire.shohojsheba.ui.screens.HistoryScreen
-import com.bonfire.shohojsheba.ui.screens.HomeScreen
-import com.bonfire.shohojsheba.ui.screens.ServiceDetailScreen
-import com.bonfire.shohojsheba.ui.screens.ServiceListScreen
-import com.bonfire.shohojsheba.ui.screens.SettingsScreen
+import com.bonfire.shohojsheba.ui.screens.*
 
 @Composable
 fun AppNavGraph(
@@ -35,32 +29,32 @@ fun AppNavGraph(
                 onVoiceSearchClick = onVoiceSearchClick
             )
         }
-        composable(Routes.DEPARTMENTS) {
-            DepartmentsScreen(navController = navController)
-        }
+
+        composable(Routes.DEPARTMENTS) { DepartmentsScreen(navController = navController) }
         composable(Routes.CITIZEN_SERVICES) {
-            ServiceListScreen(navController = navController, category = "citizen", title = R.string.category_citizen)
+            ServiceListScreen(navController, "citizen", R.string.category_citizen)
         }
         composable(Routes.FARMER_SERVICES) {
-            ServiceListScreen(navController = navController, category = "farmer", title = R.string.category_farmer)
+            ServiceListScreen(navController, "farmer", R.string.category_farmer)
         }
         composable(Routes.ENTREPRENEUR_SERVICES) {
-            ServiceListScreen(navController = navController, category = "entrepreneur", title = R.string.category_entrepreneur)
+            ServiceListScreen(navController, "entrepreneur", R.string.category_entrepreneur)
         }
         composable(Routes.GOVT_OFFICE_SERVICES) {
-            ServiceListScreen(navController = navController, category = "govt_office", title = R.string.category_govt_office)
+            ServiceListScreen(navController, "govt_office", R.string.category_govt_office)
         }
-        composable("${Routes.SERVICE_DETAIL}/{serviceId}") {
-            ServiceDetailScreen(navController = navController, serviceId = it.arguments?.getString("serviceId"))
+
+        // ServiceDetailScreen: no context parameter needed
+        composable("${Routes.SERVICE_DETAIL}/{serviceId}") { backStackEntry ->
+            val serviceId = backStackEntry.arguments?.getString("serviceId") ?: ""
+            ServiceDetailScreen(
+                navController = navController,
+                serviceId = serviceId
+            )
         }
-        composable(Routes.HISTORY) {
-            HistoryScreen(navController = navController)
-        }
-        composable(Routes.FAVORITES) {
-            FavoritesScreen(navController = navController)
-        }
-        composable(Routes.SETTINGS) {
-            SettingsScreen(navController = navController)
-        }
+
+        composable(Routes.HISTORY) { HistoryScreen(navController) }
+        composable(Routes.FAVORITES) { FavoritesScreen(navController) }
+        composable(Routes.SETTINGS) { SettingsScreen(navController) }
     }
 }

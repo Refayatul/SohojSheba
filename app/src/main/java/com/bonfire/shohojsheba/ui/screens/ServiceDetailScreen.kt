@@ -1,161 +1,200 @@
 package com.bonfire.shohojsheba.ui.screens
 
-import android.content.Intent
-import android.net.Uri
+import android.content.Context
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.ui.components.HtmlText
 import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModelFactory
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ServiceDetailScreen(navController: NavController, serviceId: String?) {
-    if (serviceId == null) {
-        // Handle error: serviceId is null
-        return
+fun getServiceImages(context: Context, serviceId: String): List<Int> {
+    val prefix = when (serviceId) {
+        "citizen_apply_nid" -> "nid_registration_"
+        "citizen_renew_passport" -> "passport_step_"
+        else -> "img_step_placeholder_"
     }
+    return R.drawable::class.java.declaredFields
+        .filter { it.name.startsWith(prefix) }
+        .mapNotNull { try { it.getInt(null) } catch (e: Exception) { null } }
+        .sorted()
+}
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@Composable
+fun ServiceDetailScreen(
+    navController: NavController,
+    serviceId: String
+) {
     val context = LocalContext.current
     val repository = RepositoryProvider.getRepository(context)
+
     val viewModel: ServiceDetailViewModel = viewModel(
         factory = ServiceDetailViewModelFactory(serviceId, repository)
     )
 
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    val isFavorite = (uiState as? ServiceDetailUiState.Success)?.isFavorite == true
-                    IconButton(onClick = { viewModel.toggleFavorite() }) {
-                        Icon(
-                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Favorite",
-                            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
-                )
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.background
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            when (val state = uiState) {
-                is ServiceDetailUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                is ServiceDetailUiState.Success -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            text = stringResource(id = state.service.titleRes),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(id = state.service.subtitleRes),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
+    when (uiState) {
+        is ServiceDetailUiState.Loading -> {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        is ServiceDetailUiState.Error -> {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text((uiState as ServiceDetailUiState.Error).message)
+            }
+        }
+        is ServiceDetailUiState.Success -> {
+            val successState = uiState as ServiceDetailUiState.Success
+            val service = successState.service
+            val detail = successState.serviceDetail
+            var isFavorite by remember { mutableStateOf(successState.isFavorite) }
 
-                        state.serviceDetail?.let { detail ->
-                            Text("Instructions:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            // Using the dynamic data from the ViewModel
-                            HtmlText(html = detail.instructions)
-                            Spacer(modifier = Modifier.height(16.dp))
+            Box(Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
+                    // Top spacer to avoid overlapping with floating buttons
+                    Spacer(modifier = Modifier.height(72.dp)) // 48dp button + 16dp padding + extra 8dp
 
-                            val imageResNames = detail.imageRes.split(",").map { it.trim() }
-                            imageResNames.forEach { resName ->
-                                val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)
-                                if (resId != 0) {
-                                    Image(painter = painterResource(id = resId), contentDescription = null, modifier = Modifier.fillMaxWidth())
-                                    Spacer(modifier = Modifier.height(16.dp))
+                    detail?.let {
+                        val images = getServiceImages(context, serviceId)
+                        val instructions = it.instructions.split("\n\n")
+
+                        instructions.forEachIndexed { index, instruction ->
+                            AnimatedVisibility(
+                                visible = true,
+                                enter = fadeIn(animationSpec = tween(700)) +
+                                        slideInVertically(animationSpec = tween(700)) { it / 2 },
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .shadow(4.dp, RoundedCornerShape(16.dp)),
+                                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(20.dp)
+                                    ) {
+                                        Text(
+                                            text = instruction.trim(),
+                                            style = MaterialTheme.typography.bodyMedium.copy(
+                                                fontSize = 16.sp,
+                                                lineHeight = 24.sp
+                                            ),
+                                            fontWeight = FontWeight.Medium
+                                        )
+
+                                        if (index < images.size) {
+                                            Spacer(modifier = Modifier.height(12.dp))
+                                            Image(
+                                                painter = painterResource(images[index]),
+                                                contentDescription = null,
+                                                contentScale = ContentScale.FillWidth,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .clip(RoundedCornerShape(16.dp))
+                                                    .shadow(2.dp, RoundedCornerShape(16.dp))
+                                            )
+                                        }
+                                    }
                                 }
                             }
-
-                            if (!detail.youtubeLink.isNullOrBlank()) {
-                                Button(onClick = { 
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(detail.youtubeLink))
-                                    context.startActivity(intent)
-                                }) {
-                                    Text("Watch on YouTube")
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-
-                            Text("Required Documents:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            // Using the dynamic data from the ViewModel
-                            HtmlText(html = detail.requiredDocuments)
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Text("Processing Time:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(detail.processingTime, style = MaterialTheme.typography.bodyMedium)
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Text("Contact Info:", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(detail.contactInfo, style = MaterialTheme.typography.bodyMedium)
                         }
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        // Bottom Info Section - light card
+                        Column(
+                            Modifier
+                                .padding(horizontal = 16.dp)
+                                .background(Color.White, RoundedCornerShape(16.dp))
+                                .shadow(2.dp, RoundedCornerShape(16.dp))
+                                .padding(20.dp)
+                        ) {
+                            Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(it.requiredDocuments, style = MaterialTheme.typography.bodyMedium)
+                            Spacer(Modifier.height(16.dp))
+
+                            Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(it.processingTime, style = MaterialTheme.typography.bodyMedium)
+                            Spacer(Modifier.height(16.dp))
+
+                            Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(it.contactInfo, style = MaterialTheme.typography.bodyMedium)
+                        }
+
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
-                is ServiceDetailUiState.Error -> {
-                    Text(state.message, modifier = Modifier.align(Alignment.Center))
+
+                // Floating back button
+                IconButton(
+                    onClick = { navController.popBackStack() },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(48.dp)
+                        .align(Alignment.TopStart)
+                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                ) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                }
+
+                // Floating favorite button
+                IconButton(
+                    onClick = {
+                        isFavorite = !isFavorite
+                        viewModel.toggleFavorite()
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(48.dp)
+                        .align(Alignment.TopEnd)
+                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = if (isFavorite) MaterialTheme.colorScheme.primary else Color.Black
+                    )
                 }
             }
         }
