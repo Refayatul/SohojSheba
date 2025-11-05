@@ -66,7 +66,6 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-// Pre-populate services and service details
 suspend fun prePopulateDatabase(context: Context, serviceDao: ServiceDao) {
     Log.d("AppDatabase", "prePopulateDatabase called")
 
@@ -101,43 +100,27 @@ suspend fun prePopulateDatabase(context: Context, serviceDao: ServiceDao) {
             "citizen",
             1
         )
+        // Add other services here
     )
 
     val serviceDetails = services.map { service ->
-        val (images, instructions) = when (service.id) {
-            "citizen_apply_nid" -> {
-                // Multiple images and their corresponding step instructions
-                "nid_registration_1,nid_registration_2" to
-                        "Step 1: Fill out the NID application form completely.\n\n" +
-                        "Step 2: Upload your photo and supporting documents as required."
-            }
-            "citizen_renew_passport" -> {
-                "img_step_placeholder_1,img_step_placeholder_2" to
-                        "Step 1: Complete the passport renewal form.\n\n" +
-                        "Step 2: Submit required documents and pay the applicable fees."
-            }
-            "citizen_file_gd" -> {
-                "img_step_placeholder_1,img_step_placeholder_2" to
-                        "Step 1: Visit your nearest police station.\n\n" +
-                        "Step 2: File the GD with accurate details and get a receipt."
-            }
-            else -> {
-                "img_step_placeholder_1,img_step_placeholder_2" to
-                        "Step 1: Follow the instructions provided.\n\n" +
-                        "Step 2: Complete the process as per guidelines."
-            }
+        val instructions = when (service.id) {
+            "citizen_apply_nid" -> "Step 1: Fill out the NID application form completely.\n\nStep 2: Upload your photo and supporting documents as required."
+            "citizen_renew_passport" -> "Step 1: Complete the passport renewal form.\n\nStep 2: Submit required documents and pay the applicable fees."
+            "citizen_file_gd" -> "Step 1: Visit your nearest police station.\n\nStep 2: File the GD with accurate details and get a receipt."
+            else -> "Step 1: Follow the instructions provided.\n\nStep 2: Complete the process as per guidelines."
         }
 
         ServiceDetail(
             serviceId = service.id,
             instructions = instructions,
-            imageRes = images,
+            imageRes = "", // no need to store images anymore
             youtubeLink = null,
             requiredDocuments = "- Document 1\n- Document 2",
             processingTime = "5-10 business days",
             contactInfo = "Contact the relevant office.",
             lastUpdated = 1
-        ).also { Log.d("AppDatabase", "Service ID: ${service.id}, images = $images, instructions = $instructions") }
+        ).also { Log.d("AppDatabase", "Service ID: ${service.id}, instructions = $instructions") }
     }
 
     serviceDao.insertServices(services)

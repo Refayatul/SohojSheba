@@ -32,6 +32,9 @@ android {
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -60,6 +63,10 @@ android {
         }
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.6.10"
+    }
+
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
@@ -71,20 +78,21 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // Compose
+    // Compose BOM
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.graphics)
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
+    implementation(libs.material.icons.extended)
+    
+    // Compose dependencies
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
-    implementation(libs.material.icons.extended)
-    debugImplementation(libs.compose.tooling)
-    debugImplementation(libs.compose.test.manifest)
-
+    
     // Lifecycle
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.compose)
 
     // Room
     implementation(libs.room.runtime)
@@ -93,18 +101,16 @@ dependencies {
 
     // Coil for Compose
     implementation(libs.coil.compose)
-	
-	// Accompanist Pager
-    //implementation(libs.accompanist.pager)
-    //implementation(libs.accompanist.pager.indicators)
-	
-	
+
+    // Gemini AI
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
 
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Gemini (if used)
-    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.tooling)
+    debugImplementation(libs.compose.test.manifest)
 }
