@@ -115,7 +115,7 @@ suspend fun prePopulateDatabase(context: Context, serviceDao: ServiceDao) {
 
             "citizen_renew_passport" -> """
                 Step 1 — Search on Google
-                ● Type: passport bd
+                ● Type: epassport bd
                 ● Click the first result: “E-Passport Online Registration Portal”.
 
                 Step 2 — Homepage, click “APPLY ONLINE”
