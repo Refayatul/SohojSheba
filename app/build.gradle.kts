@@ -27,7 +27,7 @@ android {
 
         val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY")
         if (geminiApiKey.isNullOrBlank()) {
-            throw GradleException("GEMINI_API_KEY not found or is empty in local.properties. Please check the key name and formatting.")
+            throw GradleException("GEMINI_API_KEY not found or is empty in local.properties.")
         }
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
 
@@ -66,28 +66,39 @@ android {
 }
 
 dependencies {
+    // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.graphics)
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
-    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
     implementation(libs.material.icons.extended)
     debugImplementation(libs.compose.tooling)
     debugImplementation(libs.compose.test.manifest)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
 
+    // Lifecycle
+    implementation(libs.lifecycle.runtime.ktx)
 
     // Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+
+    // Coil for Compose
+    implementation(libs.coil.compose)
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Gemini (if used)
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
 }

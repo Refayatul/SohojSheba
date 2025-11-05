@@ -33,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
+import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
@@ -41,8 +42,8 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceListScreen(
-    navController: NavController, 
-    category: String, 
+    navController: NavController,
+    category: String,
     title: Int
 ) {
     val context = LocalContext.current
@@ -95,7 +96,7 @@ fun ServiceListScreen(
                         ) {
                             items(state.services) { service ->
                                 ServiceRow(service = service) {
-                                    navController.navigate("service_detail/${service.id}")
+                                    navController.navigate("${Routes.SERVICE_DETAIL}/${service.id}")
                                 }
                             }
                         }
