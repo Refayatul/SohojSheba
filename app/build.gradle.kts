@@ -93,6 +93,12 @@ dependencies {
 
     // Coil for Compose
     implementation(libs.coil.compose)
+	
+	// Accompanist Pager
+    //implementation(libs.accompanist.pager)
+    //implementation(libs.accompanist.pager.indicators)
+	
+	
 
     // Testing
     testImplementation(libs.junit)
