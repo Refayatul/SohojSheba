@@ -17,11 +17,11 @@ import androidx.room.PrimaryKey
 )
 data class ServiceDetail(
     @PrimaryKey val serviceId: String,
-    var instructions: String,
-    var imageRes: String, // Changed to String to store a comma-separated list of drawable names
+    val instructions: String,
+    val imageNames: String,        // CSV: "step1,step2"
     val youtubeLink: String?,
-    var requiredDocuments: String,
-    var processingTime: String,
-    var contactInfo: String,
-    val lastUpdated: Int
+    val requiredDocuments: String,
+    val processingTime: String,
+    val contactInfo: String,
+    val lastUpdated: Long
 )

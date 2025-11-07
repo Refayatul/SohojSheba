@@ -1,68 +1,53 @@
 package com.bonfire.shohojsheba.data.repositories
 
+import com.bonfire.shohojsheba.data.database.dao.MetadataDao
 import com.bonfire.shohojsheba.data.database.dao.ServiceDao
 import com.bonfire.shohojsheba.data.database.dao.UserDataDao
-import com.bonfire.shohojsheba.data.database.entities.Service
-import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
-import com.bonfire.shohojsheba.data.database.entities.UserFavorite
-import com.bonfire.shohojsheba.data.database.entities.UserHistory
+import com.bonfire.shohojsheba.data.database.entities.*
+import com.bonfire.shohojsheba.data.mappers.toEntity
+import com.bonfire.shohojsheba.data.remote.FirestoreApi
 import kotlinx.coroutines.flow.Flow
 
-class Repository(private val serviceDao: ServiceDao, private val userDataDao: UserDataDao) {
-
-    // Service methods
+class Repository(
+    private val serviceDao: ServiceDao,
+    private val userDataDao: UserDataDao,
+    private val metadataDao: MetadataDao
+) {
     fun getAllServices(): Flow<List<Service>> = serviceDao.getAllServices()
-
     fun getServicesByCategory(category: String): Flow<List<Service>> = serviceDao.getServicesByCategory(category)
+    fun getServiceById(id: String): Flow<Service?> = serviceDao.getServiceById(id)
+    fun searchServices(q: String): Flow<List<Service>> = serviceDao.searchServices(q)
+    fun getServicesByIds(ids: List<String>): Flow<List<Service>> = serviceDao.getServicesByIds(ids)
+    fun getServiceDetail(id: String): Flow<ServiceDetail?> = serviceDao.getServiceDetail(id)
 
-    fun searchServices(query: String): Flow<List<Service>> = serviceDao.searchServices(query)
-
-    fun getServiceById(serviceId: String): Flow<Service?> = serviceDao.getServiceById(serviceId)
-
-    fun getServiceDetail(serviceId: String): Flow<ServiceDetail?> = serviceDao.getServiceDetail(serviceId)
-
-    // User data methods
-    suspend fun addFavorite(serviceId: String): Boolean {
-        return try {
-            userDataDao.addFavorite(UserFavorite(serviceId = serviceId, addedDate = System.currentTimeMillis()))
-            true
-        } catch (e: Exception) {
-            false
+    suspend fun ensureDetail(serviceId: String) {
+        if (serviceDao.getServiceDetailOnce(serviceId) == null) {
+            FirestoreApi.detailById(serviceId)?.toEntity()?.let { serviceDao.insertServiceDetails(listOf(it)) }
         }
     }
 
-    suspend fun removeFavorite(serviceId: String): Boolean {
-        return try {
-            userDataDao.removeFavorite(serviceId)
-            true
-        } catch (e: Exception) {
-            false
+    suspend fun refreshIfNeeded() {
+        val localCount = serviceDao.getServiceCount()
+        val remoteVer = FirestoreApi.catalogVersion()
+        val localVer = metadataDao.get("catalog_version")?.toIntOrNull()
+
+        if (localCount == 0 || localVer == null || localVer != remoteVer) {
+            val services = FirestoreApi.allServices().map { it.toEntity() }
+            val details = FirestoreApi.allDetails().map { it.toEntity() }
+            serviceDao.insertServices(services)
+            serviceDao.insertServiceDetails(details)
+            metadataDao.put(Metadata("catalog_version", remoteVer.toString()))
+            metadataDao.put(Metadata("last_sync_epoch", System.currentTimeMillis().toString()))
         }
     }
 
+    // Favorites/History (unchanged)
     fun getFavorites(): Flow<List<UserFavorite>> = userDataDao.getFavorites()
-
     fun isFavorite(serviceId: String): Flow<Boolean> = userDataDao.isFavorite(serviceId)
-
-    suspend fun addHistory(serviceId: String): Boolean {
-        return try {
-            userDataDao.addHistory(UserHistory(serviceId = serviceId, accessedDate = System.currentTimeMillis()))
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
+    suspend fun addFavorite(f: UserFavorite) = userDataDao.addFavorite(f)
+    suspend fun removeFavorite(serviceId: String) = userDataDao.removeFavorite(serviceId)
 
     fun getRecentHistory(limit: Int = 20): Flow<List<UserHistory>> = userDataDao.getRecentHistory(limit)
-
-    suspend fun clearOldHistory(cutoffDate: Long): Boolean {
-        return try {
-            userDataDao.clearOldHistory(cutoffDate)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
-    
-    fun getServicesByIds(serviceIds: List<String>): Flow<List<Service>> = serviceDao.getServicesByIds(serviceIds)
+    suspend fun addHistory(h: UserHistory) = userDataDao.addHistory(h)
+    suspend fun clearOldHistory(cutoffDate: Long) = userDataDao.clearOldHistory(cutoffDate)
 }

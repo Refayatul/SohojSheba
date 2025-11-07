@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose.compiler)
+    alias(libs.plugins.google.services)
 }
 
 // Load local.properties
@@ -104,6 +105,13 @@ dependencies {
 
     // Gemini AI
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
 
     // Testing
     testImplementation(libs.junit)

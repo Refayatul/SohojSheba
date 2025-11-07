@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.data.repositories.Repository
 import kotlinx.coroutines.launch
 
-class ServiceDetailViewModel(private val repository: Repository, private val serviceId: String) : ViewModel() {
+class ServiceListViewModel(private val repository: Repository) : ViewModel() {
 
-    val serviceDetail = repository.getServiceDetail(serviceId)
+    val allServices = repository.getAllServices()
 
     init {
         viewModelScope.launch {
-            repository.ensureDetail(serviceId)
+            repository.refreshIfNeeded()
         }
     }
 }

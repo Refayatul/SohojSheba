@@ -1,0 +1,67 @@
+{
+  "config": { "catalog": { "version": 1, "updatedAt": 1730947200000 } },
+  "services": [
+    {
+      "id": "citizen_apply_nid",
+      "title": "Apply for NID",
+      "subtitle": "Eligibility, fees, and steps",
+      "iconName": "ic_citizen_apply_nid",
+      "category": "citizen",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": ["nid","national","id","apply","registration","card","identity"]
+    },
+    {
+      "id": "citizen_renew_passport",
+      "title": "Renew Passport (e-Passport)",
+      "subtitle": "Online registration & appointment",
+      "iconName": "ic_citizen_renew_passport",
+      "category": "citizen",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": ["passport","renew","epassport","appointment","rpo","apply","registration"]
+    },
+    {
+      "id": "citizen_file_gd",
+      "title": "File a GD",
+      "subtitle": "Where to go & what to bring",
+      "iconName": "ic_citizen_file_gd",
+      "category": "citizen",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": ["gd","general","diary","police","complaint","report","station"]
+    }
+  ],
+  "service_details": [
+    {
+      "serviceId": "citizen_apply_nid",
+      "instructions": "Step 1: Fill NID form.\nStep 2: Upload photo & docs.\nStep 3: Submit & track.",
+      "imageNames": ["nid_step1","nid_step2"],
+      "youtubeLink": null,
+      "requiredDocuments": "- Birth certificate\n- 2 passport photos",
+      "processingTime": "7–10 working days",
+      "contactInfo": "NID Helpline: 333",
+      "lastUpdated": 1730947200000
+    },
+    {
+      "serviceId": "citizen_renew_passport",
+      "instructions": "Step 1 — Search 'epassport bd' → portal.\nStep 2 — Apply Online.\nStep 3 — Fill info, verify NID, pay.\nStep 4 — Book appointment & visit RPO.\nStep 5 — Biometric, submit, track.",
+      "imageNames": ["epassport_step1","epassport_step2","epassport_step3"],
+      "youtubeLink": null,
+      "requiredDocuments": "- Old passport (if any)\n- NID\n- Payment receipt",
+      "processingTime": "Regular/Express/Super Express",
+      "contactInfo": "RPO Helpline",
+      "lastUpdated": 1730947200000
+    },
+    {
+      "serviceId": "citizen_file_gd",
+      "instructions": "Step 1: Visit nearest police station.\nStep 2: File GD and get receipt.",
+      "imageNames": [],
+      "youtubeLink": null,
+      "requiredDocuments": "- NID copy\n- Incident details",
+      "processingTime": "Same day",
+      "contactInfo": "Local Police Station",
+      "lastUpdated": 1730947200000
+    }
+  ]
+}
