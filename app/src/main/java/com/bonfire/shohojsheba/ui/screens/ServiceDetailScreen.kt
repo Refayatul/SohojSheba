@@ -2,7 +2,6 @@ package com.bonfire.shohojsheba.ui.screens
 
 import android.content.Context
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,175 +27,162 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
-import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailUiState
+import com.bonfire.shohojsheba.data.database.entities.Service
+import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
+import com.bonfire.shohojsheba.data.database.entities.UserFavorite
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import com.bonfire.shohojsheba.util.drawableId
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-fun getServiceImages(context: Context, serviceId: String): List<Int> {
-    val prefix = when (serviceId) {
-        "citizen_apply_nid" -> "nid_registration_"
-        "citizen_renew_passport" -> "passport_step_"
-        else -> "img_step_placeholder_"
-    }
-    return R.drawable::class.java.declaredFields
-        .filter { it.name.startsWith(prefix) }
-        .mapNotNull { try { it.getInt(null) } catch (e: Exception) { null } }
-        .sorted()
-}
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetailScreen(
     navController: NavController,
     serviceId: String
 ) {
     val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
-
     val viewModel: ServiceDetailViewModel = viewModel(
-        factory = ServiceDetailViewModelFactory(serviceId, repository)
+        factory = ViewModelFactory(context, serviceId = serviceId)
     )
 
-    val uiState by viewModel.uiState.collectAsState()
+    val service by viewModel.service.collectAsState(initial = null)
+    val detail by viewModel.serviceDetail.collectAsState(initial = null)
+    val isFavorite by viewModel.isFavorite.collectAsState(initial = false)
+    val coroutineScope = rememberCoroutineScope()
 
-    when (uiState) {
-        is ServiceDetailUiState.Loading -> {
+    Box(Modifier.fillMaxSize()) {
+        if (service != null && detail != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                // Top spacer to avoid overlapping with floating buttons
+                Spacer(modifier = Modifier.height(72.dp)) // 48dp button + 16dp padding + extra 8dp
+
+                ServiceDetailContent(context, service!!, detail!!)
+
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+        } else {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        is ServiceDetailUiState.Error -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text((uiState as ServiceDetailUiState.Error).message)
-            }
-        }
-        is ServiceDetailUiState.Success -> {
-            val successState = uiState as ServiceDetailUiState.Success
-            val service = successState.service
-            val detail = successState.serviceDetail
-            var isFavorite by remember { mutableStateOf(successState.isFavorite) }
 
-            Box(Modifier.fillMaxSize()) {
+        // Floating back button
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(48.dp)
+                .align(Alignment.TopStart)
+                .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+        ) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+        }
+
+        // Floating favorite button
+        IconButton(
+            onClick = {
+                      coroutineScope.launch {
+                          if(isFavorite){
+                              viewModel.removeFavorite(serviceId)
+                          } else {
+                              viewModel.addFavorite(UserFavorite(serviceId))
+                          }
+                      }
+            },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(48.dp)
+                .align(Alignment.TopEnd)
+                .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+        ) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                contentDescription = "Favorite",
+                tint = if (isFavorite) MaterialTheme.colorScheme.primary else Color.Black
+            )
+        }
+    }
+}
+
+@Composable
+private fun ServiceDetailContent(context: Context, service: Service, detail: ServiceDetail) {
+    val imageNames = detail.imageNames.split(",").filter { it.isNotBlank() }
+    val images = imageNames.map { context.drawableId(it) }
+    val instructions = detail.instructions.split("\n\n")
+
+    instructions.forEachIndexed { index, instruction ->
+        AnimatedVisibility(
+            visible = true,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(4.dp, RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(16.dp)
+            ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .background(MaterialTheme.colorScheme.background)
+                        .fillMaxWidth()
+                        .padding(20.dp)
                 ) {
-                    // Top spacer to avoid overlapping with floating buttons
-                    Spacer(modifier = Modifier.height(72.dp)) // 48dp button + 16dp padding + extra 8dp
-
-                    detail?.let {
-                        val images = getServiceImages(context, serviceId)
-                        val instructions = it.instructions.split("\n\n")
-
-                        instructions.forEachIndexed { index, instruction ->
-                            AnimatedVisibility(
-                                visible = true,
-                                enter = fadeIn(animationSpec = tween(700)) +
-                                        slideInVertically(animationSpec = tween(700)) { it / 2 },
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Card(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .shadow(4.dp, RoundedCornerShape(16.dp)),
-                                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                                    shape = RoundedCornerShape(16.dp)
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(20.dp)
-                                    ) {
-                                        Text(
-                                            text = instruction.trim(),
-                                            style = MaterialTheme.typography.bodyMedium.copy(
-                                                fontSize = 16.sp,
-                                                lineHeight = 24.sp
-                                            ),
-                                            fontWeight = FontWeight.Medium
-                                        )
-
-                                        if (index < images.size) {
-                                            Spacer(modifier = Modifier.height(12.dp))
-                                            Image(
-                                                painter = painterResource(images[index]),
-                                                contentDescription = null,
-                                                contentScale = ContentScale.FillWidth,
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .clip(RoundedCornerShape(16.dp))
-                                                    .shadow(2.dp, RoundedCornerShape(16.dp))
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        // Bottom Info Section - light card
-                        Column(
-                            Modifier
-                                .padding(horizontal = 16.dp)
-                                .background(Color.White, RoundedCornerShape(16.dp))
-                                .shadow(2.dp, RoundedCornerShape(16.dp))
-                                .padding(20.dp)
-                        ) {
-                            Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(it.requiredDocuments, style = MaterialTheme.typography.bodyMedium)
-                            Spacer(Modifier.height(16.dp))
-
-                            Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(it.processingTime, style = MaterialTheme.typography.bodyMedium)
-                            Spacer(Modifier.height(16.dp))
-
-                            Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(it.contactInfo, style = MaterialTheme.typography.bodyMedium)
-                        }
-
-                        Spacer(modifier = Modifier.height(24.dp))
-                    }
-                }
-
-                // Floating back button
-                IconButton(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(48.dp)
-                        .align(Alignment.TopStart)
-                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
-                ) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
-                }
-
-                // Floating favorite button
-                IconButton(
-                    onClick = {
-                        isFavorite = !isFavorite
-                        viewModel.toggleFavorite()
-                    },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(48.dp)
-                        .align(Alignment.TopEnd)
-                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
-                ) {
-                    Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = if (isFavorite) MaterialTheme.colorScheme.primary else Color.Black
+                    Text(
+                        text = instruction.trim(),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 16.sp,
+                            lineHeight = 24.sp
+                        ),
+                        fontWeight = FontWeight.Medium
                     )
+
+                    if (index < images.size) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Image(
+                            painter = painterResource(images[index]),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .shadow(2.dp, RoundedCornerShape(16.dp))
+                        )
+                    }
                 }
             }
         }
+    }
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    // Bottom Info Section - light card
+    Column(
+        Modifier
+            .padding(horizontal = 16.dp)
+            .background(Color.White, RoundedCornerShape(16.dp))
+            .shadow(2.dp, RoundedCornerShape(16.dp))
+            .padding(20.dp)
+    ) {
+        Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(detail.requiredDocuments, style = MaterialTheme.typography.bodyMedium)
+        Spacer(Modifier.height(16.dp))
+
+        Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(detail.processingTime, style = MaterialTheme.typography.bodyMedium)
+        Spacer(Modifier.height(16.dp))
+
+        Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(detail.contactInfo, style = MaterialTheme.typography.bodyMedium)
     }
 }

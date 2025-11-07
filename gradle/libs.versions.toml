@@ -5,7 +5,7 @@ composeBom = "2025.10.01"
 activityCompose = "1.11.0"
 lifecycleRuntimeKtx = "2.9.4"
 lifecycleViewModelCompose = "2.9.4"
-navigationCompose = "2.9.5"
+navigationCompose = "2.9.6"
 ksp = "2.2.20-2.0.4"
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
@@ -16,12 +16,13 @@ espressoCore = "3.7.0"
 materialIconsExtended = "1.7.8"
 room = "2.8.3"
 coil = "2.7.0"
-googleServices = "4.4.2"
-firebaseBom = "33.2.0"
+gemini = "0.9.0"  # Updated version
+firebaseBom = "34.5.0"
+googleServices = "4.4.4"
 work = "2.9.0"
 
 [libraries]
-# Compose BOM and libraries (versions managed by BOM)
+# Compose BOM and libraries
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-graphics = { module = "androidx.compose.ui:ui-graphics" }
@@ -50,10 +51,13 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 # Coil for Compose
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
-# Firebase
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" }
+# Gemini AI - FIXED: Use version catalog
+gemini-ai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "gemini" }
 
+# Firebase - FIXED: Use main modules (no -ktx suffix), no version.ref (managed by BoM)
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 
 # Testing
 junit = { module = "junit:junit", version.ref = "junit" }

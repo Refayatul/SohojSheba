@@ -19,6 +19,12 @@ android {
     namespace = "com.bonfire.shohojsheba"
     compileSdk = 36
 
+    signingConfigs {
+        getByName("debug") {
+            // Optional: Configure debug signing if needed
+        }
+    }
+
     defaultConfig {
         applicationId = "com.bonfire.shohojsheba"
         minSdk = 26
@@ -46,6 +52,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+        }
     }
 
     buildFeatures {
@@ -69,7 +79,13 @@ android {
     }
 
     packaging {
+        jniLibs {
+            useLegacyPackaging = true // Fixes native library stripping warnings
+        }
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        // Suppress warnings about specific native libraries
+        resources.excludes += "**/libandroidx.graphics.path.so"
+        resources.excludes += "**/libdatastore_shared_counter.so"
     }
 }
 
@@ -86,11 +102,11 @@ dependencies {
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.material.icons.extended)
-    
+
     // Compose dependencies
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
-    
+
     // Lifecycle
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
@@ -103,11 +119,12 @@ dependencies {
     // Coil for Compose
     implementation(libs.coil.compose)
 
-    // Gemini AI
-    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+    // Gemini AI - FIXED: Use version catalog instead of hardcoded dependency
+    implementation(libs.gemini.ai)
 
-    // Firebase
+    // Firebase - FIXED: Use correct dependencies with BoM
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics) // Added missing analytics
     implementation(libs.firebase.firestore)
 
     // WorkManager

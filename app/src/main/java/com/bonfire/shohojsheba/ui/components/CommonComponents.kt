@@ -28,12 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bonfire.shohojsheba.data.database.entities.Service
+import com.bonfire.shohojsheba.util.drawableId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,6 +118,7 @@ fun ServiceListItem(title: String, subtitle: String, onClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Service' model
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,8 +141,8 @@ fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Serv
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(id = service.iconRes),
-                    contentDescription = stringResource(id = service.titleRes),
+                    painter = painterResource(id = context.drawableId(service.iconName)),
+                    contentDescription = service.title,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(28.dp)
                 )
@@ -148,13 +150,13 @@ fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Serv
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(id = service.titleRes),
+                    text = service.title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = stringResource(id = service.subtitleRes),
+                    text = service.subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
