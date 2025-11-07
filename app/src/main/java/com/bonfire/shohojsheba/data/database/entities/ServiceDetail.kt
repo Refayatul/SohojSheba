@@ -18,7 +18,8 @@ import androidx.room.PrimaryKey
 data class ServiceDetail(
     @PrimaryKey val serviceId: String,
     val instructions: String,
-    val imageNames: String,        // CSV: "step1,step2"
+    val imageNames: String, // Stored as comma-separated names
+    val images: String, // Stored as comma-separated URLs
     val youtubeLink: String?,
     val requiredDocuments: String,
     val processingTime: String,

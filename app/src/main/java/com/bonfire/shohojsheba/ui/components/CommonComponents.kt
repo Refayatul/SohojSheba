@@ -28,13 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.bonfire.shohojsheba.data.database.entities.Service
-import com.bonfire.shohojsheba.util.drawableId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,11 +112,10 @@ fun ServiceListItem(title: String, subtitle: String, onClick: () -> Unit) {
     }
 }
 
-// THIS IS THE IMPORTANT FIX: Update ServiceRow to use the new 'Service' model
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Service' model
-    val context = LocalContext.current
+fun ServiceRow(service: Service, onClick: () -> Unit) {
+    val imageUrl = service.images.split(",").firstOrNull { it.isNotBlank() }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,20 +130,14 @@ fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Serv
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = service.title,
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = context.drawableId(service.iconName)),
-                    contentDescription = service.title,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(28.dp)
-                )
-            }
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            )
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(

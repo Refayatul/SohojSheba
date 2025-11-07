@@ -32,12 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,10 +46,9 @@ fun ServiceListScreen(
     title: Int
 ) {
     val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
     val viewModel: ServicesViewModel = viewModel(
         key = category, // Ensures a new ViewModel instance for each category
-        factory = ServicesViewModelFactory(repository, context)
+        factory = ViewModelFactory(context)
     )
 
     // Load the data for the specific category when the screen is first composed.

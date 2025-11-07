@@ -25,14 +25,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
+import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.CategoryCard
 import com.bonfire.shohojsheba.ui.components.ServiceListItem
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.theme.*
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -43,9 +43,9 @@ fun HomeScreen(
     onVoiceSearchClick: () -> Unit
 ) {
     val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
+    val appScope = rememberCoroutineScope()
     val viewModel: ServicesViewModel = viewModel(
-        factory = ServicesViewModelFactory(repository, context)
+        factory = ViewModelFactory(context, appScope = appScope)
     )
 
     val uiState by viewModel.uiState.collectAsState()
@@ -129,7 +129,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Person,
                             iconBackgroundColor = IconBgLightGreen,
                             iconTintColor = IconTintDarkGreen,
-                            onClick = { navController.navigate("citizen_services") }
+                            onClick = { navController.navigate(Routes.CITIZEN_SERVICES) }
                         )
                         CategoryCard(
                             modifier = Modifier.weight(1f),
@@ -137,7 +137,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Agriculture,
                             iconBackgroundColor = IconBgLightBlue,
                             iconTintColor = IconTintDarkBlue,
-                            onClick = { navController.navigate("farmer_services") }
+                            onClick = { navController.navigate(Routes.FARMER_SERVICES) }
                         )
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -147,7 +147,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Storefront,
                             iconBackgroundColor = IconBgLightPurple,
                             iconTintColor = IconTintDarkPurple,
-                            onClick = { navController.navigate("entrepreneur_services") }
+                            onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) }
                         )
                         CategoryCard(
                             modifier = Modifier.weight(1f),
@@ -155,7 +155,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Apartment,
                             iconBackgroundColor = IconBgLightYellow,
                             iconTintColor = IconTintDarkYellow,
-                            onClick = { navController.navigate("govt_office_services") }
+                            onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) }
                         )
                     }
                 }
@@ -164,12 +164,12 @@ fun HomeScreen(
                     ServiceListItem(
                         title = stringResource(id = R.string.recent_services_title),
                         subtitle = stringResource(id = R.string.recent_services_subtitle),
-                        onClick = { navController.navigate("history") }
+                        onClick = { navController.navigate(Routes.HISTORY) }
                     )
                     ServiceListItem(
                         title = stringResource(id = R.string.favorite_services_title),
                         subtitle = stringResource(id = R.string.favorite_services_subtitle),
-                        onClick = { navController.navigate("favorites") }
+                        onClick = { navController.navigate(Routes.FAVORITES) }
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))

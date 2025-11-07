@@ -9,7 +9,7 @@ import com.bonfire.shohojsheba.data.remote.FirestoreApi
 import kotlinx.coroutines.flow.Flow
 
 class Repository(
-    private val serviceDao: ServiceDao,
+    val serviceDao: ServiceDao,
     private val userDataDao: UserDataDao,
     private val metadataDao: MetadataDao
 ) {

@@ -8,6 +8,8 @@ import kotlinx.coroutines.launch
 class ServiceListViewModel(private val repository: Repository) : ViewModel() {
 
     val allServices = repository.getAllServices()
+    val history = repository.getRecentHistory()
+    val favorites = repository.getFavorites()
 
     init {
         viewModelScope.launch {

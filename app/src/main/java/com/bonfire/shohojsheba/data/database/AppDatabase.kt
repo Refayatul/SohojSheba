@@ -21,7 +21,7 @@ import com.bonfire.shohojsheba.workers.CatalogRefreshWorker
         UserFavorite::class, UserHistory::class,
         Metadata::class
     ],
-    version = 3,
+    version = 4, // Incremented version to 4
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -32,43 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
 
-        private val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("DROP TABLE IF EXISTS service_details")
-                db.execSQL("DROP TABLE IF EXISTS services")
-                db.execSQL("""
-                    CREATE TABLE IF NOT EXISTS services(
-                        id TEXT NOT NULL PRIMARY KEY,
-                        title TEXT NOT NULL,
-                        subtitle TEXT NOT NULL,
-                        iconName TEXT NOT NULL,
-                        category TEXT NOT NULL,
-                        versionAdded INTEGER NOT NULL,
-                        lastUpdated INTEGER NOT NULL
-                    )
-                """.trimIndent())
-                db.execSQL("""
-                    CREATE TABLE IF NOT EXISTS service_details(
-                        serviceId TEXT NOT NULL PRIMARY KEY,
-                        instructions TEXT NOT NULL,
-                        imageNames TEXT NOT NULL,
-                        youtubeLink TEXT,
-                        requiredDocuments TEXT NOT NULL,
-                        processingTime TEXT NOT NULL,
-                        contactInfo TEXT NOT NULL,
-                        lastUpdated INTEGER NOT NULL,
-                        FOREIGN KEY(serviceId) REFERENCES services(id) ON DELETE CASCADE
-                    )
-                """.trimIndent())
-                db.execSQL("""
-                    CREATE TABLE IF NOT EXISTS metadata(
-                        key TEXT NOT NULL PRIMARY KEY,
-                        value TEXT NOT NULL
-                    )
-                """.trimIndent())
-            }
-        }
-
         fun getDatabase(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
@@ -76,7 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "shohoj_sheba_database"
                 )
-                .addMigrations(MIGRATION_2_3)
+                .fallbackToDestructiveMigration() // This will solve the migration error
                 .addCallback(object : Callback() {
                     override fun onOpen(db: SupportSQLiteDatabase) {
                         super.onOpen(db)

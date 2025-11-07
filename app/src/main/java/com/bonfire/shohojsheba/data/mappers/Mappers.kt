@@ -12,13 +12,17 @@ fun ServiceDTO.toEntity() = Service(
     iconName = iconName,
     category = category,
     versionAdded = versionAdded,
-    lastUpdated = lastUpdated
+    lastUpdated = lastUpdated,
+    images = images.joinToString(","),
+    imageNames = imageNames.joinToString(","),
+    searchKeywords = searchKeywords.joinToString(",")
 )
 
 fun ServiceDetailDTO.toEntity() = ServiceDetail(
     serviceId = serviceId,
     instructions = instructions,
     imageNames = imageNames.joinToString(","),
+    images = images.joinToString(","),
     youtubeLink = youtubeLink,
     requiredDocuments = requiredDocuments,
     processingTime = processingTime,

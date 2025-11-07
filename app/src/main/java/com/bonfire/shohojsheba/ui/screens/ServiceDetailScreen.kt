@@ -1,8 +1,6 @@
 package com.bonfire.shohojsheba.ui.screens
 
-import android.content.Context
 import androidx.compose.animation.*
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,18 +19,17 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
 import com.bonfire.shohojsheba.data.database.entities.UserFavorite
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
-import com.bonfire.shohojsheba.util.drawableId
 import kotlinx.coroutines.launch
 
 
@@ -63,7 +60,7 @@ fun ServiceDetailScreen(
                 // Top spacer to avoid overlapping with floating buttons
                 Spacer(modifier = Modifier.height(72.dp)) // 48dp button + 16dp padding + extra 8dp
 
-                ServiceDetailContent(context, service!!, detail!!)
+                ServiceDetailContent(service!!, detail!!)
 
                 Spacer(modifier = Modifier.height(24.dp))
             }
@@ -92,7 +89,7 @@ fun ServiceDetailScreen(
                           if(isFavorite){
                               viewModel.removeFavorite(serviceId)
                           } else {
-                              viewModel.addFavorite(UserFavorite(serviceId))
+                              viewModel.addFavorite(UserFavorite(serviceId = serviceId, addedDate = System.currentTimeMillis()))
                           }
                       }
             },
@@ -112,9 +109,8 @@ fun ServiceDetailScreen(
 }
 
 @Composable
-private fun ServiceDetailContent(context: Context, service: Service, detail: ServiceDetail) {
-    val imageNames = detail.imageNames.split(",").filter { it.isNotBlank() }
-    val images = imageNames.map { context.drawableId(it) }
+private fun ServiceDetailContent(service: Service, detail: ServiceDetail) {
+    val imageUrls = detail.images.split(",").filter { it.isNotBlank() }
     val instructions = detail.instructions.split("\n\n")
 
     instructions.forEachIndexed { index, instruction ->
@@ -143,10 +139,10 @@ private fun ServiceDetailContent(context: Context, service: Service, detail: Ser
                         fontWeight = FontWeight.Medium
                     )
 
-                    if (index < images.size) {
+                    if (index < imageUrls.size) {
                         Spacer(modifier = Modifier.height(12.dp))
-                        Image(
-                            painter = painterResource(images[index]),
+                        AsyncImage(
+                            model = imageUrls[index],
                             contentDescription = null,
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier
