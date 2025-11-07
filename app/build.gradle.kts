@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose.compiler)
+    //id("com.google.gms.google-services")
+    alias(libs.plugins.google.services)
 }
 
 // Load local.properties
@@ -94,10 +96,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
 
-    // Room
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
 
     // Coil for Compose
     implementation(libs.coil.compose)
@@ -113,4 +111,18 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.tooling)
     debugImplementation(libs.compose.test.manifest)
+
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
+
+    // Cloud Firestore KTX
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
+    // Firebase Authentication KTX
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    implementation("com.google.firebase:firebase-analytics")
+
+
+
 }

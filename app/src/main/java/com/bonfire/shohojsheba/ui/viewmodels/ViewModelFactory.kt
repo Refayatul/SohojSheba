@@ -1,16 +1,18 @@
 package com.bonfire.shohojsheba.ui.viewmodels
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bonfire.shohojsheba.data.repositories.Repository
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
+// Make sure to import the NEW repository
+import com.bonfire.shohojsheba.data.repositories.FirebaseRepository
 
-class ServicesViewModelFactory(private val repository: Repository, private val context: Context) : ViewModelProvider.Factory {
+class ServicesViewModelFactory(
+    private val repository: FirebaseRepository // <-- THIS IS THE FIX
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ServicesViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ServicesViewModel(repository, context) as T
+            // The factory now passes the correct repository type to the ViewModel
+            return ServicesViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
@@ -18,7 +20,7 @@ class ServicesViewModelFactory(private val repository: Repository, private val c
 
 class ServiceDetailViewModelFactory(
     private val serviceId: String,
-    private val repository: Repository
+    private val repository: FirebaseRepository // <-- THIS IS THE FIX
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ServiceDetailViewModel::class.java)) {
@@ -29,7 +31,9 @@ class ServiceDetailViewModelFactory(
     }
 }
 
-class UserDataViewModelFactory(private val repository: Repository) : ViewModelProvider.Factory {
+class UserDataViewModelFactory(
+    private val repository: FirebaseRepository // <-- THIS IS THE FIX
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserDataViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

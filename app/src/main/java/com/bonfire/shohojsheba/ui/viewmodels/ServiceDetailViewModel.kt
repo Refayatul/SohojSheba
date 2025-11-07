@@ -4,14 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
-import com.bonfire.shohojsheba.data.repositories.Repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import com.bonfire.shohojsheba.data.repositories.FirebaseRepository
 
 sealed class ServiceDetailUiState {
     object Loading : ServiceDetailUiState()
@@ -22,10 +19,9 @@ sealed class ServiceDetailUiState {
     ) : ServiceDetailUiState()
     data class Error(val message: String) : ServiceDetailUiState()
 }
-
 class ServiceDetailViewModel(
     private val serviceId: String,
-    private val repository: Repository
+    private val repository: FirebaseRepository // <-- Changed to FirebaseRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ServiceDetailUiState>(ServiceDetailUiState.Loading)
@@ -37,29 +33,40 @@ class ServiceDetailViewModel(
     }
 
     private fun loadServiceDetails() {
-        val serviceFlow = repository.getServiceById(serviceId)
-        val serviceDetailFlow = repository.getServiceDetail(serviceId)
-        val isFavoriteFlow = repository.isFavorite(serviceId)
+        viewModelScope.launch {
+            _uiState.value = ServiceDetailUiState.Loading
 
-        combine(serviceFlow, serviceDetailFlow, isFavoriteFlow) { service, serviceDetail, isFavorite ->
+            // Await all results
+            val serviceResult = repository.getServiceById(serviceId)
+            val detailResult = repository.getServiceDetail(serviceId)
+            val isFavoriteResult = repository.isFavorite(serviceId)
+
+            // Process results
+            val service = serviceResult.getOrNull()
             if (service != null) {
-                ServiceDetailUiState.Success(service, serviceDetail, isFavorite)
+                _uiState.value = ServiceDetailUiState.Success(
+                    service = service,
+                    serviceDetail = detailResult.getOrNull(),
+                    isFavorite = isFavoriteResult.getOrDefault(false)
+                )
             } else {
-                ServiceDetailUiState.Error("Service not found")
+                _uiState.value = ServiceDetailUiState.Error(
+                    serviceResult.exceptionOrNull()?.message ?: "Service not found"
+                )
             }
         }
-            .onEach { _uiState.value = it }
-            .launchIn(viewModelScope)
     }
 
     fun toggleFavorite() {
         viewModelScope.launch {
-            val isFavorite = (_uiState.value as? ServiceDetailUiState.Success)?.isFavorite ?: return@launch
-            if (isFavorite) {
+            val currentState = (_uiState.value as? ServiceDetailUiState.Success) ?: return@launch
+            if (currentState.isFavorite) {
                 repository.removeFavorite(serviceId)
             } else {
                 repository.addFavorite(serviceId)
             }
+            // Reload to reflect the change
+            loadServiceDetails()
         }
     }
 

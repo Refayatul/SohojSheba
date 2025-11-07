@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "89056035065",
+    "project_id": "shohoj-sheba",
+    "storage_bucket": "shohoj-sheba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89056035065:android:cc7d053b326f4f5da5a228",
+        "android_client_info": {
+          "package_name": "com.bonfire.shohojsheba"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC2eT65YKoD3CZc170HAT2601q96B0e6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

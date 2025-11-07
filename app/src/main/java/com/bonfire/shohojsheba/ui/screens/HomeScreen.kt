@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,16 +41,24 @@ fun HomeScreen(
     onSearchQueryChange: (String) -> Unit,
     onVoiceSearchClick: () -> Unit
 ) {
-    val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
+    // 1. Correctly initialize the ViewModel with the new FirebaseRepository
+    val repository = RepositoryProvider.firebaseRepository
     val viewModel: ServicesViewModel = viewModel(
-        factory = ServicesViewModelFactory(repository, context)
+        factory = ServicesViewModelFactory(repository)
     )
+
+
 
     val uiState by viewModel.uiState.collectAsState()
     val aiResponse by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    // 2. Add this new LaunchedEffect to load data ONCE when the screen appears
+    LaunchedEffect(Unit) {
+        viewModel.loadAllServicesForSearch()
+    }
+
+    // This LaunchedEffect now triggers a search on the pre-loaded data
     LaunchedEffect(searchQuery) {
         if (searchQuery.isNotBlank()) {
             viewModel.searchServices(searchQuery)
@@ -71,7 +78,7 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        // 🔍 Search bar with voice mic
+        // 🔍 Search bar with voice mic - NO CHANGES NEEDED HERE
         TextField(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
@@ -111,7 +118,7 @@ fun HomeScreen(
         )
 
         if (searchQuery.isBlank()) {
-            // 🏠 Default content (unchanged)
+            // 🏠 Default content - NO CHANGES NEEDED HERE
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(
@@ -175,6 +182,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(16.dp))
             }
         } else {
+            // Search results display - NO CHANGES NEEDED HERE
             when (val state = uiState) {
                 is ServicesUiState.Loading -> {
                     Box(modifier = Modifier.fillMaxSize()) {
@@ -217,6 +225,7 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(state.services) { service ->
+                                // Note: Make sure ServiceRow is updated to handle the new Service data model
                                 ServiceRow(service = service) {
                                     navController.navigate("service_detail/${service.id}")
                                 }
