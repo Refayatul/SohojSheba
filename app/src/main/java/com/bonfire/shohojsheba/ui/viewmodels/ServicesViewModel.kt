@@ -1,6 +1,5 @@
 package com.bonfire.shohojsheba.ui.viewmodels
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.BuildConfig
@@ -20,7 +19,7 @@ sealed class ServicesUiState {
     data class Error(val message: String) : ServicesUiState()
 }
 
-class ServicesViewModel(private val repository: Repository, private val context: Context) : ViewModel() {
+class ServicesViewModel(private val repository: Repository) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ServicesUiState>(ServicesUiState.Success(emptyList()))
     val uiState: StateFlow<ServicesUiState> = _uiState
@@ -52,18 +51,9 @@ class ServicesViewModel(private val repository: Repository, private val context:
     fun searchServices(query: String) {
         // Clear previous AI response when a new search starts
         _aiResponse.value = null
-        repository.getAllServices()
+        repository.searchServices(query) // Use the repository's search function directly
             .onEach { services ->
-                val filteredList = if (query.isBlank()) {
-                    emptyList()
-                } else {
-                    val q = query.lowercase()
-                    services.filter {
-                        context.getString(it.titleRes).lowercase().contains(q) ||
-                                context.getString(it.subtitleRes).lowercase().contains(q)
-                    }
-                }
-                _uiState.value = ServicesUiState.Success(filteredList)
+                _uiState.value = ServicesUiState.Success(services)
             }
             .catch { e ->
                 _uiState.value =

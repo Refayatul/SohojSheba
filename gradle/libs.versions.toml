@@ -1,7 +1,7 @@
 [versions]
 agp = "8.13.0"
-kotlin = "2.2.20"
-composeBom = "2025.10.01"
+kotlin = "2.2.21"
+composeBom = "2025.11.00"
 activityCompose = "1.11.0"
 lifecycleRuntimeKtx = "2.9.4"
 lifecycleViewModelCompose = "2.9.4"
@@ -19,7 +19,7 @@ coil = "2.7.0"
 gemini = "0.9.0"  # Updated version
 firebaseBom = "34.5.0"
 googleServices = "4.4.4"
-work = "2.9.0"
+work = "2.11.0"
 
 [libraries]
 # Compose BOM and libraries

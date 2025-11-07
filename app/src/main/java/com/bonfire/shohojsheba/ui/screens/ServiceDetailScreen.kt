@@ -33,7 +33,6 @@ import com.bonfire.shohojsheba.data.database.entities.UserFavorite
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import com.bonfire.shohojsheba.util.drawableId
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
