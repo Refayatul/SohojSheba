@@ -27,14 +27,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.components.ServiceRow
-import com.bonfire.shohojsheba.ui.viewmodels.ServiceListViewModel
+import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(navController: NavController) {
     val context = LocalContext.current
-    val viewModel: ServiceListViewModel = viewModel(
+    val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context)
     )
 

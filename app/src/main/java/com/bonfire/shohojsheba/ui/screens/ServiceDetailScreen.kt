@@ -111,54 +111,54 @@ fun ServiceDetailScreen(
 @Composable
 private fun ServiceDetailContent(service: Service, detail: ServiceDetail) {
     val imageUrls = detail.images.split(",").filter { it.isNotBlank() }
-    val instructions = detail.instructions.split("\n\n")
 
-    instructions.forEachIndexed { index, instruction ->
-        AnimatedVisibility(
-            visible = true,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+    // Instructions Section
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .shadow(4.dp, RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(4.dp, RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Column(
+            Text(
+                text = detail.instructions.trim(),
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp
+                ),
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+
+    // Image Gallery Section
+    if (imageUrls.isNotEmpty()) {
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            imageUrls.forEach { imageUrl ->
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp)
-                ) {
-                    Text(
-                        text = instruction.trim(),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = 16.sp,
-                            lineHeight = 24.sp
-                        ),
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    if (index < imageUrls.size) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        AsyncImage(
-                            model = imageUrls[index],
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp))
-                                .shadow(2.dp, RoundedCornerShape(16.dp))
-                        )
-                    }
-                }
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .shadow(2.dp, RoundedCornerShape(16.dp))
+                )
             }
         }
     }
 
     Spacer(modifier = Modifier.height(24.dp))
 
-    // Bottom Info Section - light card
+    // Bottom Info Section
     Column(
         Modifier
             .padding(horizontal = 16.dp)

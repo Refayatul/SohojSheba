@@ -21,7 +21,7 @@ import com.bonfire.shohojsheba.workers.CatalogRefreshWorker
         UserFavorite::class, UserHistory::class,
         Metadata::class
     ],
-    version = 4, // Incremented version to 4
+    version = 5, // Incremented version to 5
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -32,6 +32,8 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
 
+        // Destructive migration is enabled below, so specific migration paths are not needed for now
+
         fun getDatabase(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
@@ -39,7 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "shohoj_sheba_database"
                 )
-                .fallbackToDestructiveMigration() // This will solve the migration error
+                .fallbackToDestructiveMigration() // This will solve any migration errors during development
                 .addCallback(object : Callback() {
                     override fun onOpen(db: SupportSQLiteDatabase) {
                         super.onOpen(db)

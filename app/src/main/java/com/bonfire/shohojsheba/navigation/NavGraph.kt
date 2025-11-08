@@ -44,13 +44,14 @@ fun AppNavGraph(
             ServiceListScreen(navController, "govt_office", R.string.category_govt_office)
         }
 
-        // ServiceDetailScreen: no context parameter needed
         composable("${Routes.SERVICE_DETAIL}/{serviceId}") { backStackEntry ->
-            val serviceId = backStackEntry.arguments?.getString("serviceId") ?: ""
-            ServiceDetailScreen(
-                navController = navController,
-                serviceId = serviceId
-            )
+            val serviceId = backStackEntry.arguments?.getString("serviceId")
+            if (!serviceId.isNullOrBlank()) {
+                ServiceDetailScreen(
+                    navController = navController,
+                    serviceId = serviceId
+                )
+            }
         }
 
         composable(Routes.HISTORY) { HistoryScreen(navController) }

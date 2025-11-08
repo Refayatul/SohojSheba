@@ -1,5 +1,6 @@
 package com.bonfire.shohojsheba.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,6 +34,7 @@ import com.bonfire.shohojsheba.ui.theme.*
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -51,6 +53,13 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsState()
     val aiResponse by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Listen for toast messages
+    LaunchedEffect(key1 = Unit) {
+        viewModel.toastMessage.collectLatest {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     LaunchedEffect(searchQuery) {
         if (searchQuery.isNotBlank()) {

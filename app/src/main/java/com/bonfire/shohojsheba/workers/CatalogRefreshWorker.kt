@@ -12,7 +12,7 @@ class CatalogRefreshWorker(
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = try {
         val db = AppDatabase.getDatabase(applicationContext)
-        val repo = Repository(db.serviceDao(), db.userDataDao(), db.metadataDao())
+        val repo = Repository(applicationContext, db.serviceDao(), db.userDataDao(), db.metadataDao())
         repo.refreshIfNeeded()
         Result.success()
     } catch (t: Throwable) {

@@ -20,9 +20,7 @@ data class ServiceDetail(
     val instructions: String,
     val imageNames: String, // Stored as comma-separated names
     val images: String, // Stored as comma-separated URLs
-    val youtubeLink: String?,
     val requiredDocuments: String,
     val processingTime: String,
-    val contactInfo: String,
-    val lastUpdated: Long
+    val contactInfo: String
 )

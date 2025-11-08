@@ -1,5 +1,6 @@
 package com.bonfire.shohojsheba.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
@@ -37,6 +39,7 @@ import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,11 +50,16 @@ fun ServiceListScreen(
 ) {
     val context = LocalContext.current
     val viewModel: ServicesViewModel = viewModel(
-        key = category, // Ensures a new ViewModel instance for each category
+        key = category,
         factory = ViewModelFactory(context)
     )
 
-    // Load the data for the specific category when the screen is first composed.
+    LaunchedEffect(key1 = Unit) {
+        viewModel.toastMessage.collectLatest {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     LaunchedEffect(category) {
         viewModel.loadServicesByCategory(category)
     }
@@ -64,6 +72,10 @@ fun ServiceListScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    val dataSource by viewModel.dataSource.collectAsState()
+                    Text("Source: $dataSource", fontSize = 10.sp, modifier = Modifier.padding(end = 8.dp))
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)

@@ -10,8 +10,8 @@ object RepositoryProvider {
 
     fun getRepository(context: Context): Repository {
         return repository ?: synchronized(this) {
-            val database = AppDatabase.getDatabase(context)
-            val instance = Repository(database.serviceDao(), database.userDataDao(), database.metadataDao())
+            val database = AppDatabase.getDatabase(context.applicationContext)
+            val instance = Repository(context.applicationContext, database.serviceDao(), database.userDataDao(), database.metadataDao())
             repository = instance
             instance
         }

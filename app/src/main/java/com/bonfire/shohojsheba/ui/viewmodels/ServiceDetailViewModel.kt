@@ -3,6 +3,7 @@ package com.bonfire.shohojsheba.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.data.database.entities.UserFavorite
+import com.bonfire.shohojsheba.data.database.entities.UserHistory
 import com.bonfire.shohojsheba.data.repositories.Repository
 import kotlinx.coroutines.launch
 
@@ -15,6 +16,8 @@ class ServiceDetailViewModel(private val repository: Repository, private val ser
     init {
         viewModelScope.launch {
             repository.ensureDetail(serviceId)
+            // This line was missing and is now re-added
+            repository.addHistory(UserHistory(serviceId = serviceId, accessedDate = System.currentTimeMillis()))
         }
     }
 
