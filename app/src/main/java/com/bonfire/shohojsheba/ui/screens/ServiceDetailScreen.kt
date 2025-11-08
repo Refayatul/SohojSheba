@@ -19,7 +19,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -115,13 +118,11 @@ fun ServiceDetailScreen(
 @Composable
 private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale: Locale) {
     val imageUrls = detail.images.split(",").filter { it.isNotBlank() }
-    // Correctly split instructions into logical blocks
     val instructionBlocks = (if (locale.language == "bn") detail.instructions.bn else detail.instructions.en)
         .split("\n\n").filter { it.isNotBlank() }
 
     val stepCount = max(instructionBlocks.size, imageUrls.size)
 
-    // Interleaved Instructions and Images
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         (0 until stepCount).forEach { index ->
             Card(
@@ -137,7 +138,6 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         .fillMaxWidth()
                         .padding(20.dp)
                 ) {
-                    // --- IMAGE FIRST ---
                     if (index < imageUrls.size) {
                         AsyncImage(
                             model = imageUrls[index],
@@ -151,15 +151,31 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         Spacer(modifier = Modifier.height(12.dp))
                     }
 
-                    // --- THEN ENTIRE INSTRUCTION BLOCK ---
                     if (index < instructionBlocks.size) {
+                        val blockText = instructionBlocks[index].trim()
+                        val annotatedText = buildAnnotatedString {
+                            val stepKeyword = if (locale.language == "bn") "ধাপ" else "Step"
+                            val delimiter = "—"
+                            val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*$delimiter)")
+                            val match = stepRegex.find(blockText)
+
+                            if (match != null) {
+                                val stepHeader = match.value
+                                val restOfText = blockText.substring(stepHeader.length)
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)) {
+                                    append(stepHeader)
+                                }
+                                append(restOfText)
+                            } else {
+                                append(blockText)
+                            }
+                        }
                         Text(
-                            text = instructionBlocks[index].trim(),
+                            text = annotatedText,
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontSize = 16.sp,
                                 lineHeight = 24.sp
-                            ),
-                            fontWeight = FontWeight.Medium
+                            )
                         )
                     }
                 }
