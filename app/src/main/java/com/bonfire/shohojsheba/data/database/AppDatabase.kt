@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase // <-- This import was missing
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -21,9 +21,10 @@ import com.bonfire.shohojsheba.workers.CatalogRefreshWorker
         UserFavorite::class, UserHistory::class,
         Metadata::class
     ],
-    version = 5, // Incremented version to 5
+    version = 7, // Incremented version to 7
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun serviceDao(): ServiceDao
     abstract fun userDataDao(): UserDataDao
@@ -31,8 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
-
-        // Destructive migration is enabled below, so specific migration paths are not needed for now
 
         fun getDatabase(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {

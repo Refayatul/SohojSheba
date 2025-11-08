@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.CategoryCard
@@ -46,6 +47,7 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val appScope = rememberCoroutineScope()
+    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context, appScope = appScope)
     )
@@ -226,7 +228,7 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(state.services) { service ->
-                                ServiceRow(service = service) {
+                                ServiceRow(service = service, locale = locale) {
                                     navController.navigate("service_detail/${service.id}")
                                 }
                             }

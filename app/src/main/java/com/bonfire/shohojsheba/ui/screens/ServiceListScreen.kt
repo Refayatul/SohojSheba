@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.ServiceRow
@@ -49,6 +50,7 @@ fun ServiceListScreen(
     title: Int
 ) {
     val context = LocalContext.current
+    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         key = category,
         factory = ViewModelFactory(context)
@@ -105,7 +107,7 @@ fun ServiceListScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(state.services) { service ->
-                                ServiceRow(service = service) {
+                                ServiceRow(service = service, locale = locale) {
                                     navController.navigate("${Routes.SERVICE_DETAIL}/${service.id}")
                                 }
                             }

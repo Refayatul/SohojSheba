@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.bonfire.shohojsheba.data.database.entities.Service
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,8 +115,11 @@ fun ServiceListItem(title: String, subtitle: String, onClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceRow(service: Service, onClick: () -> Unit) {
+fun ServiceRow(service: Service, locale: Locale, onClick: () -> Unit) {
     val imageUrl = service.images.split(",").firstOrNull { it.isNotBlank() }
+    val title = if (locale.language == "bn") service.title.bn else service.title.en
+    val subtitle = if (locale.language == "bn") service.subtitle.bn else service.subtitle.en
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,7 +136,7 @@ fun ServiceRow(service: Service, onClick: () -> Unit) {
         ) {
             AsyncImage(
                 model = imageUrl,
-                contentDescription = service.title,
+                contentDescription = title,
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
@@ -141,13 +145,13 @@ fun ServiceRow(service: Service, onClick: () -> Unit) {
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = service.title,
+                    text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = service.subtitle,
+                    text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

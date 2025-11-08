@@ -2,26 +2,30 @@ package com.bonfire.shohojsheba.data.mappers
 
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
-import com.bonfire.shohojsheba.data.remote.ServiceDTO
-import com.bonfire.shohojsheba.data.remote.ServiceDetailDTO
+import com.bonfire.shohojsheba.data.remote.ServiceDetails
+import com.bonfire.shohojsheba.data.remote.ServiceSummary
 
-fun ServiceDTO.toEntity() = Service(
+fun ServiceSummary.toEntity() = Service(
     id = id,
     title = title,
     subtitle = subtitle,
     iconName = iconName,
     category = category,
+    versionAdded = versionAdded,
+    lastUpdated = lastUpdated,
     images = images.joinToString(","),
     imageNames = imageNames.joinToString(","),
     searchKeywords = searchKeywords.joinToString(",")
 )
 
-fun ServiceDetailDTO.toEntity() = ServiceDetail(
+fun ServiceDetails.toEntity() = ServiceDetail(
     serviceId = serviceId,
     instructions = instructions,
-    imageNames = imageNames.joinToString(","),
-    images = images.joinToString(","),
     requiredDocuments = requiredDocuments,
     processingTime = processingTime,
-    contactInfo = contactInfo
+    contactInfo = contactInfo,
+    youtubeLink = youtubeLink,
+    lastUpdated = lastUpdated,
+    imageNames = imageNames.joinToString(","),
+    images = images.joinToString(",")
 )

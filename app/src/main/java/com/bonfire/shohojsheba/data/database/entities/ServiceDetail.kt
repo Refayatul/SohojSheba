@@ -3,6 +3,7 @@ package com.bonfire.shohojsheba.data.database.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.bonfire.shohojsheba.data.remote.LocalizedString
 
 @Entity(
     tableName = "service_details",
@@ -17,10 +18,12 @@ import androidx.room.PrimaryKey
 )
 data class ServiceDetail(
     @PrimaryKey val serviceId: String,
-    val instructions: String,
+    val instructions: LocalizedString,
+    val requiredDocuments: LocalizedString,
+    val processingTime: LocalizedString,
+    val contactInfo: LocalizedString,
+    val youtubeLink: String?,
+    val lastUpdated: Long,
     val imageNames: String, // Stored as comma-separated names
-    val images: String, // Stored as comma-separated URLs
-    val requiredDocuments: String,
-    val processingTime: String,
-    val contactInfo: String
+    val images: String // Stored as comma-separated URLs
 )

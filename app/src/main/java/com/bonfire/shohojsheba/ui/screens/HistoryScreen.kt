@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
@@ -34,6 +35,7 @@ import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 @Composable
 fun HistoryScreen(navController: NavController) {
     val context = LocalContext.current
+    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context)
     )
@@ -73,7 +75,7 @@ fun HistoryScreen(navController: NavController) {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(historyServices) { service ->
-                        ServiceRow(service = service) {
+                        ServiceRow(service = service, locale = locale) {
                             navController.navigate("service_detail/${service.id}")
                         }
                     }
