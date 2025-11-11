@@ -20,6 +20,9 @@
     <string name="recent_services_subtitle">What you have seen recently</string>
     <string name="favorite_services_title">Favorite Services</string>
     <string name="favorite_services_subtitle">Your favorite services</string>
+    <string name="ai_assistant">AI Assistant</string>
+    <string name="type_your_question">Type your question…</string>
+
 
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>

@@ -53,6 +53,9 @@ fun AppNavGraph(
                 )
             }
         }
+        composable(Routes.CHAT) {
+            ChatScreen(navController = navController)
+        }
 
         composable(Routes.HISTORY) { HistoryScreen(navController) }
         composable(Routes.FAVORITES) { FavoritesScreen(navController) }

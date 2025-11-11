@@ -21,6 +21,10 @@
     <string name="favorite_services_title">প্রিয় সেবা</string>
     <string name="favorite_services_subtitle">আপনার প্রিয় সেবা</string>
 
+    <!-- AI Chat Screen -->
+    <string name="ai_assistant">এআই অ্যাসিস্ট্যান্ট</string>
+    <string name="type_your_question">আপনার প্রশ্ন লিখুন…</string>
+
     <!-- Bottom Navigation -->
     <string name="nav_home">হোম</string>
     <string name="nav_departments">ক্যাটাগরি</string>

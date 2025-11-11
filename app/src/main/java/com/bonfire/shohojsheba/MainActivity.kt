@@ -28,6 +28,9 @@ import com.bonfire.shohojsheba.utils.LocalLocale
 import com.bonfire.shohojsheba.utils.LocalOnLocaleChange
 import com.bonfire.shohojsheba.utils.ProvideLocale
 import java.util.Locale
+//
+import com.bonfire.shohojsheba.navigation.Routes
+import androidx.compose.material.icons.filled.Chat
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -37,7 +40,6 @@ class MainActivity : ComponentActivity() {
             val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             val savedLang = remember { sharedPreferences.getString("language", "bn") ?: "bn" }
             val (locale, setLocale) = remember { mutableStateOf(Locale(savedLang)) }
-
             val onLocaleChange: (Locale) -> Unit = { newLocale ->
                 setLocale(newLocale)
                 sharedPreferences.edit().putString("language", newLocale.language).apply()
@@ -95,7 +97,27 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             },
-                            bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) }
+                            bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) },
+
+                            floatingActionButton = {
+                                // We only want to show this button on the home screen
+                                if (currentRoute == Routes.HOME) {
+                                    FloatingActionButton(
+                                        onClick = {
+                                            // Navigate to the chat screen when clicked
+                                            navController.navigate(Routes.CHAT)
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Chat,
+                                            contentDescription = stringResource(id = R.string.ai_assistant)
+                                        )
+                                    }
+                                }
+                            }
+
+
+
                         ) { paddingValues ->
                             AppNavGraph(
                                 modifier = Modifier.padding(paddingValues),

@@ -223,6 +223,62 @@
       ],
       "images": [],
       "imageNames": []
+    },
+
+    {
+      "id": "entrepreneur_trade_license",
+      "title": {
+        "en": "Trade License",
+        "bn": "ট্রেড লাইসেন্স"
+      },
+      "subtitle": {
+        "en": "Online application via prottoyon.gov.bd",
+        "bn": "prottoyon.gov.bd এর মাধ্যমে অনলাইন আবেদন"
+      },
+      "iconName": "ic_entrepreneur_trade_license",
+      "category": "entrepreneur",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "trade",
+        "license",
+        "business",
+        "shop",
+        "prottoyon",
+        "licence",
+        "ব্যবসা",
+        "লাইসেন্স"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_13.webp"
+      ],
+      "imageNames": [
+        "entrepreneur_trade_license_1",
+        "entrepreneur_trade_license_2",
+        "entrepreneur_trade_license_3",
+        "entrepreneur_trade_license_4",
+        "entrepreneur_trade_license_5",
+        "entrepreneur_trade_license_6",
+        "entrepreneur_trade_license_7",
+        "entrepreneur_trade_license_8",
+        "entrepreneur_trade_license_9",
+        "entrepreneur_trade_license_10",
+        "entrepreneur_trade_license_11",
+        "entrepreneur_trade_license_12",
+        "entrepreneur_trade_license_13"
+      ]
     }
   ],
   "service_details": [
@@ -434,6 +490,58 @@
       "lastUpdated": 1730947200000,
       "imageNames": [],
       "images": []
+    },
+
+    {
+      "serviceId": "entrepreneur_trade_license",
+      "instructions": {
+        "en": "Step 1 — Go to the prottoyon.gov.bd website.\n\nStep 2 — Click on the \"Free Citizen Account\" button from the top-right corner of the website.\n\nStep 3 — Fill out the registration form with your National ID number, Date of Birth, and mobile number, then click the \"Register\" button.\n\nStep 4 — Enter the OTP code sent to your mobile phone in the designated field and click the \"Submit\" button.\n\nStep 5 — After completing the registration, log in using your mobile number and password.\n\nStep 6 — After entering the dashboard, click on the \"Complete Profile\" button.\n\nStep 7 — Fill in your present and permanent address details correctly and click the \"Next\" button.\n\nStep 8 — Upload your photo and a scanned copy of your National ID card, then \"Save\" the profile.\n\nStep 9 — From the services on the dashboard, find and click on the \"Trade License\" icon.\n\nStep 10 — Fill out the trade license application form with your business information and the owner's personal details.\n\nStep 11 — After saving the form, select your preferred payment gateway (e.g., ekpay) on the fee payment page.\n\nStep 12 — Complete the payment by paying the specified fee through mobile banking or a card.\n\nStep 13 — After successful payment, print the receipt with the application tracking number and contact your nearest Union Council/Municipality office.",
+        "bn": "ধাপ ১ — prottoyon.gov.bd ওয়েবসাইটে যান।\n\nধাপ ২ — ওয়েবসাইটের উপরের ডান দিক থেকে \"ফ্রি নাগরিক একাউন্ট\" বাটনে ক্লিক করুন।\n\nধাপ ৩ — জাতীয় পরিচয়পত্র নম্বর, জন্ম তারিখ ও মোবাইল নম্বর দিয়ে নিবন্ধন ফরমটি পূরণ করুন এবং \"নিবন্ধন করুন\" বাটনে ক্লিক করুন।\n\nধাপ ৪ — আপনার মোবাইলে পাঠানো ওটিপি (OTP) কোডটি নির্দিষ্ট ঘরে লিখে \"জমা দিন\" বাটনে ক্লিক করুন।\n\nধাপ ৫ — রেজিস্ট্রেশন সম্পন্ন হলে আপনার মোবাইল নম্বর এবং পাসওয়ার্ড ব্যবহার করে লগইন করুন।\n\nধাপ ৬ — ড্যাশবোর্ডে প্রবেশ করে \"প্রোফাইল সম্পূর্ণ করুন\" বাটনে ক্লিক করুন।\n\nধাপ ৭ — আপনার বর্তমান ও স্থায়ী ঠিকানা সঠিকভাবে পূরণ করুন এবং \"পরবর্তী\" বাটনে ক্লিক করুন।\n\nধাপ ৮ — আপনার ছবি এবং জাতীয় পরিচয়পত্রের স্ক্যান কপি আপলোড করে প্রোফাইল \"সংরক্ষণ করুন\"।\n\nধাপ ৯ — ড্যাশবোর্ডের সেবাসমূহ থেকে \"ট্রেড লাইসেন্স\" আইকনটি খুঁজে বের করে তাতে ক্লিক করুন।\n\nধাপ ১০ — ব্যবসা প্রতিষ্ঠানের তথ্য এবং মালিকের ব্যক্তিগত তথ্য দিয়ে ট্রেড লাইসেন্সের আবেদন ফরমটি পূরণ করুন।\n\nধাপ ১১ — ফরমটি সংরক্ষণ করার পর ফি প্রদানের পৃষ্ঠায় আপনার পছন্দের পেমেন্ট গেটওয়ে (যেমন: ekpay) নির্বাচন করুন।\n\nধাপ ১২ — মোবাইল ব্যাংকিং বা কার্ডের মাধ্যমে নির্ধারিত ফি প্রদান করে পেমেন্ট সম্পন্ন করুন।\n\nধাপ ১৩ — পেমেন্ট সফল হওয়ার পর অ্যাপ্লিকেশন ট্র্যাকিং নম্বরসহ রশিদটি প্রিন্ট করুন এবং আপনার নিকটস্থ ইউনিয়ন পরিষদ/পৌরসভা অফিসে যোগাযোগ করুন।"
+      },
+      "requiredDocuments": {
+        "en": "- Scanned copy of NID\n- Recent photo\n- Business address details",
+        "bn": "- জাতীয় পরিচয়পত্রের স্ক্যান কপি\n- সাম্প্রতিক ছবি\n- ব্যবসার ঠিকানা বিবরণ"
+      },
+      "processingTime": {
+        "en": "Varies by Union/Municipality",
+        "bn": "ইউনিয়ন/পৌরসভা অনুযায়ী ভিন্ন"
+      },
+      "contactInfo": {
+        "en": "Your local Union Council / Municipality office",
+        "bn": "আপনার স্থানীয় ইউনিয়ন পরিষদ / পৌরসভা অফিস"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "entrepreneur_trade_license_1",
+        "entrepreneur_trade_license_2",
+        "entrepreneur_trade_license_3",
+        "entrepreneur_trade_license_4",
+        "entrepreneur_trade_license_5",
+        "entrepreneur_trade_license_6",
+        "entrepreneur_trade_license_7",
+        "entrepreneur_trade_license_8",
+        "entrepreneur_trade_license_9",
+        "entrepreneur_trade_license_10",
+        "entrepreneur_trade_license_11",
+        "entrepreneur_trade_license_12",
+        "entrepreneur_trade_license_13"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_13.webp"
+      ]
     }
   ]
 }
