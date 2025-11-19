@@ -224,7 +224,7 @@ private fun ChatScreenContent(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(id = R.string.ai_assistant),
+                            text = stringResource(id = R.string.chat_screen_title),
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
@@ -401,12 +401,12 @@ fun ChatBubble(
 @Composable
 fun ChatInputBar(
     input: String,
-    imageUri: Uri?, // NEW
+    imageUri: Uri?,
     onInputChange: (String) -> Unit,
     onSendClick: () -> Unit,
     onVoiceClick: () -> Unit,
-    onAttachClick: () -> Unit, // NEW
-    onRemoveImage: () -> Unit, // NEW
+    onAttachClick: () -> Unit,
+    onRemoveImage: () -> Unit,
     isLoading: Boolean
 ) {
     Surface(
@@ -427,23 +427,23 @@ fun ChatInputBar(
                         color = MaterialTheme.colorScheme.secondaryContainer,
                         modifier = Modifier.size(60.dp)
                     ) {
-                        // Just a placeholder icon to avoid Coil dependency crash
-                        // If you have Coil, use AsyncImage here
                         Box(contentAlignment = Alignment.Center) {
                             Icon(Icons.Default.AttachFile, contentDescription = null)
                         }
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
+                        // --- UPDATE THESE TWO TEXTS ---
                         Text(
-                            text = "Image attached",
+                            text = stringResource(id = R.string.image_attached_status), // Was "Image attached"
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "Ready to send",
+                            text = stringResource(id = R.string.ready_to_send_status), // Was "Ready to send"
                             style = MaterialTheme.typography.labelSmall
                         )
+                        // ------------------------------
                     }
                     IconButton(onClick = onRemoveImage) {
                         Icon(Icons.Default.Close, contentDescription = "Remove")
@@ -539,18 +539,22 @@ fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
         )
         Text(
-            text = "How can I help you today?",
+            // --- 1. LOCALIZED GREETING ---
+            text = stringResource(id = R.string.chat_greeting),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(24.dp))
+
+        // --- 2. LOCALIZED SUGGESTIONS ---
         val suggestions = listOf(
-            "Renew Passport",
-            "Trade License Fee",
-            "Birth Certificate",
-            "Emergency Numbers"
+            stringResource(id = R.string.sugg_passport),
+            stringResource(id = R.string.sugg_trade_license),
+            stringResource(id = R.string.sugg_birth_cert),
+            stringResource(id = R.string.sugg_emergency)
         )
+
         WrapContent(suggestions, onSuggestionClick)
     }
 }

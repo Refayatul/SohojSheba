@@ -50,6 +50,15 @@
     <string name="history_page_title">হিস্টোরি</string>
     <string name="favorites_page_title">প্রিয়</string>
     <string name="settings_page_title">সেটিংস</string>
+    <!-- Chat Screen Strings -->
+    <string name="chat_screen_title">সহজ সেবা</string>
+    <string name="chat_greeting">আজ আপনাকে কীভাবে সাহায্য করতে পারি?</string>
+    <string name="sugg_passport">পাসপোর্ট নবায়ন</string>
+    <string name="sugg_trade_license">ট্রেড লাইসেন্স ফি</string>
+    <string name="sugg_birth_cert">জন্ম নিবন্ধন</string>
+    <string name="sugg_emergency">জরুরী নাম্বারসমূহ</string>
+    <string name="image_attached_status">ছবি যুক্ত করা হয়েছে</string>
+    <string name="ready_to_send_status">পাঠানোর জন্য প্রস্তুত</string>
 
     <!-- History Content Screen -->
     <string name="clear_history_title">হিস্টোরি মুছে ফেলুন</string>

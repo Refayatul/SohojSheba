@@ -53,6 +53,14 @@
     <!-- History Content Screen -->
     <string name="clear_history_title">Clear all history</string>
     <string name="clear_history_button">Clear History</string>
+    <string name="chat_screen_title">Shohoj Sheba</string>
+    <string name="chat_greeting">How can I help you today?</string>
+    <string name="sugg_passport">Renew Passport</string>
+    <string name="sugg_trade_license">Trade License Fee</string>
+    <string name="sugg_birth_cert">Birth Certificate</string>
+    <string name="sugg_emergency">Emergency Numbers</string>
+    <string name="image_attached_status">Image attached</string>
+    <string name="ready_to_send_status">Ready to send</string>
 
     <!-- ==================================================== -->
     <!-- ==              SERVICE DEFINITIONS                 == -->
