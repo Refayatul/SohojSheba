@@ -28,7 +28,15 @@ val IconBgLightYellow = Color(0xFFFFFDE7)
 val IconTintDarkYellow = Color(0xFFF9A825)
 
 // Splash Screen Colors
+//val SplashGradientStart = Color(0xFFEAF4F4)
+//val SplashGradientEnd = Color(0xFFEFF6F9)
+//val SplashLogoGreen = Color(0xFF00C895)
+//val SplashTextTeal = Color(0xFF00695C)
+
+// --- UPDATED SPLASH SCREEN COLORS  ---
+val SplashBackground = Color(0xFFE0F2F1) // Very light teal/gray background
+val SplashLogoGreen = Color(0xFF009688)  // The specific Teal/Green from the logo
+val SplashTextTeal = Color(0xFF00695C)   // Darker teal for text
+
 val SplashGradientStart = Color(0xFFEAF4F4)
 val SplashGradientEnd = Color(0xFFEFF6F9)
-val SplashLogoGreen = Color(0xFF00C895)
-val SplashTextTeal = Color(0xFF00695C)
