@@ -4,13 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.speech.RecognizerIntent
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +27,8 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AttachFile // NEW ICON
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.SmartToy
@@ -28,6 +36,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -42,11 +53,17 @@ import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.viewmodels.AiResponseState
 import com.bonfire.shohojsheba.ui.viewmodels.ChatViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.InputStream
+import androidx.compose.ui.text.font.FontWeight
 
 data class ChatMessage(
     val id: String = java.util.UUID.randomUUID().toString(),
     val text: String,
-    val isFromUser: Boolean
+    val isFromUser: Boolean,
+    val imageUri: Uri? = null // Added to show sent images in chat history
 )
 
 // --- HELPER: Recursive Activity Finder ---
@@ -55,6 +72,19 @@ fun Context.findActivity(): ComponentActivity? {
         is ComponentActivity -> this
         is ContextWrapper -> this.baseContext.findActivity()
         else -> null
+    }
+}
+
+// --- HELPER: Convert URI to Bitmap safely ---
+suspend fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
+    return withContext(Dispatchers.IO) {
+        try {
+            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }
 
@@ -67,7 +97,7 @@ fun ChatScreen(
     val context = LocalContext.current
     val view = LocalView.current
 
-    // Try to find the Activity using both Context and View
+    // Try to find the Activity
     val activity = remember(context, view) {
         context.findActivity() ?: view.context.findActivity()
     }
@@ -81,7 +111,6 @@ fun ChatScreen(
     }
 }
 
-// --- ADDED OptIn HERE TO FIX THE ERROR ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ChatScreenContent(
@@ -89,12 +118,20 @@ private fun ChatScreenContent(
     viewModel: ChatViewModel
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     val messages = remember { mutableStateListOf<ChatMessage>() }
     var textInput by remember { mutableStateOf("") }
+
+    // New State for Image Attachment
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
     val listState = rememberLazyListState()
     val aiState by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    // 1. Voice Launcher
     val voiceLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -107,6 +144,19 @@ private fun ChatScreenContent(
         }
     }
 
+    // 2. Photo Picker Launcher
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            selectedImageUri = uri
+            // Convert to bitmap for the AI
+            scope.launch {
+                selectedBitmap = uriToBitmap(context, uri)
+            }
+        }
+    }
+
     val onVoiceInputClick: () -> Unit = {
         try {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
@@ -115,11 +165,12 @@ private fun ChatScreenContent(
                 putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
             }
             voiceLauncher.launch(intent)
-        } catch (_: Exception) { // Changed 'e' to '_' to ignore unused warning
+        } catch (_: Exception) {
             Toast.makeText(context, "Voice input not available", Toast.LENGTH_SHORT).show()
         }
     }
 
+    // Auto Scroll
     LaunchedEffect(messages.size, aiState) {
         if (messages.isNotEmpty()) {
             listState.animateScrollToItem(messages.size - 1)
@@ -141,10 +192,21 @@ private fun ChatScreenContent(
     }
 
     val onSendMessage: (String) -> Unit = { messageText ->
-        if (messageText.isNotBlank() && aiState !is AiResponseState.Loading) {
-            messages.add(ChatMessage(text = messageText, isFromUser = true))
-            viewModel.searchWithAI(messageText)
+        if ((messageText.isNotBlank() || selectedBitmap != null) && aiState !is AiResponseState.Loading) {
+            // Add user message to UI
+            messages.add(ChatMessage(
+                text = messageText,
+                isFromUser = true,
+                imageUri = selectedImageUri // Save URI for UI display
+            ))
+
+            // Call ViewModel
+            viewModel.searchWithAI(messageText, selectedBitmap)
+
+            // Reset Inputs
             textInput = ""
+            selectedImageUri = null
+            selectedBitmap = null
             keyboardController?.hide()
         }
     }
@@ -199,7 +261,11 @@ private fun ChatScreenContent(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(messages, key = { it.id }) { message ->
-                            ChatBubble(message = message)
+                            ChatBubble(message = message, bitmapLoader = { uri ->
+                                // Simple synchronous load for UI display, or you can use Coil
+                                // For now returning null to keep it crash-free if you don't have Coil
+                                null
+                            })
                         }
                         if (aiState is AiResponseState.Loading) {
                             item { TypingIndicator() }
@@ -210,9 +276,20 @@ private fun ChatScreenContent(
 
             ChatInputBar(
                 input = textInput,
+                imageUri = selectedImageUri, // Pass the selected image
                 onInputChange = { textInput = it },
                 onSendClick = { onSendMessage(textInput) },
                 onVoiceClick = onVoiceInputClick,
+                onAttachClick = {
+                    // Launch Photo Picker
+                    photoPickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                },
+                onRemoveImage = {
+                    selectedImageUri = null
+                    selectedBitmap = null
+                },
                 isLoading = aiState is AiResponseState.Loading
             )
         }
@@ -220,7 +297,10 @@ private fun ChatScreenContent(
 }
 
 @Composable
-fun ChatBubble(message: ChatMessage) {
+fun ChatBubble(
+    message: ChatMessage,
+    bitmapLoader: (Uri) -> Bitmap? // Optional for later
+) {
     val isUser = message.isFromUser
     val clipboardManager = LocalClipboardManager.current
 
@@ -264,9 +344,19 @@ fun ChatBubble(message: ChatMessage) {
                 modifier = Modifier.weight(1f, fill = false)
             ) {
                 Column {
+                    // Show Image if present (Note: In real app, use Coil/Glide here)
+                    if (message.imageUri != null) {
+                        Text(
+                            text = "📷 [Image Attached]",
+                            modifier = Modifier.padding(top = 12.dp, start = 12.dp, end = 12.dp),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (isUser) MaterialTheme.colorScheme.onPrimary.copy(0.7f) else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
                     SelectionContainer {
                         Text(
-                            text = message.text,
+                            text = message.text.ifBlank { "Sent an image" },
                             modifier = Modifier.padding(12.dp),
                             color = if (isUser)
                                 MaterialTheme.colorScheme.onPrimary
@@ -311,72 +401,126 @@ fun ChatBubble(message: ChatMessage) {
 @Composable
 fun ChatInputBar(
     input: String,
+    imageUri: Uri?, // NEW
     onInputChange: (String) -> Unit,
     onSendClick: () -> Unit,
     onVoiceClick: () -> Unit,
+    onAttachClick: () -> Unit, // NEW
+    onRemoveImage: () -> Unit, // NEW
     isLoading: Boolean
 ) {
     Surface(
         tonalElevation = 2.dp,
         color = MaterialTheme.colorScheme.surface,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = input,
-                onValueChange = onInputChange,
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 50.dp, max = 120.dp),
-                placeholder = { Text(stringResource(id = R.string.type_your_question)) },
-                shape = RoundedCornerShape(24.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                ),
-                enabled = !isLoading,
-                maxLines = 4,
-                trailingIcon = {
-                    IconButton(onClick = onVoiceClick) {
-                        Icon(
-                            imageVector = Icons.Default.Mic,
-                            contentDescription = "Voice Input",
-                            tint = MaterialTheme.colorScheme.secondary
+        Column {
+            // PREVIEW AREA FOR SELECTED IMAGE
+            if (imageUri != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        modifier = Modifier.size(60.dp)
+                    ) {
+                        // Just a placeholder icon to avoid Coil dependency crash
+                        // If you have Coil, use AsyncImage here
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.AttachFile, contentDescription = null)
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Image attached",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Ready to send",
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
+                    IconButton(onClick = onRemoveImage) {
+                        Icon(Icons.Default.Close, contentDescription = "Remove")
+                    }
                 }
-            )
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(0.2f))
+            }
 
-            Spacer(modifier = Modifier.width(12.dp))
-
-            FilledIconButton(
-                onClick = onSendClick,
-                enabled = input.isNotBlank() && !isLoading,
-                modifier = Modifier.size(50.dp)
+            // TEXT INPUT ROW
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.dp
-                    )
-                } else {
+                // ATTACH BUTTON
+                IconButton(onClick = onAttachClick, enabled = !isLoading) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Send,
-                        contentDescription = "Send"
+                        imageVector = Icons.Default.AttachFile,
+                        contentDescription = "Attach",
+                        tint = MaterialTheme.colorScheme.secondary
                     )
+                }
+
+                OutlinedTextField(
+                    value = input,
+                    onValueChange = onInputChange,
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = 50.dp, max = 120.dp),
+                    placeholder = { Text(stringResource(id = R.string.type_your_question)) },
+                    shape = RoundedCornerShape(24.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    enabled = !isLoading,
+                    maxLines = 4,
+                    trailingIcon = {
+                        IconButton(onClick = onVoiceClick) {
+                            Icon(
+                                imageVector = Icons.Default.Mic,
+                                contentDescription = "Voice Input",
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                FilledIconButton(
+                    onClick = onSendClick,
+                    enabled = (input.isNotBlank() || imageUri != null) && !isLoading,
+                    modifier = Modifier.size(50.dp)
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Send,
+                            contentDescription = "Send"
+                        )
+                    }
                 }
             }
         }
     }
 }
 
+// EmptyChatState, WrapContent, TypingIndicator remain unchanged
 @Composable
 fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
     Column(
@@ -401,14 +545,12 @@ fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(24.dp))
-
         val suggestions = listOf(
             "Renew Passport",
             "Trade License Fee",
             "Birth Certificate",
             "Emergency Numbers"
         )
-
         WrapContent(suggestions, onSuggestionClick)
     }
 }
