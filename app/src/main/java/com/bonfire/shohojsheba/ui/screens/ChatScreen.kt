@@ -1,151 +1,16 @@
-/*package com.bonfire.shohojsheba.ui.screens
-
-
-
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.ui.viewmodels.AiResponseState
-import com.bonfire.shohojsheba.ui.viewmodels.ChatViewModel
-import kotlinx.coroutines.launch
-
-
-
-
-
-
-data class ChatMessage(val text: String, val isFromUser: Boolean)
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-
-
-fun ChatScreen(navController: NavController,
-               viewModel: ChatViewModel = viewModel()) {
-    val messages = remember { mutableStateListOf<ChatMessage>() }
-    var textInput by remember { mutableStateOf("") }
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
-    val aiState by viewModel.aiResponse.collectAsState()
-
-
-    LaunchedEffect(aiState) {
-        when (val state = aiState) {
-            is AiResponseState.Success -> {
-                messages.add(ChatMessage(state.responseText, isFromUser = false))
-                viewModel.clearResponseState() // Reset state to prevent re-adding
-            }
-            is AiResponseState.Error -> {
-                messages.add(ChatMessage(state.errorMessage, isFromUser = false))
-                viewModel.clearResponseState() // Reset state
-            }
-            else -> { /* Do nothing for Idle or Loading here */ }
-        }
-
-        // Auto-scroll to the new message
-        if (messages.isNotEmpty()) {
-            listState.animateScrollToItem(messages.size - 1)
-        }
-    }
-
-    val onSendMessage: (String) -> Unit = { messageText ->
-        if (messageText.isNotBlank() && aiState !is AiResponseState.Loading) {
-            messages.add(ChatMessage(messageText, isFromUser = true))
-            // --- THIS IS THE KEY ---
-            // Trigger the AI logic in the ViewModel
-            viewModel.searchWithAI(messageText)
-            textInput = ""
-        }
-    }
-
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(id = R.string.ai_assistant)) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            // Message List
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
-                contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                items(messages) { msg ->
-                    // You can customize the chat bubble appearance here later
-                    Text(text = msg.text, modifier = Modifier.fillMaxWidth().padding(8.dp))
-                }
-
-                // Show a loading indicator while the AI is thinking
-                if (aiState is AiResponseState.Loading) {
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                }
-            }
-
-
-            // Input Field and Send Button
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = textInput,
-                    onValueChange = { textInput = it },
-                    modifier = Modifier.weight(1f),
-                    placeholder = { Text(stringResource(id = R.string.type_your_question)) },
-                    // Disable input while loading
-                    enabled = aiState !is AiResponseState.Loading
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    onClick = { onSendMessage(textInput) },
-                    // Disable button while loading
-                    enabled = aiState !is AiResponseState.Loading
-                ) {
-                    Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
-                }
-            }
-        }
-    }
-}*/
-
 package com.bonfire.shohojsheba.ui.screens
 
-import androidx.compose.foundation.background
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -157,18 +22,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -177,14 +42,21 @@ import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.viewmodels.AiResponseState
 import com.bonfire.shohojsheba.ui.viewmodels.ChatViewModel
-import androidx.compose.foundation.BorderStroke
 
-// Data class stays the same
 data class ChatMessage(
     val id: String = java.util.UUID.randomUUID().toString(),
     val text: String,
     val isFromUser: Boolean
 )
+
+// --- HELPER: Recursive Activity Finder ---
+fun Context.findActivity(): ComponentActivity? {
+    return when (this) {
+        is ComponentActivity -> this
+        is ContextWrapper -> this.baseContext.findActivity()
+        else -> null
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -192,13 +64,62 @@ fun ChatScreen(
     navController: NavController,
     viewModel: ChatViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    val view = LocalView.current
+
+    // Try to find the Activity using both Context and View
+    val activity = remember(context, view) {
+        context.findActivity() ?: view.context.findActivity()
+    }
+
+    if (activity != null) {
+        CompositionLocalProvider(LocalActivityResultRegistryOwner provides activity) {
+            ChatScreenContent(navController, viewModel)
+        }
+    } else {
+        ChatScreenContent(navController, viewModel)
+    }
+}
+
+// --- ADDED OptIn HERE TO FIX THE ERROR ---
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ChatScreenContent(
+    navController: NavController,
+    viewModel: ChatViewModel
+) {
+    val context = LocalContext.current
     val messages = remember { mutableStateListOf<ChatMessage>() }
     var textInput by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val aiState by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Auto-scroll when new messages appear
+    val voiceLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            results?.firstOrNull()?.let { spokenText ->
+                textInput = spokenText
+            }
+        }
+    }
+
+    val onVoiceInputClick: () -> Unit = {
+        try {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD")
+                putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
+            }
+            voiceLauncher.launch(intent)
+        } catch (_: Exception) { // Changed 'e' to '_' to ignore unused warning
+            Toast.makeText(context, "Voice input not available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     LaunchedEffect(messages.size, aiState) {
         if (messages.isNotEmpty()) {
             listState.animateScrollToItem(messages.size - 1)
@@ -265,9 +186,8 @@ fun ChatScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .imePadding() // Keeps input above keyboard
+                .imePadding()
         ) {
-            // Chat Area
             Box(modifier = Modifier.weight(1f)) {
                 if (messages.isEmpty()) {
                     EmptyChatState(onSuggestionClick = { onSendMessage(it) })
@@ -281,21 +201,18 @@ fun ChatScreen(
                         items(messages, key = { it.id }) { message ->
                             ChatBubble(message = message)
                         }
-
                         if (aiState is AiResponseState.Loading) {
-                            item {
-                                TypingIndicator()
-                            }
+                            item { TypingIndicator() }
                         }
                     }
                 }
             }
 
-            // Input Area
             ChatInputBar(
                 input = textInput,
                 onInputChange = { textInput = it },
                 onSendClick = { onSendMessage(textInput) },
+                onVoiceClick = onVoiceInputClick,
                 isLoading = aiState is AiResponseState.Loading
             )
         }
@@ -313,9 +230,8 @@ fun ChatBubble(message: ChatMessage) {
     ) {
         Row(
             verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.widthIn(max = 320.dp) // Limit bubble width
+            modifier = Modifier.widthIn(max = 320.dp)
         ) {
-            // AI Icon for left side
             if (!isUser) {
                 Surface(
                     shape = CircleShape,
@@ -332,7 +248,6 @@ fun ChatBubble(message: ChatMessage) {
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
-            // The Bubble
             Card(
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
@@ -361,7 +276,6 @@ fun ChatBubble(message: ChatMessage) {
                         )
                     }
 
-                    // Copy Button for AI messages
                     if (!isUser) {
                         HorizontalDivider(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f),
@@ -399,6 +313,7 @@ fun ChatInputBar(
     input: String,
     onInputChange: (String) -> Unit,
     onSendClick: () -> Unit,
+    onVoiceClick: () -> Unit,
     isLoading: Boolean
 ) {
     Surface(
@@ -426,7 +341,16 @@ fun ChatInputBar(
                     unfocusedContainerColor = MaterialTheme.colorScheme.surface
                 ),
                 enabled = !isLoading,
-                maxLines = 4
+                maxLines = 4,
+                trailingIcon = {
+                    IconButton(onClick = onVoiceClick) {
+                        Icon(
+                            imageVector = Icons.Default.Mic,
+                            contentDescription = "Voice Input",
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -478,7 +402,6 @@ fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
         )
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Suggestions
         val suggestions = listOf(
             "Renew Passport",
             "Trade License Fee",
@@ -503,7 +426,6 @@ fun WrapContent(suggestions: List<String>, onClick: (String) -> Unit) {
                 colors = SuggestionChipDefaults.suggestionChipColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)
                 ),
-                // --- FIX: Use BorderStroke instead of suggestionChipBorder ---
                 border = BorderStroke(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
@@ -512,6 +434,7 @@ fun WrapContent(suggestions: List<String>, onClick: (String) -> Unit) {
         }
     }
 }
+
 @Composable
 fun TypingIndicator() {
     Row(
