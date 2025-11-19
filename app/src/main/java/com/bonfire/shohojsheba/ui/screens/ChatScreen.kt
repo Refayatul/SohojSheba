@@ -13,8 +13,10 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background // Added this just in case
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,7 +30,8 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Description // PDF Icon
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material3.*
@@ -59,7 +62,8 @@ data class ChatMessage(
     val id: String = java.util.UUID.randomUUID().toString(),
     val text: String,
     val isFromUser: Boolean,
-    val attachmentName: String? = null // Stores filename for UI
+    val attachmentName: String? = null,
+    val isImage: Boolean = false
 )
 
 // --- HELPERS ---
@@ -72,7 +76,6 @@ fun Context.findActivity(): ComponentActivity? {
     }
 }
 
-// Helper to get filename from URI
 fun getFileName(context: Context, uri: Uri): String {
     var result: String? = null
     if (uri.scheme == "content") {
@@ -98,24 +101,22 @@ fun getFileName(context: Context, uri: Uri): String {
     return result ?: "attachment"
 }
 
-// Helper to get Bytes (for PDF)
 suspend fun uriToBytes(context: Context, uri: Uri): ByteArray? {
     return withContext(Dispatchers.IO) {
         try {
             context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
 }
 
-// Helper to get Bitmap (for Images)
 suspend fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
     return withContext(Dispatchers.IO) {
         try {
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
             BitmapFactory.decodeStream(inputStream)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
@@ -151,12 +152,10 @@ private fun ChatScreenContent(
     val messages = remember { mutableStateListOf<ChatMessage>() }
     var textInput by remember { mutableStateOf("") }
 
-    // --- STATE FOR ATTACHMENTS ---
     var selectedUri by remember { mutableStateOf<Uri?>(null) }
     var selectedFileName by remember { mutableStateOf<String?>(null) }
-    var selectedMimeType by remember { mutableStateOf<String?>(null) }
+    var isImageAttachment by remember { mutableStateOf(false) }
 
-    // Data to send
     var selectedBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var selectedPdfBytes by remember { mutableStateOf<ByteArray?>(null) }
 
@@ -168,33 +167,39 @@ private fun ChatScreenContent(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull()?.let {
-                textInput = it
+            val spokenText = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull()
+            if (spokenText != null) {
+                textInput = spokenText
             }
         }
     }
 
-    // --- UPDATED LAUNCHER: GetContent (Allows PDF & Images) ---
-    val filePickerLauncher = rememberLauncherForActivityResult(
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            selectedUri = uri
+            selectedFileName = "Image"
+            isImageAttachment = true
+
+            scope.launch {
+                selectedBitmap = uriToBitmap(context, uri)
+                selectedPdfBytes = null
+            }
+        }
+    }
+
+    val pdfLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
         if (uri != null) {
             selectedUri = uri
             selectedFileName = getFileName(context, uri)
-            val type = context.contentResolver.getType(uri)
-            selectedMimeType = type
+            isImageAttachment = false
 
             scope.launch {
-                if (type?.startsWith("image") == true) {
-                    selectedBitmap = uriToBitmap(context, uri)
-                    selectedPdfBytes = null
-                } else if (type == "application/pdf") {
-                    selectedPdfBytes = uriToBytes(context, uri)
-                    selectedBitmap = null
-                } else {
-                    Toast.makeText(context, "Only Images or PDF supported", Toast.LENGTH_SHORT).show()
-                    selectedUri = null // Reset if invalid
-                }
+                selectedPdfBytes = uriToBytes(context, uri)
+                selectedBitmap = null
             }
         }
     }
@@ -236,13 +241,12 @@ private fun ChatScreenContent(
             messages.add(ChatMessage(
                 text = messageText,
                 isFromUser = true,
-                attachmentName = selectedFileName // Show filename in chat
+                attachmentName = selectedFileName,
+                isImage = isImageAttachment
             ))
 
-            // SEND TO VIEWMODEL
             viewModel.searchWithAI(messageText, selectedBitmap, selectedPdfBytes)
 
-            // Reset
             textInput = ""
             selectedUri = null
             selectedFileName = null
@@ -306,13 +310,16 @@ private fun ChatScreenContent(
 
             ChatInputBar(
                 input = textInput,
-                attachmentName = selectedFileName, // Display filename
+                attachmentName = selectedFileName,
+                isImage = isImageAttachment,
                 onInputChange = { textInput = it },
                 onSendClick = { onSendMessage(textInput) },
                 onVoiceClick = onVoiceInputClick,
-                onAttachClick = {
-                    // Launch Generic File Picker (Images and PDFs)
-                    filePickerLauncher.launch("*/*")
+                onPickImage = {
+                    imageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
+                onPickPdf = {
+                    pdfLauncher.launch("application/pdf")
                 },
                 onRemoveAttachment = {
                     selectedUri = null
@@ -358,14 +365,14 @@ fun ChatBubble(message: ChatMessage) {
                 modifier = Modifier.weight(1f, fill = false)
             ) {
                 Column {
-                    // --- SHOW ATTACHMENT NAME IF EXISTS ---
                     if (message.attachmentName != null) {
                         Row(
                             modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            val icon = if (message.isImage) Icons.Default.Image else Icons.Default.Description
                             Icon(
-                                imageVector = Icons.Default.Description, // Document Icon
+                                imageVector = icon,
                                 contentDescription = null,
                                 tint = if (isUser) MaterialTheme.colorScheme.onPrimary.copy(0.8f) else MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.size(16.dp)
@@ -381,7 +388,7 @@ fun ChatBubble(message: ChatMessage) {
 
                     SelectionContainer {
                         Text(
-                            text = message.text.ifBlank { "Sent a file" },
+                            text = message.text.ifBlank { if (message.isImage) "Sent an image" else "Sent a PDF" },
                             modifier = Modifier.padding(12.dp),
                             color = if (isUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 22.sp)
@@ -405,17 +412,20 @@ fun ChatBubble(message: ChatMessage) {
 @Composable
 fun ChatInputBar(
     input: String,
-    attachmentName: String?, // Changed from ImageUri to generic name
+    attachmentName: String?,
+    isImage: Boolean,
     onInputChange: (String) -> Unit,
     onSendClick: () -> Unit,
     onVoiceClick: () -> Unit,
-    onAttachClick: () -> Unit,
+    onPickImage: () -> Unit,
+    onPickPdf: () -> Unit,
     onRemoveAttachment: () -> Unit,
     isLoading: Boolean
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     Surface(tonalElevation = 2.dp, color = MaterialTheme.colorScheme.surface) {
         Column {
-            // --- ATTACHMENT PREVIEW ---
             if (attachmentName != null) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
@@ -423,7 +433,8 @@ fun ChatInputBar(
                 ) {
                     Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.size(50.dp)) {
                         Box(contentAlignment = Alignment.Center) {
-                            Icon(Icons.Default.Description, contentDescription = null)
+                            val icon = if (isImage) Icons.Default.Image else Icons.Default.Description
+                            Icon(icon, contentDescription = null)
                         }
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -438,13 +449,37 @@ fun ChatInputBar(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(0.2f))
             }
 
-            // INPUT ROW
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = onAttachClick, enabled = !isLoading) {
-                    Icon(Icons.Default.AttachFile, "Attach", tint = MaterialTheme.colorScheme.secondary)
+                Box {
+                    IconButton(onClick = { showMenu = true }, enabled = !isLoading) {
+                        Icon(Icons.Default.AttachFile, "Attach", tint = MaterialTheme.colorScheme.secondary)
+                    }
+                    // --- FIX IS HERE: Used containerColor instead of Modifier.background ---
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false },
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Photo") },
+                            leadingIcon = { Icon(Icons.Default.Image, null) },
+                            onClick = {
+                                showMenu = false
+                                onPickImage()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("PDF Document") },
+                            leadingIcon = { Icon(Icons.Default.Description, null) },
+                            onClick = {
+                                showMenu = false
+                                onPickPdf()
+                            }
+                        )
+                    }
                 }
 
                 OutlinedTextField(
