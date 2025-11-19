@@ -14,7 +14,10 @@ fun AppNavGraph(
     navController: NavHostController,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onVoiceSearchClick: () -> Unit
+    onVoiceSearchClick: () -> Unit,
+    // --- Added these two parameters ---
+    currentThemeMode: String,
+    onThemeChange: (String) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -59,6 +62,14 @@ fun AppNavGraph(
 
         composable(Routes.HISTORY) { HistoryScreen(navController) }
         composable(Routes.FAVORITES) { FavoritesScreen(navController) }
-        composable(Routes.SETTINGS) { SettingsScreen(navController) }
+
+        // --- Updated Settings Route to pass theme data ---
+        composable(Routes.SETTINGS) {
+            SettingsScreen(
+                navController = navController,
+                currentThemeMode = currentThemeMode,
+                onThemeChange = onThemeChange
+            )
+        }
     }
 }
