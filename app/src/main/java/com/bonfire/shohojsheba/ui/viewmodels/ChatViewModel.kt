@@ -23,10 +23,10 @@ class ChatViewModel : ViewModel() {
     private val _aiResponse = MutableStateFlow<AiResponseState>(AiResponseState.Idle)
     val aiResponse = _aiResponse.asStateFlow()
 
-    // FIXED: Changed class name from 'ChatSession' to 'Chat'
     private var chat: Chat? = null
 
-    fun searchWithAI(query: String, image: Bitmap? = null) {
+    // UPDATED: Accepts pdfBytes
+    fun searchWithAI(query: String, image: Bitmap? = null, pdfBytes: ByteArray? = null) {
         viewModelScope.launch {
             _aiResponse.value = AiResponseState.Loading
 
@@ -37,18 +37,17 @@ class ChatViewModel : ViewModel() {
             }
 
             try {
-                // Initialize Chat if it doesn't exist
                 if (chat == null) {
                     val generativeModel = GenerativeModel(
                         modelName = "gemini-2.5-flash-lite",
-
                         apiKey = apiKey,
                         systemInstruction = content {
                             text("""You are Shohoj Sheba, a helpful assistant dedicated to making Bangladesh government services accessible to everyone.  Do not introduce yourself as an AI
 
                                     YOUR BEHAVIOR:
                                 1. **Small Talk & Greetings:** If the user says "Hi", "Hello", "Salam", "Thanks", or asks "How are you?", respond naturally, politely, and briefly. Ask how you can help them with government services.
-                                2. **Service Requests:** If the user asks about a service (e.g., "NID", "Passport", "Birth Certificate", "Trade License"), providing a guide is your PRIORITY. You must provide a structured, step-by-step guide.
+                                2. **Service Requests:** If the user asks about a service (e.g., "NID", "Passport", "Birth Certificate", "Trade License" etc), providing a guide is your PRIORITY. You must provide a structured, step-by-step guide.
+3. If the user sends a PDF/Image, analyze it, summarize it, or explain the steps inside it
 
                             FORMATTING RULES FOR SERVICES (Make it Accessible):
                             - **Do NOT use Markdown** (like **bold** or ## headers) because the app cannot display them.
@@ -69,7 +68,7 @@ class ChatViewModel : ViewModel() {
                             • Fee: [Amount]
                             • Time: [Duration]
 
-                            ⚠️ **Note:** [Important Warning]
+                           ⚠️ **Note:** [Important Warning]
 
                             LANGUAGE:
                             - Respond in the exact same language as the user (Bangla or English).
@@ -77,27 +76,30 @@ class ChatViewModel : ViewModel() {
 
                             """.trimIndent())
                         }
+
+
                     )
-                    // FIXED: startChat returns a 'Chat' object
                     chat = generativeModel.startChat()
                 }
 
-                // Send Message (Text + Optional Image)
-                val response = if (image != null) {
-                    // FIXED: sendMessage on 'Chat' object
-                    chat?.sendMessage(content {
+                // Construct the message
+                val inputContent = content {
+                    if (image != null) {
                         image(image)
-                        text(query)
-                    })
-                } else {
-                    chat?.sendMessage(query)
+                    }
+                    if (pdfBytes != null) {
+                        // SEND PDF AS BLOB
+                        blob("application/pdf", pdfBytes)
+                    }
+                    text(query)
                 }
 
+                val response = chat?.sendMessage(inputContent)
                 _aiResponse.value = AiResponseState.Success(response?.text ?: "Sorry, I couldn't generate a response.")
 
             } catch (e: Exception) {
-                _aiResponse.value = AiResponseState.Error("⚠️ Error: ${e.localizedMessage ?: "Unknown error"}")
-                chat = null // Reset chat on error
+                _aiResponse.value = AiResponseState.Error("⚠️ AI Error: ${e.message?.take(50) ?: "Unknown error"}")
+                chat = null
             }
         }
     }
