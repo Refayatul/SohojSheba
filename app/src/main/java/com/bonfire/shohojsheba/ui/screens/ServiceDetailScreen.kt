@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.max
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetailScreen(
@@ -65,7 +64,7 @@ fun ServiceDetailScreen(
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 // Top spacer to avoid overlapping with floating buttons
-                Spacer(modifier = Modifier.height(72.dp)) // 48dp button + 16dp padding + extra 8dp
+                Spacer(modifier = Modifier.height(72.dp))
 
                 ServiceDetailContent(service!!, detail!!, locale)
 
@@ -84,32 +83,43 @@ fun ServiceDetailScreen(
                 .padding(16.dp)
                 .size(48.dp)
                 .align(Alignment.TopStart)
-                .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                // CHANGED: Use Surface color instead of hardcoded White
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
         ) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                // CHANGED: Use OnSurface (Black in light, White in dark)
+                tint = MaterialTheme.colorScheme.onSurface
+            )
         }
 
         // Floating favorite button
         IconButton(
             onClick = {
-                      coroutineScope.launch {
-                          if(isFavorite){
-                              viewModel.removeFavorite(serviceId)
-                          } else {
-                              viewModel.addFavorite(UserFavorite(serviceId = serviceId, addedDate = System.currentTimeMillis()))
-                          }
-                      }
+                coroutineScope.launch {
+                    if(isFavorite){
+                        viewModel.removeFavorite(serviceId)
+                    } else {
+                        viewModel.addFavorite(UserFavorite(serviceId = serviceId, addedDate = System.currentTimeMillis()))
+                    }
+                }
             },
             modifier = Modifier
                 .padding(16.dp)
                 .size(48.dp)
                 .align(Alignment.TopEnd)
-                .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                // CHANGED: Use Surface color instead of hardcoded White
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+
         ) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                 contentDescription = "Favorite",
-                tint = if (isFavorite) MaterialTheme.colorScheme.primary else Color.Black
+                // Keep primary color for favorite state, otherwise use onSurface
+                tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -130,7 +140,8 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .shadow(4.dp, RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                // CHANGED: Use Surface color (White in Light Mode, Dark Grey in Dark Mode)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(
@@ -172,6 +183,8 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         }
                         Text(
                             text = annotatedText,
+                            // CHANGED: Explicitly set text color to onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontSize = 16.sp,
                                 lineHeight = 24.sp
@@ -189,25 +202,29 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
     val requiredDocuments = if (locale.language == "bn") detail.requiredDocuments.bn else detail.requiredDocuments.en
     val processingTime = if (locale.language == "bn") detail.processingTime.bn else detail.processingTime.en
     val contactInfo = if (locale.language == "bn") detail.contactInfo.bn else detail.contactInfo.en
+
     Column(
         Modifier
             .padding(horizontal = 16.dp)
-            .background(Color.White, RoundedCornerShape(16.dp))
+            // CHANGED: Use Surface color instead of Color.White
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
             .shadow(2.dp, RoundedCornerShape(16.dp))
             .padding(20.dp)
     ) {
-        Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+        // CHANGED: Added color = MaterialTheme.colorScheme.onSurface to all Texts
+
+        Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.height(6.dp))
-        Text(requiredDocuments, style = MaterialTheme.typography.bodyMedium)
+        Text(requiredDocuments, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(16.dp))
 
-        Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+        Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.height(6.dp))
-        Text(processingTime, style = MaterialTheme.typography.bodyMedium)
+        Text(processingTime, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(16.dp))
 
-        Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+        Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.height(6.dp))
-        Text(contactInfo, style = MaterialTheme.typography.bodyMedium)
+        Text(contactInfo, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
     }
 }
