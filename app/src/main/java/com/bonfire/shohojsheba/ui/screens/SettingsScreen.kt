@@ -37,8 +37,8 @@ import java.util.Locale
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    currentThemeMode: String,       // Added Parameter
-    onThemeChange: (String) -> Unit // Added Parameter
+    currentThemeMode: String,
+    onThemeChange: (String) -> Unit
 ) {
     val showLanguageOption = false
 
@@ -49,7 +49,7 @@ fun SettingsScreen(
                     Text(
                         stringResource(id = R.string.settings),
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface // Fix text color
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -57,11 +57,10 @@ fun SettingsScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onSurface // Fix icon color
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
-                // Changed from Color.White to Surface so it respects dark mode
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -77,7 +76,7 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // --- Added Theme Section ---
+            // --- Theme Section (Now Translated) ---
             ThemeSection(
                 currentMode = currentThemeMode,
                 onModeSelected = onThemeChange
@@ -103,25 +102,28 @@ private fun SectionTitle(title: String) {
     )
 }
 
-// --- New Composable for Theme Selection ---
+// --- Updated Composable using stringResource ---
 @Composable
 private fun ThemeSection(
     currentMode: String,
     onModeSelected: (String) -> Unit
 ) {
     Column {
-        SectionTitle(title = "Appearance") // You can add string resource later
+        // UPDATED: Uses resource ID instead of hardcoded string
+        SectionTitle(title = stringResource(id = R.string.section_appearance))
+
         Spacer(modifier = Modifier.height(8.dp))
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Adapt to dark mode
+                .background(MaterialTheme.colorScheme.surface)
         ) {
-            ThemeOptionRow("System Default", currentMode == "system") { onModeSelected("system") }
+            // UPDATED: Uses resource IDs
+            ThemeOptionRow(stringResource(id = R.string.theme_system), currentMode == "system") { onModeSelected("system") }
             Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
-            ThemeOptionRow("Light Mode", currentMode == "light") { onModeSelected("light") }
+            ThemeOptionRow(stringResource(id = R.string.theme_light), currentMode == "light") { onModeSelected("light") }
             Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
-            ThemeOptionRow("Dark Mode", currentMode == "dark") { onModeSelected("dark") }
+            ThemeOptionRow(stringResource(id = R.string.theme_dark), currentMode == "dark") { onModeSelected("dark") }
         }
     }
 }
@@ -160,7 +162,7 @@ private fun LanguageSection() {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Fix: use surface
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             Row(
                 modifier = Modifier
@@ -175,7 +177,7 @@ private fun LanguageSection() {
                         else R.string.language_english
                     ),
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface // Fix text color
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Switch(
@@ -202,7 +204,7 @@ private fun SupportSection() {
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Fix: use surface
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             SettingsRow(title = stringResource(id = R.string.report_a_problem), onClick = {})
             Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
@@ -219,7 +221,7 @@ private fun AboutSection() {
 
     if (showDevDialog) {
         DeveloperDialog(onDismiss = { showDevDialog = false })
-    }
+    } // End of showDevDialog check
 
     val versionNumber = stringResource(id = R.string.version_number)
     val versionName = stringResource(id = R.string.version_name)
@@ -270,9 +272,9 @@ private fun DeveloperDialog(onDismiss: () -> Unit) {
                 Text(stringResource(id = R.string.dialog_close))
             }
         },
-        containerColor = MaterialTheme.colorScheme.surface, // Fix background
-        titleContentColor = MaterialTheme.colorScheme.onSurface, // Fix text
-        textContentColor = MaterialTheme.colorScheme.onSurface // Fix text
+        containerColor = MaterialTheme.colorScheme.surface, // Fix background for Dark Mode
+        titleContentColor = MaterialTheme.colorScheme.onSurface, // Fix text color
+        textContentColor = MaterialTheme.colorScheme.onSurface // Fix text color
     )
 }
 
@@ -286,7 +288,7 @@ private fun SettingsRow(title: String, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = title, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface) // Fix text
+        Text(text = title, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface) // Fix text color
         Icon(Icons.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
     }
 }
@@ -300,7 +302,7 @@ private fun SettingsInfoRowWithAnnotatedValue(label: String, value: AnnotatedStr
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface) // Fix text
+        Text(text = label, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface) // Fix text color
         Text(text = value, fontSize = 18.sp, color = MaterialTheme.colorScheme.secondary)
     }
 }

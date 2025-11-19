@@ -44,6 +44,10 @@
     <string name="github">গিটহাব</string>
     <string name="dev_dialog_title">আমাদের টিম</string>
     <string name="dialog_close">বন্ধ করুন</string>
+    <string name="section_appearance">থিম</string>
+    <string name="theme_system">সিস্টেম ডিফল্ট</string>
+    <string name="theme_light">লাইট মোড</string>
+    <string name="theme_dark">ডার্ক মোড</string>
 
     <!-- Other Screens -->
     <string name="departments_page_title">বিভাগ</string>
