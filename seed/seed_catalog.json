@@ -1,0 +1,547 @@
+{
+  "config": {
+    "catalog": {
+      "version": 1,
+      "updatedAt": 1730947200000
+    }
+  },
+  "services": [
+    {
+      "id": "citizen_apply_nid",
+      "title": {
+        "en": "Apply for NID",
+        "bn": "জাতীয় পরিচয়পত্র আবেদন"
+      },
+      "subtitle": {
+        "en": "Eligibility, fees, and steps",
+        "bn": "যোগ্যতা, ফি এবং ধাপসমূহ"
+      },
+      "iconName": "ic_citizen_apply_nid",
+      "category": "citizen",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "nid",
+        "national",
+        "id",
+        "apply",
+        "registration",
+        "card",
+        "identity"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_13.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_14.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_15.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_16.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_17.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_18.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_19.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_20.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_21.webp"
+      ],
+      "imageNames": [
+        "citizen_apply_nid_1",
+        "citizen_apply_nid_2",
+        "citizen_apply_nid_3",
+        "citizen_apply_nid_4",
+        "citizen_apply_nid_5",
+        "citizen_apply_nid_6",
+        "citizen_apply_nid_7",
+        "citizen_apply_nid_8",
+        "citizen_apply_nid_9",
+        "citizen_apply_nid_10",
+        "citizen_apply_nid_11",
+        "citizen_apply_nid_12",
+        "citizen_apply_nid_13",
+        "citizen_apply_nid_14",
+        "citizen_apply_nid_15",
+        "citizen_apply_nid_16",
+        "citizen_apply_nid_17",
+        "citizen_apply_nid_18",
+        "citizen_apply_nid_19",
+        "citizen_apply_nid_20",
+        "citizen_apply_nid_21"
+      ]
+    },
+    {
+      "id": "citizen_renew_passport",
+      "title": {
+        "en": "Renew Passport (e-Passport)",
+        "bn": "পাসপোর্ট নবায়ন (ই-পাসপোর্ট)"
+      },
+      "subtitle": {
+        "en": "Online registration & appointment",
+        "bn": "অনলাইন নিবন্ধন এবং অ্যাপয়েন্টমেন্ট"
+      },
+      "iconName": "ic_citizen_renew_passport",
+      "category": "citizen",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "passport",
+        "renew",
+        "epassport",
+        "appointment",
+        "rpo",
+        "apply",
+        "registration"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_13.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_14.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_15.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_16.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_17.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_18.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_19.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_20.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_21.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_22.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_23.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_24.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_25.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_26.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_27.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_28.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_29.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_30.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_31.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_32.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_33.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_34.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_35.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_36.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_37.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_38.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_39.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_40.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_41.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_42.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_43.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_44.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_45.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_46.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_47.webp"
+      ],
+      "imageNames": [
+        "citizen_renew_passport_1",
+        "citizen_renew_passport_2",
+        "citizen_renew_passport_3",
+        "citizen_renew_passport_4",
+        "citizen_renew_passport_5",
+        "citizen_renew_passport_6",
+        "citizen_renew_passport_7",
+        "citizen_renew_passport_8",
+        "citizen_renew_passport_9",
+        "citizen_renew_passport_10",
+        "citizen_renew_passport_11",
+        "citizen_renew_passport_12",
+        "citizen_renew_passport_13",
+        "citizen_renew_passport_14",
+        "citizen_renew_passport_15",
+        "citizen_renew_passport_16",
+        "citizen_renew_passport_17",
+        "citizen_renew_passport_18",
+        "citizen_renew_passport_19",
+        "citizen_renew_passport_20",
+        "citizen_renew_passport_21",
+        "citizen_renew_passport_22",
+        "citizen_renew_passport_23",
+        "citizen_renew_passport_24",
+        "citizen_renew_passport_25",
+        "citizen_renew_passport_26",
+        "citizen_renew_passport_27",
+        "citizen_renew_passport_28",
+        "citizen_renew_passport_29",
+        "citizen_renew_passport_30",
+        "citizen_renew_passport_31",
+        "citizen_renew_passport_32",
+        "citizen_renew_passport_33",
+        "citizen_renew_passport_34",
+        "citizen_renew_passport_35",
+        "citizen_renew_passport_36",
+        "citizen_renew_passport_37",
+        "citizen_renew_passport_38",
+        "citizen_renew_passport_39",
+        "citizen_renew_passport_40",
+        "citizen_renew_passport_41",
+        "citizen_renew_passport_42",
+        "citizen_renew_passport_43",
+        "citizen_renew_passport_44",
+        "citizen_renew_passport_45",
+        "citizen_renew_passport_46",
+        "citizen_renew_passport_47"
+      ]
+    },
+    {
+      "id": "citizen_file_gd",
+      "title": {
+        "en": "File a GD",
+        "bn": "জিডি করার নিয়ম"
+      },
+      "subtitle": {
+        "en": "Where to go & what to bring",
+        "bn": "কোথায় যাবেন এবং কি নেবেন"
+      },
+      "iconName": "ic_citizen_file_gd",
+      "category": "citizen",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "gd",
+        "general",
+        "diary",
+        "police",
+        "complaint",
+        "report",
+        "station"
+      ],
+      "images": [],
+      "imageNames": []
+    },
+
+    {
+      "id": "entrepreneur_trade_license",
+      "title": {
+        "en": "Trade License",
+        "bn": "ট্রেড লাইসেন্স"
+      },
+      "subtitle": {
+        "en": "Online application via prottoyon.gov.bd",
+        "bn": "prottoyon.gov.bd এর মাধ্যমে অনলাইন আবেদন"
+      },
+      "iconName": "ic_entrepreneur_trade_license",
+      "category": "entrepreneur",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "trade",
+        "license",
+        "business",
+        "shop",
+        "prottoyon",
+        "licence",
+        "ব্যবসা",
+        "লাইসেন্স"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_13.webp"
+      ],
+      "imageNames": [
+        "entrepreneur_trade_license_1",
+        "entrepreneur_trade_license_2",
+        "entrepreneur_trade_license_3",
+        "entrepreneur_trade_license_4",
+        "entrepreneur_trade_license_5",
+        "entrepreneur_trade_license_6",
+        "entrepreneur_trade_license_7",
+        "entrepreneur_trade_license_8",
+        "entrepreneur_trade_license_9",
+        "entrepreneur_trade_license_10",
+        "entrepreneur_trade_license_11",
+        "entrepreneur_trade_license_12",
+        "entrepreneur_trade_license_13"
+      ]
+    }
+  ],
+  "service_details": [
+    {
+      "serviceId": "citizen_apply_nid",
+      "instructions": {
+        "en": "Step 1: Fill out the NID application form completely.\n\nStep 2: Upload your photo and supporting documents as required.\n\nStep 3: Dummy Step",
+        "bn": "ধাপ ১: এনআইডি আবেদনপত্রটি সম্পূর্ণরূপে পূরণ করুন।\n\nধাপ ২: প্রয়োজন অনুযায়ী আপনার ছবি এবং সহায়ক নথি আপলোড করুন।\n\nধাপ ৩: ডামি ধাপ"
+      },
+      "requiredDocuments": {
+        "en": "- Birth certificate\n- 2 passport size photos",
+        "bn": "- জন্মসনদ\n- ২ কপি পাসপোর্ট সাইজ ছবি"
+      },
+      "processingTime": {
+        "en": "7–10 working days",
+        "bn": "৭-১০ কার্যদিবস"
+      },
+      "contactInfo": {
+        "en": "NID Helpline: 333",
+        "bn": "এনআইডি হেল্পলাইন: ৩৩৩"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "citizen_apply_nid_1",
+        "citizen_apply_nid_2",
+        "citizen_apply_nid_3",
+        "citizen_apply_nid_4",
+        "citizen_apply_nid_5",
+        "citizen_apply_nid_6",
+        "citizen_apply_nid_7",
+        "citizen_apply_nid_8",
+        "citizen_apply_nid_9",
+        "citizen_apply_nid_10",
+        "citizen_apply_nid_11",
+        "citizen_apply_nid_12",
+        "citizen_apply_nid_13",
+        "citizen_apply_nid_14",
+        "citizen_apply_nid_15",
+        "citizen_apply_nid_16",
+        "citizen_apply_nid_17",
+        "citizen_apply_nid_18",
+        "citizen_apply_nid_19",
+        "citizen_apply_nid_20",
+        "citizen_apply_nid_21"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_13.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_14.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_15.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_16.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_17.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_18.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_19.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_20.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_apply_nid_21.webp"
+      ]
+    },
+    {
+      "serviceId": "citizen_renew_passport",
+      "instructions": {
+        "en": "Step 1 — Search on Google\n● Type: epassport bd\n● Click the first result: “E-Passport Online Registration Portal”.\n\nStep 2 — Homepage, click “APPLY ONLINE”\n● Click the green APPLY ONLINE button on the left.\n\nStep 3 — Region/Office Availability\n● Question: “Are you applying from Bangladesh?” → Yes.\n● Select your district (example: Tangail).\n● Select your nearest police station (example: Ghatail).\n● Note the Regional Passport Office shown.\n● Click Continue.\n\nStep 4 — Enter Email\n● Enter your email address.\n● Check “I am human” (reCAPTCHA).\n● Click Continue.\n\nStep 5 — Email Verification Screen\n● Confirm email is correct.\n● Click Continue.\n\nStep 6 — Account Information\n● Enter Password (min 6 characters: uppercase, lowercase, numbers).\n● Enter Full Name (as per NID/BRC).\n● Optional: Given Name.\n● Surname: last/family name.\n\nStep 7 — Mobile Number\n● Select country code: +880.\n● Enter mobile number.\n● Check “I am human”.\n\nStep 8 — Create Account\n● Click Create Account button.\n● Note: Max 6 applications per account.\n\nStep 9 — Account Activation\n● Click the activation link sent to your email.\n● Resend if not received.\n\nStep 10 — Sign In\n● Enter Email and Password.\n● Check “I am human”.\n● Use Forgot Password? if needed.\n\nStep 11 — Sign In Confirm\n● Click Sign In.\n\nStep 12 — Dashboard\n● Click “Apply for a new e-Passport”.\n● Optional: Review profile under Account.\n\nStep 13 — Passport Type\n● Ordinary Passport for normal users.\n● Official Passport only for government officials.\n● Click Save and Continue.\n\nStep 14 — Personal Information\n● Select “I apply for myself”.\n● Select gender.\n● Enter Full Name / Given Name / Surname exactly.\n● Ensure spelling matches previous documents.\n\nStep 15 — Profession\n● Select profession (PRIVATE SERVICE / STUDENT / BUSINESS etc.).\n● Enter correct information for verification.\n\nStep 16 — Religion & Country Code\n● Select religion.\n● Country code +880.\n● Verify mobile number and other fields.\n\nStep 17 — Birth Information Part 1\n● Select country of birth.\n● Verify personal info matches documents.\n\nStep 18 — Birth Information Part 2 & Citizenship\n● Select district of birth.\n● Select date of birth (match NID/passport).\n● Citizenship type: By Birth.\n● Click Save and Continue.\n\nStep 19 — Permanent Address\n● Select district, City/Village/House, Road/Block/Sector (optional), Post office, Postal code, Police station.\n● If changed, police verification may be required.\n\nStep 20 — Present Address\n● Check “Same as Permanent” if applicable.\n● Otherwise, fill manually.\n● Regional Passport Office will appear.\n\nStep 21 — Regional Passport Office (RPO)\n● Select appropriate RPO.\n● Click Save and Continue.\n\nStep 22 — National ID Verification\n● Enter NID number.\n● Verify in NID system.\n● Indicate if you have previous passports (MRP/ePP/None).\n\nStep 23 — Reissue Reason & Old Passport Info\n● Select reason: EXPIRED, PAGES EXHAUSTED, DAMAGED, etc.\n● Enter previous passport number.\n● Enter issue and expiry dates.\n\nStep 24 — Other-country Passport (if any)\n● Indicate yes/no for other country passports.\n● Provide info if yes.\n\nStep 25 — Parental Information\n● Father: Name, Profession, Nationality, NID (optional).\n● Mother: Name, Profession, Nationality, NID (optional).\n● Legal Guardian info only if applicable.\n\nStep 26 — Spouse Information\n● Select marital status.\n● Enter spouse’s Name, Profession, Nationality, NID (optional).\n\nStep 27 — Emergency Contact\n● Select relationship.\n● Enter Name.\n● Fill Address fields: Country, District, City/Village/House, Road/Block/Sector (optional), Post office, Postal code, Police station.\n● Click Save and Continue.\n\nStep 28 — Passport Options\n● Select number of pages (48/64).\n● Select validity (5/10 years).\n● Review price.\n● Click Save and Continue.\n\nStep 29 — Delivery Options & Appointment\n● Choose Regular / Express / Super Express delivery.\n● Price updates automatically.\n● Click Save and Continue.\n\nStep 30 — Declaration & Payment\n● Check declaration box.\n● Click Confirm and proceed to payment.\n● Pay via EkPay/Card/bKash/Nagad/Rocket/Upay.\n● Complete OTP/PIN verification.\n● After payment, select appointment date/time.\n● Download summary/receipt.\n\nStep 31 — Confirm Submission\n● Review status (Submitted).\n● Download application form for printing.\n\nStep 32 — Review All Information\n● Double-check all entries.\n● Ensure names/dates match official documents.\n\nStep 33 — Passport Photos\n● Ensure photos match e-passport requirements.\n\nStep 34 — Supporting Documents\n● Upload all required documents.\n● Verify file format and size.\n\nStep 35 — Payment Confirmation\n● Confirm successful payment.\n● Retain transaction ID.\n\nStep 36 — Appointment Confirmation\n● Confirm selected date/time for passport collection.\n\nStep 37 — Track Application\n● Use portal to track status.\n\nStep 38 — Regional Passport Office Visit\n● Visit RPO as per appointment.\n\nStep 39 — Verification\n● Officials will verify all submitted info.\n\nStep 40 — Biometric Capture\n● Fingerprints and photo will be taken.\n\nStep 41 — Final Submission at RPO\n● Officials confirm all details.\n● Sign where necessary.\n\nStep 42 — Receive Acknowledgment\n● Obtain receipt of application submission.\n\nStep 43 — Passport Processing\n● Wait for processing (portal will update status).\n\nStep 44 — Payment Status Check\n● Verify transaction completed on portal.\n\nStep 45 — Passport Printed\n● Portal will notify when passport is printed.\n\nStep 46 — Passport Delivery\n● Passport will be delivered as per chosen method.\n\nStep 47 — Confirmation of Receipt\n● Confirm receipt of passport.\n● Sign acknowledgment.\n\nStep 48 — End of Process\n● Keep all documents for future reference.\n● Process complete.",
+        "bn": "ধাপ ১ — গুগলে সার্চ করুন\n● টাইপ করুন: epassport bd\n● প্রথম ফলাফলে ক্লিক করুন: “ই-পাসপোর্ট অনলাইন রেজিস্ট্রেশন পোর্টাল”।\n\nধাপ ২ — হোমপেজে “APPLY ONLINE” এ ক্লিক করুন\n● বাম দিকে সবুজ APPLY ONLINE বোতামে ক্লিক করুন।\n\nধাপ ৩ — অঞ্চল/অফিসের প্রাপ্যতা\n● প্রশ্ন: “আপনি কি বাংলাদেশ থেকে আবেদন করছেন?” → হ্যাঁ।\n● আপনার জেলা নির্বাচন করুন (উদাহরণ: টাঙ্গাইল)।\n● আপনার নিকটতম থানা নির্বাচন করুন (উদাহরণ: ঘাটাইল)।\n● প্রদর্শিত আঞ্চলিক পাসপোর্ট অফিস নোট করুন।\n● Continue ক্লিক করুন।\n\nধাপ ৪ — ইমেল লিখুন\n● আপনার ইমেল ঠিকানা লিখুন।\n● “I am human” (reCAPTCHA) চেক করুন।\n● Continue ক্লিক করুন।\n\nধাপ ৫ — ইমেল যাচাইকরণ স্ক্রিন\n● ইমেল সঠিক কিনা তা নিশ্চিত করুন।\n● Continue ক্লিক করুন।\n\nধাপ ৬ — অ্যাকাউন্টের তথ্য\n● পাসওয়ার্ড লিখুন (ন্যূনতম ৬ অক্ষর: বড় হাতের, ছোট হাতের, সংখ্যা)।\n● পুরো নাম লিখুন (এনআইডি/বিআরসি অনুযায়ী)।\n● ঐচ্ছিক: প্রদত্ত নাম।\n● বংশগত নাম: শেষ/পারিবারিক নাম।\n\nধাপ ৭ — মোবাইল নম্বর\n● দেশের কোড নির্বাচন করুন: +880।\n● মোবাইল নম্বর লিখুন।\n● “I am human” চেক করুন।\n\nধাপ ৮ — অ্যাকাউন্ট তৈরি করুন\n● Create Account বোতামে ক্লিক করুন।\n● দ্রষ্টব্য: প্রতি অ্যাকাউন্টে সর্বোচ্চ ৬টি আবেদন করা যাবে।\n\nধাপ ৯ — অ্যাকাউন্ট সক্রিয়করণ\n● আপনার ইমেলে পাঠানো অ্যাক্টিভেশন লিঙ্কে ক্লিক করুন।\n● না পেলে আবার পাঠান।\n\nধাপ ১০ — সাইন ইন করুন\n● ইমেল এবং পাসওয়ার্ড লিখুন।\n● “I am human” চেক করুন।\n● প্রয়োজনে Forgot Password? ব্যবহার করুন।\n\nধাপ ১১ — সাইন ইন নিশ্চিত করুন\n● Sign In এ ক্লিক করুন।\n\nধাপ ১২ — ড্যাশবোর্ড\n● “Apply for a new e-Passport” এ ক্লিক করুন।\n● ঐচ্ছিক: Account এর অধীনে প্রোফাইল পর্যালোচনা করুন।\n\nধাপ ১৩ — পাসপোর্টের ধরন\n● সাধারণ ব্যবহারকারীদের জন্য Ordinary Passport।\n● শুধুমাত্র সরকারি কর্মকর্তাদের জন্য Official Passport।\n● Save and Continue ক্লিক করুন।\n\nধাপ ১৪ — ব্যক্তিগত তথ্য\n● “I apply for myself” নির্বাচন করুন।\n● লিঙ্গ নির্বাচন করুন।\n● পুরো নাম / প্রদত্ত নাম / বংশগত নাম সঠিকভাবে লিখুন।\n● নিশ্চিত করুন যে বানান পূর্ববর্তী নথির সাথে মেলে।\n\nধাপ ১৫ — পেশা\n● পেশা নির্বাচন করুন (PRIVATE SERVICE / STUDENT / BUSINESS ইত্যাদি)।\n● যাচাইয়ের জন্য সঠিক তথ্য লিখুন।\n\nধাপ ১৬ — ধর্ম ও দেশের কোড\n● ধর্ম নির্বাচন করুন।\n● দেশের কোড +880।\n● মোবাইল নম্বর এবং অন্যান্য ক্ষেত্র যাচাই করুন।\n\nধাপ ১৭ — জন্ম তথ্য পর্ব ১\n● জন্মস্থান দেশ নির্বাচন করুন।\n● ব্যক্তিগত তথ্য নথির সাথে মেলে কিনা তা যাচাই করুন।\n\nধাপ ১৮ — জন্ম তথ্য পর্ব ২ ও নাগরিকত্ব\n● জন্মস্থান জেলা নির্বাচন করুন।\n● জন্ম তারিখ নির্বাচন করুন (এনআইডি/পাসপোর্টের সাথে মিলিয়ে)।\n● নাগরিকত্বের ধরন: By Birth।\n● Save and Continue ক্লিক করুন।\n\nধাপ ১৯ — স্থায়ী ঠিকানা\n● জেলা, শহর/গ্রাম/বাড়ি, রাস্তা/ব্লক/সেক্টর (ঐচ্ছিক), ডাকঘর, পোস্টাল কোড, থানা নির্বাচন করুন।\n● পরিবর্তন হলে পুলিশ ভেরিফিকেশনের প্রয়োজন হতে পারে।\n\nধাপ ২০ — বর্তমান ঠিকানা\n● প্রযোজ্য হলে “Same as Permanent” চেক করুন।\n● অন্যথায়, ম্যানুয়ালি পূরণ করুন।\n● আঞ্চলিক পাসপোর্ট অফিস প্রদর্শিত হবে।\n\nধাপ ২১ — আঞ্চলিক পাসপোর্ট অফিস (RPO)\n● উপযুক্ত RPO নির্বাচন করুন।\n● Save and Continue ক্লিক করুন।\n\nধাপ ২২ — জাতীয় পরিচয়পত্র যাচাইকরণ\n● এনআইডি নম্বর লিখুন।\n● এনআইডি সিস্টেমে যাচাই করুন।\n● আপনার পূর্ববর্তী পাসপোর্ট আছে কিনা তা উল্লেখ করুন (MRP/ePP/None)।\n\nধাপ ২৩ — পুনঃইস্যুর কারণ ও পুরনো পাসপোর্টের তথ্য\n● কারণ নির্বাচন করুন: EXPIRED, PAGES EXHAUSTED, DAMAGED, ইত্যাদি।\n● পূর্ববর্তী পাসপোর্ট নম্বর লিখুন।\n● ইস্যু এবং মেয়াদ শেষ হওয়ার তারিখ লিখুন।\n\nধাপ ২৪ — অন্য দেশের পাসপোর্ট (যদি থাকে)\n● অন্য দেশের পাসপোর্ট আছে কিনা তা হ্যাঁ/না দিয়ে উল্লেখ করুন।\n● হ্যাঁ হলে তথ্য প্রদান করুন।\n\nধাপ ২৫ — পিতামাতার তথ্য\n● পিতা: নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক)।\n● মাতা: নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক)।\n● শুধুমাত্র প্রযোজ্য হলে আইনি অভিভাবকের তথ্য দিন।\n\nধাপ ২৬ — স্ত্রীর তথ্য\n● বৈবাহিক অবস্থা নির্বাচন করুন।\n● স্ত্রীর নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক) লিখুন।\n\nধাপ ২৭ — জরুরি যোগাযোগ\n● সম্পর্ক নির্বাচন করুন।\n● নাম লিখুন।\n● ঠিকানা পূরণ করুন: দেশ, জেলা, শহর/গ্রাম/বাড়ি, রাস্তা/ব্লক/সেক্টর (ঐচ্ছিক), ডাকঘর, পোস্টাল কোড, থানা।\n● Save and Continue ক্লিক করুন।\n\nধাপ ২৮ — পাসপোর্টের বিকল্প\n● পৃষ্ঠার সংখ্যা নির্বাচন করুন (৪৮/৬৪)।\n● মেয়াদ নির্বাচন করুন (৫/১০ বছর)।\n● মূল্য পর্যালোচনা করুন।\n● Save and Continue ক্লিক করুন।\n\nধাপ ২৯ — ডেলিভারি বিকল্প ও অ্যাপয়েন্টমেন্ট\n● Regular / Express / Super Express ডেলিভারি বেছে নিন।\n● মূল্য স্বয়ংক্রিয়ভাবে আপডেট হবে।\n● Save and Continue ক্লিক করুন।\n\nধাপ ৩০ — ঘোষণা ও পেমেন্ট\n● ঘোষণা বক্সে চেক করুন।\n● Confirm and proceed to payment এ ক্লিক করুন।\n● EkPay/Card/bKash/Nagad/Rocket/Upay এর মাধ্যমে পেমেন্ট করুন।\n● OTP/PIN যাচাই সম্পন্ন করুন।\n● পেমেন্টের পর, অ্যাপয়েন্টমেন্টের তারিখ/সময় নির্বাচন করুন।\n● সারাংশ/রসিদ ডাউনলোড করুন।\n\nধাপ ৩১ — জমা নিশ্চিত করুন\n● স্ট্যাটাস পর্যালোচনা করুন (Submitted)।\n● প্রিন্ট করার জন্য আবেদনপত্র ডাউনলোড করুন।\n\nধাপ ৩২ — সমস্ত তথ্য পর্যালোচনা করুন\n● সমস্ত এন্ট্রি দুবার চেক করুন।\n● নিশ্চিত করুন নাম/তারিখ অফিসিয়াল নথির সাথে মেলে।\n\nধাপ ৩৩ — পাসপোর্টের ছবি\n● নিশ্চিত করুন ছবি ই-পাসপোর্টের প্রয়োজনীয়তা পূরণ করে।\n\nধাপ ৩৪ — সহায়ক নথি\n● সমস্ত প্রয়োজনীয় নথি আপলোড করুন।\n● ফাইলের ফরম্যাট এবং আকার যাচাই করুন।\n\nধাপ ৩৫ — পেমেন্ট নিশ্চিতকরণ\n● সফল পেমেন্ট নিশ্চিত করুন।\n● লেনদেন আইডি সংরক্ষণ করুন।\n\nধাপ ৩৬ — অ্যাপয়েন্টমেন্ট নিশ্চিতকরণ\n● পাসপোর্ট সংগ্রহের জন্য নির্বাচিত তারিখ/সময় নিশ্চিত করুন।\n\nধাপ ৩৭ — আবেদন ট্র্যাক করুন\n● স্ট্যাটাস ট্র্যাক করতে পোর্টাল ব্যবহার করুন।\n\nধাপ ৩৮ — আঞ্চলিক পাসপোর্ট অফিস দর্শন\n● অ্যাপয়েন্টমেন্ট অনুযায়ী RPO-তে যান।\n\nধাপ ৩৯ — যাচাইকরণ\n● কর্মকর্তারা সমস্ত জমা দেওয়া তথ্য যাচাই করবেন।\n\nধাপ ৪০ — বায়োমেট্রিক গ্রহণ\n● আঙুলের ছাপ এবং ছবি নেওয়া হবে।\n\nধাপ ৪১ — RPO-তে চূড়ান্ত জমা\n● কর্মকর্তারা সমস্ত বিবরণ নিশ্চিত করবেন।\n● প্রয়োজনে স্বাক্ষর করুন।\n\nধাপ ৪২ — প্রাপ্তি স্বীকার\n● আবেদন জমা দেওয়ার রসিদ নিন।\n\nধাপ ৪৩ — পাসপোর্ট প্রক্রিয়াকরণ\n● প্রক্রিয়াকরণের জন্য অপেক্ষা করুন (পোর্টাল স্ট্যাটাস আপডেট করবে)।\n\nধাপ ৪৪ — পেমেন্ট স্ট্যাটাস চেক\n● পোর্টালে লেনদেন সম্পন্ন হয়েছে কিনা যাচাই করুন।\n\nধাপ ৪৫ — পাসপোর্ট মুদ্রিত\n● পাসপোর্ট প্রিন্ট হলে পোর্টাল জানাবে।\n\nধাপ ৪৬ — পাসপোর্ট ডেলিভারি\n● নির্বাচিত পদ্ধতি অনুযায়ী পাসপোর্ট ডেলিভারি করা হবে।\n\nধাপ ৪৭ — প্রাপ্তি নিশ্চিতকরণ\n● পাসপোর্ট প্রাপ্তি নিশ্চিত করুন।\n● প্রাপ্তি স্বীকারে স্বাক্ষর করুন।\n\nধাপ ৪৮ — প্রক্রিয়ার সমাপ্তি\n● ভবিষ্যতের রেফারেন্সের জন্য সমস্ত নথি রাখুন।\n● প্রক্রিয়া সম্পন্ন। "
+      },
+      "requiredDocuments": {
+        "en": "- Old passport\n- NID\n- Payment receipt",
+        "bn": "- পুরনো পাসপোর্ট\n- এনআইডি\n- পেমেন্ট রসিদ"
+      },
+      "processingTime": {
+        "en": "Regular / Express / Super Express",
+        "bn": "রেগুলার / এক্সপ্রেস / সুপার এক্সপ্রেস"
+      },
+      "contactInfo": {
+        "en": "RPO Helpline",
+        "bn": "আরপিও হেল্পলাইন"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "citizen_renew_passport_1",
+        "citizen_renew_passport_2",
+        "citizen_renew_passport_3",
+        "citizen_renew_passport_4",
+        "citizen_renew_passport_5",
+        "citizen_renew_passport_6",
+        "citizen_renew_passport_7",
+        "citizen_renew_passport_8",
+        "citizen_renew_passport_9",
+        "citizen_renew_passport_10",
+        "citizen_renew_passport_11",
+        "citizen_renew_passport_12",
+        "citizen_renew_passport_13",
+        "citizen_renew_passport_14",
+        "citizen_renew_passport_15",
+        "citizen_renew_passport_16",
+        "citizen_renew_passport_17",
+        "citizen_renew_passport_18",
+        "citizen_renew_passport_19",
+        "citizen_renew_passport_20",
+        "citizen_renew_passport_21",
+        "citizen_renew_passport_22",
+        "citizen_renew_passport_23",
+        "citizen_renew_passport_24",
+        "citizen_renew_passport_25",
+        "citizen_renew_passport_26",
+        "citizen_renew_passport_27",
+        "citizen_renew_passport_28",
+        "citizen_renew_passport_29",
+        "citizen_renew_passport_30",
+        "citizen_renew_passport_31",
+        "citizen_renew_passport_32",
+        "citizen_renew_passport_33",
+        "citizen_renew_passport_34",
+        "citizen_renew_passport_35",
+        "citizen_renew_passport_36",
+        "citizen_renew_passport_37",
+        "citizen_renew_passport_38",
+        "citizen_renew_passport_39",
+        "citizen_renew_passport_40",
+        "citizen_renew_passport_41",
+        "citizen_renew_passport_42",
+        "citizen_renew_passport_43",
+        "citizen_renew_passport_44",
+        "citizen_renew_passport_45",
+        "citizen_renew_passport_46",
+        "citizen_renew_passport_47"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_13.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_14.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_15.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_16.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_17.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_18.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_19.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_20.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_21.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_22.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_23.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_24.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_25.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_26.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_27.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_28.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_29.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_30.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_31.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_32.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_33.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_34.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_35.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_36.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_37.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_38.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_39.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_40.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_41.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_42.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_43.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_44.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_45.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_46.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/citizen_renew_passport_47.webp"
+      ]
+    },
+    {
+      "serviceId": "citizen_file_gd",
+      "instructions": {
+        "en": "Step 1: Visit your nearest police station.\nStep 2: File the GD with accurate details and get a receipt.",
+        "bn": "ধাপ ১: আপনার নিকটস্থ থানায় যান।\nধাপ ২: সঠিক বিবরণ দিয়ে জিডি করুন এবং একটি রসিদ নিন।"
+      },
+      "requiredDocuments": {
+        "en": "- NID copy\n- Incident details",
+        "bn": "- এনআইডি কপি\n- ঘটনার বিবরণ"
+      },
+      "processingTime": {
+        "en": "Same day",
+        "bn": "একই দিন"
+      },
+      "contactInfo": {
+        "en": "Local Police Station",
+        "bn": "স্থানীয় থানা"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [],
+      "images": []
+    },
+
+    {
+      "serviceId": "entrepreneur_trade_license",
+      "instructions": {
+        "en": "Step 1 — Go to the prottoyon.gov.bd website.\n\nStep 2 — Click on the \"Free Citizen Account\" button from the top-right corner of the website.\n\nStep 3 — Fill out the registration form with your National ID number, Date of Birth, and mobile number, then click the \"Register\" button.\n\nStep 4 — Enter the OTP code sent to your mobile phone in the designated field and click the \"Submit\" button.\n\nStep 5 — After completing the registration, log in using your mobile number and password.\n\nStep 6 — After entering the dashboard, click on the \"Complete Profile\" button.\n\nStep 7 — Fill in your present and permanent address details correctly and click the \"Next\" button.\n\nStep 8 — Upload your photo and a scanned copy of your National ID card, then \"Save\" the profile.\n\nStep 9 — From the services on the dashboard, find and click on the \"Trade License\" icon.\n\nStep 10 — Fill out the trade license application form with your business information and the owner's personal details.\n\nStep 11 — After saving the form, select your preferred payment gateway (e.g., ekpay) on the fee payment page.\n\nStep 12 — Complete the payment by paying the specified fee through mobile banking or a card.\n\nStep 13 — After successful payment, print the receipt with the application tracking number and contact your nearest Union Council/Municipality office.",
+        "bn": "ধাপ ১ — prottoyon.gov.bd ওয়েবসাইটে যান।\n\nধাপ ২ — ওয়েবসাইটের উপরের ডান দিক থেকে \"ফ্রি নাগরিক একাউন্ট\" বাটনে ক্লিক করুন।\n\nধাপ ৩ — জাতীয় পরিচয়পত্র নম্বর, জন্ম তারিখ ও মোবাইল নম্বর দিয়ে নিবন্ধন ফরমটি পূরণ করুন এবং \"নিবন্ধন করুন\" বাটনে ক্লিক করুন।\n\nধাপ ৪ — আপনার মোবাইলে পাঠানো ওটিপি (OTP) কোডটি নির্দিষ্ট ঘরে লিখে \"জমা দিন\" বাটনে ক্লিক করুন।\n\nধাপ ৫ — রেজিস্ট্রেশন সম্পন্ন হলে আপনার মোবাইল নম্বর এবং পাসওয়ার্ড ব্যবহার করে লগইন করুন।\n\nধাপ ৬ — ড্যাশবোর্ডে প্রবেশ করে \"প্রোফাইল সম্পূর্ণ করুন\" বাটনে ক্লিক করুন।\n\nধাপ ৭ — আপনার বর্তমান ও স্থায়ী ঠিকানা সঠিকভাবে পূরণ করুন এবং \"পরবর্তী\" বাটনে ক্লিক করুন।\n\nধাপ ৮ — আপনার ছবি এবং জাতীয় পরিচয়পত্রের স্ক্যান কপি আপলোড করে প্রোফাইল \"সংরক্ষণ করুন\"।\n\nধাপ ৯ — ড্যাশবোর্ডের সেবাসমূহ থেকে \"ট্রেড লাইসেন্স\" আইকনটি খুঁজে বের করে তাতে ক্লিক করুন।\n\nধাপ ১০ — ব্যবসা প্রতিষ্ঠানের তথ্য এবং মালিকের ব্যক্তিগত তথ্য দিয়ে ট্রেড লাইসেন্সের আবেদন ফরমটি পূরণ করুন।\n\nধাপ ১১ — ফরমটি সংরক্ষণ করার পর ফি প্রদানের পৃষ্ঠায় আপনার পছন্দের পেমেন্ট গেটওয়ে (যেমন: ekpay) নির্বাচন করুন।\n\nধাপ ১২ — মোবাইল ব্যাংকিং বা কার্ডের মাধ্যমে নির্ধারিত ফি প্রদান করে পেমেন্ট সম্পন্ন করুন।\n\nধাপ ১৩ — পেমেন্ট সফল হওয়ার পর অ্যাপ্লিকেশন ট্র্যাকিং নম্বরসহ রশিদটি প্রিন্ট করুন এবং আপনার নিকটস্থ ইউনিয়ন পরিষদ/পৌরসভা অফিসে যোগাযোগ করুন।"
+      },
+      "requiredDocuments": {
+        "en": "- Scanned copy of NID\n- Recent photo\n- Business address details",
+        "bn": "- জাতীয় পরিচয়পত্রের স্ক্যান কপি\n- সাম্প্রতিক ছবি\n- ব্যবসার ঠিকানা বিবরণ"
+      },
+      "processingTime": {
+        "en": "Varies by Union/Municipality",
+        "bn": "ইউনিয়ন/পৌরসভা অনুযায়ী ভিন্ন"
+      },
+      "contactInfo": {
+        "en": "Your local Union Council / Municipality office",
+        "bn": "আপনার স্থানীয় ইউনিয়ন পরিষদ / পৌরসভা অফিস"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "entrepreneur_trade_license_1",
+        "entrepreneur_trade_license_2",
+        "entrepreneur_trade_license_3",
+        "entrepreneur_trade_license_4",
+        "entrepreneur_trade_license_5",
+        "entrepreneur_trade_license_6",
+        "entrepreneur_trade_license_7",
+        "entrepreneur_trade_license_8",
+        "entrepreneur_trade_license_9",
+        "entrepreneur_trade_license_10",
+        "entrepreneur_trade_license_11",
+        "entrepreneur_trade_license_12",
+        "entrepreneur_trade_license_13"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_13.webp"
+      ]
+    }
+  ]
+}

@@ -1,16 +1,13 @@
 package com.bonfire.shohojsheba.ui.screens
 
-import android.content.Context
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
@@ -22,181 +19,212 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
-import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailUiState
+import coil.compose.AsyncImage
+import com.bonfire.shohojsheba.LocalLocale
+import com.bonfire.shohojsheba.data.database.entities.Service
+import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
+import com.bonfire.shohojsheba.data.database.entities.UserFavorite
 import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import kotlinx.coroutines.launch
+import java.util.Locale
+import kotlin.math.max
 
-fun getServiceImages(context: Context, serviceId: String): List<Int> {
-    val prefix = when (serviceId) {
-        "citizen_apply_nid" -> "nid_registration_"
-        "citizen_renew_passport" -> "passport_step_"
-        else -> "img_step_placeholder_"
-    }
-    return R.drawable::class.java.declaredFields
-        .filter { it.name.startsWith(prefix) }
-        .mapNotNull { try { it.getInt(null) } catch (e: Exception) { null } }
-        .sorted()
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetailScreen(
     navController: NavController,
     serviceId: String
 ) {
     val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
-
+    val locale = LocalLocale.current
     val viewModel: ServiceDetailViewModel = viewModel(
-        factory = ServiceDetailViewModelFactory(serviceId, repository)
+        factory = ViewModelFactory(context, serviceId = serviceId)
     )
 
-    val uiState by viewModel.uiState.collectAsState()
+    val service by viewModel.service.collectAsState(initial = null)
+    val detail by viewModel.serviceDetail.collectAsState(initial = null)
+    val isFavorite by viewModel.isFavorite.collectAsState(initial = false)
+    val coroutineScope = rememberCoroutineScope()
 
-    when (uiState) {
-        is ServiceDetailUiState.Loading -> {
+    Box(Modifier.fillMaxSize()) {
+        if (service != null && detail != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                // Top spacer to avoid overlapping with floating buttons
+                Spacer(modifier = Modifier.height(72.dp))
+
+                ServiceDetailContent(service!!, detail!!, locale)
+
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+        } else {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        is ServiceDetailUiState.Error -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text((uiState as ServiceDetailUiState.Error).message)
-            }
+
+        // Floating back button
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(48.dp)
+                .align(Alignment.TopStart)
+                // CHANGED: Use Surface color instead of hardcoded White
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+        ) {
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                // CHANGED: Use OnSurface (Black in light, White in dark)
+                tint = MaterialTheme.colorScheme.onSurface
+            )
         }
-        is ServiceDetailUiState.Success -> {
-            val successState = uiState as ServiceDetailUiState.Success
-            val service = successState.service
-            val detail = successState.serviceDetail
-            var isFavorite by remember { mutableStateOf(successState.isFavorite) }
 
-            Box(Modifier.fillMaxSize()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    // Top spacer to avoid overlapping with floating buttons
-                    Spacer(modifier = Modifier.height(72.dp)) // 48dp button + 16dp padding + extra 8dp
-
-                    detail?.let {
-                        val images = getServiceImages(context, serviceId)
-                        val instructions = it.instructions.split("\n\n")
-
-                        instructions.forEachIndexed { index, instruction ->
-                            AnimatedVisibility(
-                                visible = true,
-                                enter = fadeIn(animationSpec = tween(700)) +
-                                        slideInVertically(animationSpec = tween(700)) { it / 2 },
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Card(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .shadow(4.dp, RoundedCornerShape(16.dp)),
-                                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                                    shape = RoundedCornerShape(16.dp)
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(20.dp)
-                                    ) {
-                                        Text(
-                                            text = instruction.trim(),
-                                            style = MaterialTheme.typography.bodyMedium.copy(
-                                                fontSize = 16.sp,
-                                                lineHeight = 24.sp
-                                            ),
-                                            fontWeight = FontWeight.Medium
-                                        )
-
-                                        if (index < images.size) {
-                                            Spacer(modifier = Modifier.height(12.dp))
-                                            Image(
-                                                painter = painterResource(images[index]),
-                                                contentDescription = null,
-                                                contentScale = ContentScale.FillWidth,
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .clip(RoundedCornerShape(16.dp))
-                                                    .shadow(2.dp, RoundedCornerShape(16.dp))
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        // Bottom Info Section - light card
-                        Column(
-                            Modifier
-                                .padding(horizontal = 16.dp)
-                                .background(Color.White, RoundedCornerShape(16.dp))
-                                .shadow(2.dp, RoundedCornerShape(16.dp))
-                                .padding(20.dp)
-                        ) {
-                            Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(it.requiredDocuments, style = MaterialTheme.typography.bodyMedium)
-                            Spacer(Modifier.height(16.dp))
-
-                            Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(it.processingTime, style = MaterialTheme.typography.bodyMedium)
-                            Spacer(Modifier.height(16.dp))
-
-                            Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(it.contactInfo, style = MaterialTheme.typography.bodyMedium)
-                        }
-
-                        Spacer(modifier = Modifier.height(24.dp))
+        // Floating favorite button
+        IconButton(
+            onClick = {
+                coroutineScope.launch {
+                    if(isFavorite){
+                        viewModel.removeFavorite(serviceId)
+                    } else {
+                        viewModel.addFavorite(UserFavorite(serviceId = serviceId, addedDate = System.currentTimeMillis()))
                     }
                 }
+            },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(48.dp)
+                .align(Alignment.TopEnd)
+                // CHANGED: Use Surface color instead of hardcoded White
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
 
-                // Floating back button
-                IconButton(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(48.dp)
-                        .align(Alignment.TopStart)
-                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
-                ) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
-                }
+        ) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                contentDescription = "Favorite",
+                // Keep primary color for favorite state, otherwise use onSurface
+                tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
 
-                // Floating favorite button
-                IconButton(
-                    onClick = {
-                        isFavorite = !isFavorite
-                        viewModel.toggleFavorite()
-                    },
+@Composable
+private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale: Locale) {
+    val imageUrls = detail.images.split(",").filter { it.isNotBlank() }
+    val instructionBlocks = (if (locale.language == "bn") detail.instructions.bn else detail.instructions.en)
+        .split("\n\n").filter { it.isNotBlank() }
+
+    val stepCount = max(instructionBlocks.size, imageUrls.size)
+
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        (0 until stepCount).forEach { index ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .shadow(4.dp, RoundedCornerShape(16.dp)),
+                // CHANGED: Use Surface color (White in Light Mode, Dark Grey in Dark Mode)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
                     modifier = Modifier
-                        .padding(16.dp)
-                        .size(48.dp)
-                        .align(Alignment.TopEnd)
-                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
+                        .fillMaxWidth()
+                        .padding(20.dp)
                 ) {
-                    Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = if (isFavorite) MaterialTheme.colorScheme.primary else Color.Black
-                    )
+                    if (index < imageUrls.size) {
+                        AsyncImage(
+                            model = imageUrls[index],
+                            contentDescription = "Step ${index + 1} Image",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .shadow(2.dp, RoundedCornerShape(16.dp))
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+
+                    if (index < instructionBlocks.size) {
+                        val blockText = instructionBlocks[index].trim()
+                        val annotatedText = buildAnnotatedString {
+                            val stepKeyword = if (locale.language == "bn") "ধাপ" else "Step"
+                            val delimiter = "—"
+                            val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*$delimiter)")
+                            val match = stepRegex.find(blockText)
+
+                            if (match != null) {
+                                val stepHeader = match.value
+                                val restOfText = blockText.substring(stepHeader.length)
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)) {
+                                    append(stepHeader)
+                                }
+                                append(restOfText)
+                            } else {
+                                append(blockText)
+                            }
+                        }
+                        Text(
+                            text = annotatedText,
+                            // CHANGED: Explicitly set text color to onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 16.sp,
+                                lineHeight = 24.sp
+                            )
+                        )
+                    }
                 }
             }
         }
+    }
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    // Bottom Info Section
+    val requiredDocuments = if (locale.language == "bn") detail.requiredDocuments.bn else detail.requiredDocuments.en
+    val processingTime = if (locale.language == "bn") detail.processingTime.bn else detail.processingTime.en
+    val contactInfo = if (locale.language == "bn") detail.contactInfo.bn else detail.contactInfo.en
+
+    Column(
+        Modifier
+            .padding(horizontal = 16.dp)
+            // CHANGED: Use Surface color instead of Color.White
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
+            .shadow(2.dp, RoundedCornerShape(16.dp))
+            .padding(20.dp)
+    ) {
+        // CHANGED: Added color = MaterialTheme.colorScheme.onSurface to all Texts
+
+        Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(requiredDocuments, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+        Spacer(Modifier.height(16.dp))
+
+        Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(processingTime, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+        Spacer(Modifier.height(16.dp))
+
+        Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(contactInfo, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
     }
 }

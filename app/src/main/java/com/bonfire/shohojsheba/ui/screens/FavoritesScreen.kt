@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,20 +25,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.ui.components.ServiceRow
-import com.bonfire.shohojsheba.ui.viewmodels.UserDataUiState
-import com.bonfire.shohojsheba.ui.viewmodels.UserDataViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.UserDataViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(navController: NavController) {
     val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
-    val viewModel: UserDataViewModel = viewModel(
-        factory = UserDataViewModelFactory(repository)
+    val locale = LocalLocale.current
+    val viewModel: ServicesViewModel = viewModel(
+        factory = ViewModelFactory(context)
     )
 
     Scaffold(
@@ -53,41 +51,35 @@ fun FavoritesScreen(navController: NavController) {
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
-        val uiState by viewModel.favoritesUiState.collectAsState()
+        val allServices by viewModel.allServices.collectAsState(initial = emptyList())
+        val favorites by viewModel.favorites.collectAsState(initial = emptyList())
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            when (val state = uiState) {
-                is UserDataUiState.Loading -> {
+            if (allServices.isEmpty() || favorites.isEmpty()) {
+                if (favorites.isEmpty()) {
+                    Text("No favorites yet.", modifier = Modifier.align(Alignment.Center))
+                } else {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-                is UserDataUiState.Favorites -> {
-                    if (state.favorites.isEmpty()) {
-                        Text("No favorites yet.", modifier = Modifier.align(Alignment.Center))
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(state.favorites) { service ->
-                                ServiceRow(service = service) {
-                                    navController.navigate("service_detail/${service.id}")
-                                }
-                            }
+            } else {
+                val favoriteServiceIds = favorites.map { it.serviceId }.toSet()
+                val favoriteServices = allServices.filter { it.id in favoriteServiceIds }
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(favoriteServices) { service ->
+                        ServiceRow(service = service, locale = locale) {
+                            navController.navigate("service_detail/${service.id}")
                         }
                     }
                 }
-                is UserDataUiState.Error -> {
-                    Text(state.message, modifier = Modifier.align(Alignment.Center))
-                    Button(onClick = { /* Implement retry logic */ }) {
-                        Text("Retry")
-                    }
-                }
-                else -> {}
             }
         }
     }

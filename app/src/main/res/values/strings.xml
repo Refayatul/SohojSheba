@@ -20,6 +20,9 @@
     <string name="recent_services_subtitle">What you have seen recently</string>
     <string name="favorite_services_title">Favorite Services</string>
     <string name="favorite_services_subtitle">Your favorite services</string>
+    <string name="ai_assistant">AI Assistant</string>
+    <string name="type_your_question">Type your question…</string>
+
 
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
@@ -40,6 +43,10 @@
     <string name="github">GitHub</string>
     <string name="dev_dialog_title">Our Team</string>
     <string name="dialog_close">Close</string>
+    <string name="section_appearance">Appearance</string>
+    <string name="theme_system">System Default</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_dark">Dark Mode</string>
 
     <!-- Other Screens -->
     <string name="departments_page_title">Departments</string>

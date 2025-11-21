@@ -14,7 +14,10 @@ fun AppNavGraph(
     navController: NavHostController,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onVoiceSearchClick: () -> Unit
+    onVoiceSearchClick: () -> Unit,
+    // --- Added these two parameters ---
+    currentThemeMode: String,
+    onThemeChange: (String) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -44,17 +47,29 @@ fun AppNavGraph(
             ServiceListScreen(navController, "govt_office", R.string.category_govt_office)
         }
 
-        // ServiceDetailScreen: no context parameter needed
         composable("${Routes.SERVICE_DETAIL}/{serviceId}") { backStackEntry ->
-            val serviceId = backStackEntry.arguments?.getString("serviceId") ?: ""
-            ServiceDetailScreen(
-                navController = navController,
-                serviceId = serviceId
-            )
+            val serviceId = backStackEntry.arguments?.getString("serviceId")
+            if (!serviceId.isNullOrBlank()) {
+                ServiceDetailScreen(
+                    navController = navController,
+                    serviceId = serviceId
+                )
+            }
+        }
+        composable(Routes.CHAT) {
+            ChatScreen(navController = navController)
         }
 
         composable(Routes.HISTORY) { HistoryScreen(navController) }
         composable(Routes.FAVORITES) { FavoritesScreen(navController) }
-        composable(Routes.SETTINGS) { SettingsScreen(navController) }
+
+        // --- Updated Settings Route to pass theme data ---
+        composable(Routes.SETTINGS) {
+            SettingsScreen(
+                navController = navController,
+                currentThemeMode = currentThemeMode,
+                onThemeChange = onThemeChange
+            )
+        }
     }
 }

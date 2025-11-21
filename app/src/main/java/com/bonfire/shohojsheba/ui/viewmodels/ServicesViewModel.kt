@@ -1,15 +1,19 @@
 package com.bonfire.shohojsheba.ui.viewmodels
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.BuildConfig
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.repositories.Repository
+import com.bonfire.shohojsheba.util.NetworkStatusTracker
 import com.google.ai.client.generativeai.GenerativeModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,55 +24,88 @@ sealed class ServicesUiState {
     data class Error(val message: String) : ServicesUiState()
 }
 
-class ServicesViewModel(private val repository: Repository, private val context: Context) : ViewModel() {
+class ServicesViewModel(
+    private val repository: Repository,
+    private val networkStatusTracker: NetworkStatusTracker
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ServicesUiState>(ServicesUiState.Success(emptyList()))
+    private val _uiState = MutableStateFlow<ServicesUiState>(ServicesUiState.Loading)
     val uiState: StateFlow<ServicesUiState> = _uiState
 
     private val _aiResponse = MutableStateFlow<String?>(null)
     val aiResponse: StateFlow<String?> = _aiResponse
 
+    private val _toastMessage = MutableSharedFlow<String>(replay = 1)
+    val toastMessage = _toastMessage.asSharedFlow()
+
+    val allServices = repository.getAllServices()
+    val history = repository.getRecentHistory()
+    val favorites = repository.getFavorites()
+    private val _dataSource = MutableStateFlow("Cache")
+    val dataSource = _dataSource.asStateFlow()
+
+    private var currentCategory: String? = null
+
+    init {
+        // Initial data load
+        viewModelScope.launch {
+            val source = repository.refreshIfNeeded()
+            _dataSource.value = source
+            if (source == "Offline" && !repository.hasSyncedOnce()) {
+                _toastMessage.tryEmit("Your internet connection is off. Turn it on to get the latest data.")
+            }
+        }
+
+        // Observe network changes to auto-refresh
+        viewModelScope.launch {
+            var wasOffline = !networkStatusTracker.isNetworkAvailable.value
+            networkStatusTracker.isNetworkAvailable
+                .collect { isAvailable ->
+                    if (isAvailable && wasOffline) {
+                         _toastMessage.emit("Back online. Fetching fresh data...")
+                         refreshData()
+                        if (_uiState.value is ServicesUiState.Error && currentCategory != null) {
+                            _toastMessage.emit("Retrying to load category...")
+                            loadServicesByCategory(currentCategory!!)
+                        }
+                    }
+                    wasOffline = !isAvailable
+                }
+        }
+    }
+
+    private fun refreshData() {
+        viewModelScope.launch {
+            _dataSource.value = repository.refreshIfNeeded()
+        }
+    }
+
     fun clearSearch() {
+        currentCategory = null
         _uiState.value = ServicesUiState.Success(emptyList())
         _aiResponse.value = null
     }
 
     fun loadServicesByCategory(category: String) {
+        currentCategory = category
         repository.getServicesByCategory(category)
-            .onEach { services ->
-                if (services.isEmpty()) {
-                    _uiState.value = ServicesUiState.Error("No services found for this category.")
+            .onEach {
+                _uiState.value = if (it.isEmpty()) {
+                    ServicesUiState.Error("No services found for this category.")
                 } else {
-                    _uiState.value = ServicesUiState.Success(services)
+                    ServicesUiState.Success(it)
                 }
             }
-            .catch { e ->
-                _uiState.value =
-                    ServicesUiState.Error(e.message ?: "An unknown error occurred")
-            }
+            .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }
             .launchIn(viewModelScope)
     }
 
     fun searchServices(query: String) {
-        // Clear previous AI response when a new search starts
+        currentCategory = null
         _aiResponse.value = null
-        repository.getAllServices()
-            .onEach { services ->
-                val filteredList = if (query.isBlank()) {
-                    emptyList()
-                } else {
-                    val q = query.lowercase()
-                    services.filter {
-                        context.getString(it.titleRes).lowercase().contains(q) ||
-                                context.getString(it.subtitleRes).lowercase().contains(q)
-                    }
-                }
-                _uiState.value = ServicesUiState.Success(filteredList)
-            }
-            .catch { e ->
-                _uiState.value =
-                    ServicesUiState.Error(e.message ?: "An unknown error occurred")
-            }
+        repository.searchServices(query)
+            .onEach { services -> _uiState.value = ServicesUiState.Success(services) }
+            .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }
             .launchIn(viewModelScope)
     }
 
@@ -77,16 +114,13 @@ class ServicesViewModel(private val repository: Repository, private val context:
             _uiState.value = ServicesUiState.Loading
             val apiKey = BuildConfig.GEMINI_API_KEY
             if (apiKey.isBlank()) {
-                _aiResponse.value = "⚠️ Gemini AI key not found. Please configure it in local.properties."
+                _aiResponse.value = "⚠️ Gemini AI key not found."
                 _uiState.value = ServicesUiState.Success(emptyList())
                 return@launch
             }
 
             try {
-                val generativeModel = GenerativeModel(
-                    modelName = "gemini-2.5-flash-lite",
-                    apiKey = apiKey
-                )
+                val generativeModel = GenerativeModel("gemini-2.5-flash-lite", apiKey)
                 val prompt = "Provide a detailed, step-by-step guide for the following service: '$query'. Assume the service is for Bangladesh unless another country is specified. Respond in the same language as the query. Do not use any markdown formatting like asterisks. Use new lines for clear spacing on a mobile screen. Do not introduce yourself as an AI. Just provide the steps."
                 val response = generativeModel.generateContent(prompt)
                 _aiResponse.value = response.text

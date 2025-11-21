@@ -11,4 +11,6 @@ object Routes {
     const val ENTREPRENEUR_SERVICES = "entrepreneur_services"
     const val GOVT_OFFICE_SERVICES = "govt_office_services"
     const val SERVICE_DETAIL = "service_detail"
+
+    const val CHAT = "chat"
 }

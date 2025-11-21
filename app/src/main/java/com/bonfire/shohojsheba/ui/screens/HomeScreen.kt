@@ -1,5 +1,6 @@
 package com.bonfire.shohojsheba.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,15 +25,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
-import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
+import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.CategoryCard
 import com.bonfire.shohojsheba.ui.components.ServiceListItem
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.theme.*
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
-import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModelFactory
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -43,14 +46,22 @@ fun HomeScreen(
     onVoiceSearchClick: () -> Unit
 ) {
     val context = LocalContext.current
-    val repository = RepositoryProvider.getRepository(context)
+    val appScope = rememberCoroutineScope()
+    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
-        factory = ServicesViewModelFactory(repository, context)
+        factory = ViewModelFactory(context, appScope = appScope)
     )
 
     val uiState by viewModel.uiState.collectAsState()
     val aiResponse by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Listen for toast messages
+    LaunchedEffect(key1 = Unit) {
+        viewModel.toastMessage.collectLatest {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     LaunchedEffect(searchQuery) {
         if (searchQuery.isNotBlank()) {
@@ -129,7 +140,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Person,
                             iconBackgroundColor = IconBgLightGreen,
                             iconTintColor = IconTintDarkGreen,
-                            onClick = { navController.navigate("citizen_services") }
+                            onClick = { navController.navigate(Routes.CITIZEN_SERVICES) }
                         )
                         CategoryCard(
                             modifier = Modifier.weight(1f),
@@ -137,7 +148,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Agriculture,
                             iconBackgroundColor = IconBgLightBlue,
                             iconTintColor = IconTintDarkBlue,
-                            onClick = { navController.navigate("farmer_services") }
+                            onClick = { navController.navigate(Routes.FARMER_SERVICES) }
                         )
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -147,7 +158,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Storefront,
                             iconBackgroundColor = IconBgLightPurple,
                             iconTintColor = IconTintDarkPurple,
-                            onClick = { navController.navigate("entrepreneur_services") }
+                            onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) }
                         )
                         CategoryCard(
                             modifier = Modifier.weight(1f),
@@ -155,7 +166,7 @@ fun HomeScreen(
                             icon = Icons.Outlined.Apartment,
                             iconBackgroundColor = IconBgLightYellow,
                             iconTintColor = IconTintDarkYellow,
-                            onClick = { navController.navigate("govt_office_services") }
+                            onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) }
                         )
                     }
                 }
@@ -164,12 +175,12 @@ fun HomeScreen(
                     ServiceListItem(
                         title = stringResource(id = R.string.recent_services_title),
                         subtitle = stringResource(id = R.string.recent_services_subtitle),
-                        onClick = { navController.navigate("history") }
+                        onClick = { navController.navigate(Routes.HISTORY) }
                     )
                     ServiceListItem(
                         title = stringResource(id = R.string.favorite_services_title),
                         subtitle = stringResource(id = R.string.favorite_services_subtitle),
-                        onClick = { navController.navigate("favorites") }
+                        onClick = { navController.navigate(Routes.FAVORITES) }
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -217,7 +228,7 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(state.services) { service ->
-                                ServiceRow(service = service) {
+                                ServiceRow(service = service, locale = locale) {
                                     navController.navigate("service_detail/${service.id}")
                                 }
                             }

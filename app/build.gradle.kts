@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose.compiler)
+    alias(libs.plugins.google.services)
 }
 
 // Load local.properties
@@ -17,6 +18,12 @@ if (localPropertiesFile.exists()) {
 android {
     namespace = "com.bonfire.shohojsheba"
     compileSdk = 36
+
+    signingConfigs {
+        getByName("debug") {
+            // Optional: Configure debug signing if needed
+        }
+    }
 
     defaultConfig {
         applicationId = "com.bonfire.shohojsheba"
@@ -45,6 +52,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+        }
     }
 
     buildFeatures {
@@ -68,7 +79,13 @@ android {
     }
 
     packaging {
+        jniLibs {
+            useLegacyPackaging = true // Fixes native library stripping warnings
+        }
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        // Suppress warnings about specific native libraries
+        resources.excludes += "**/libandroidx.graphics.path.so"
+        resources.excludes += "**/libdatastore_shared_counter.so"
     }
 }
 
@@ -85,11 +102,11 @@ dependencies {
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.material.icons.extended)
-    
+
     // Compose dependencies
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
-    
+
     // Lifecycle
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
@@ -102,8 +119,16 @@ dependencies {
     // Coil for Compose
     implementation(libs.coil.compose)
 
-    // Gemini AI
-    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+    // Gemini AI - FIXED: Use version catalog instead of hardcoded dependency
+    implementation(libs.gemini.ai)
+
+    // Firebase - FIXED: Use correct dependencies with BoM
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics) // Added missing analytics
+    implementation(libs.firebase.firestore)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
 
     // Testing
     testImplementation(libs.junit)
@@ -113,4 +138,6 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.tooling)
     debugImplementation(libs.compose.test.manifest)
+
+
 }

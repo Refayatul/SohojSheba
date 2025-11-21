@@ -9,9 +9,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bonfire.shohojsheba.navigation.AppNavGraph
 import com.bonfire.shohojsheba.navigation.BottomNavBar
+import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.theme.ShohojShebaTheme
 import com.bonfire.shohojsheba.utils.LocalLocale
 import com.bonfire.shohojsheba.utils.LocalOnLocaleChange
@@ -35,14 +37,44 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+            // ------------------------------------------------------------
+            // 1. LANGUAGE LOGIC
+            // ------------------------------------------------------------
             val savedLang = remember { sharedPreferences.getString("language", "bn") ?: "bn" }
             val (locale, setLocale) = remember { mutableStateOf(Locale(savedLang)) }
-
             val onLocaleChange: (Locale) -> Unit = { newLocale ->
                 setLocale(newLocale)
                 sharedPreferences.edit().putString("language", newLocale.language).apply()
             }
 
+            // ------------------------------------------------------------
+            // 2. THEME LOGIC (NEW)
+            // ------------------------------------------------------------
+            // Values: "light", "dark", "system"
+            val savedThemeMode = remember {
+                mutableStateOf(sharedPreferences.getString("theme_mode", "system") ?: "system")
+            }
+
+            // Check what the phone system is currently doing
+            val systemInDarkTheme = isSystemInDarkTheme()
+
+            // Decide whether to show Dark Mode based on preference
+            val useDarkTheme = when (savedThemeMode.value) {
+                "light" -> false
+                "dark" -> true
+                else -> systemInDarkTheme // "system" (default)
+            }
+
+            // Function to switch theme (passed down to SettingsScreen)
+            val onThemeChange: (String) -> Unit = { newMode ->
+                savedThemeMode.value = newMode
+                sharedPreferences.edit().putString("theme_mode", newMode).apply()
+            }
+
+            // ------------------------------------------------------------
+            // 3. APP CONTENT
+            // ------------------------------------------------------------
             var searchQuery by remember { mutableStateOf("") }
             val context = LocalContext.current
             val navController = rememberNavController()
@@ -57,7 +89,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            ShohojShebaTheme {
+            // Pass the calculated 'useDarkTheme' here
+            ShohojShebaTheme(darkTheme = useDarkTheme) {
                 ProvideLocale(locale = locale) {
                     CompositionLocalProvider(
                         LocalLocale provides locale,
@@ -90,13 +123,29 @@ class MainActivity : ComponentActivity() {
                                             }
                                         },
                                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                            // Use 'surface' so it adapts to dark/light mode
                                             containerColor = MaterialTheme.colorScheme.surface
                                         )
                                     )
                                 }
                             },
-                            bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) }
+                            bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) },
+                            floatingActionButton = {
+                                // We only want to show this button on the home screen
+                                if (currentRoute == Routes.HOME) {
+                                    FloatingActionButton(
+                                        onClick = { navController.navigate(Routes.CHAT) }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Chat,
+                                            contentDescription = stringResource(id = R.string.ai_assistant)
+                                        )
+                                    }
+                                }
+                            }
                         ) { paddingValues ->
+                            // IMPORTANT: Your AppNavGraph must be updated to accept
+                            // currentThemeMode and onThemeChange params!
                             AppNavGraph(
                                 modifier = Modifier.padding(paddingValues),
                                 navController = navController,
@@ -119,7 +168,10 @@ class MainActivity : ComponentActivity() {
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
-                                }
+                                },
+                                // Pass these to AppNavGraph -> SettingsScreen
+                                currentThemeMode = savedThemeMode.value,
+                                onThemeChange = onThemeChange
                             )
                         }
                     }

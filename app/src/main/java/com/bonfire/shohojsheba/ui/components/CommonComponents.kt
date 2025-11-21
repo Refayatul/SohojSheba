@@ -28,12 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.bonfire.shohojsheba.data.database.entities.Service
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,10 +113,13 @@ fun ServiceListItem(title: String, subtitle: String, onClick: () -> Unit) {
     }
 }
 
-// THIS IS THE IMPORTANT FIX: Update ServiceRow to use the new 'Service' model
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Service' model
+fun ServiceRow(service: Service, locale: Locale, onClick: () -> Unit) {
+    val imageUrl = service.images.split(",").firstOrNull { it.isNotBlank() }
+    val title = if (locale.language == "bn") service.title.bn else service.title.en
+    val subtitle = if (locale.language == "bn") service.subtitle.bn else service.subtitle.en
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,30 +134,24 @@ fun ServiceRow(service: Service, onClick: () -> Unit) { // Use the correct 'Serv
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = title,
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = service.iconRes),
-                    contentDescription = stringResource(id = service.titleRes),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(28.dp)
-                )
-            }
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            )
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(id = service.titleRes),
+                    text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = stringResource(id = service.subtitleRes),
+                    text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

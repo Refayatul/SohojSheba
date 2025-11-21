@@ -28,11 +28,17 @@ interface ServiceDao {
     @Query("SELECT * FROM service_details WHERE serviceId = :serviceId")
     fun getServiceDetail(serviceId: String): Flow<ServiceDetail?>
 
+    @Query("SELECT * FROM service_details WHERE serviceId = :serviceId")
+    suspend fun getServiceDetailOnce(serviceId: String): ServiceDetail?
+
     @Query("SELECT COUNT(*) FROM services")
     suspend fun getServiceCount(): Int
 
-    @Query("SELECT * FROM services WHERE titleRes LIKE :query OR subtitleRes LIKE :query")
-    fun searchServices(query: String): Flow<List<Service>>
+    @Query("""
+    SELECT * FROM services
+    WHERE title LIKE '%' || :q || '%' OR subtitle LIKE '%' || :q || '%'
+    """)
+    fun searchServices(q: String): Flow<List<Service>>
 
     @Query("SELECT * FROM services WHERE id IN (:serviceIds)")
     fun getServicesByIds(serviceIds: List<String>): Flow<List<Service>>
