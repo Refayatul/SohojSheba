@@ -124,11 +124,18 @@ dependencies {
 
     // Firebase - FIXED: Use correct dependencies with BoM
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics) // Added missing analytics
     implementation(libs.firebase.firestore)
 
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
+
+    // javax inject
+    implementation(libs.javax.inject)
+
+    // Google Play Services Auth for Google Sign-In
+    implementation(libs.play.services.auth)
 
     // Testing
     testImplementation(libs.junit)

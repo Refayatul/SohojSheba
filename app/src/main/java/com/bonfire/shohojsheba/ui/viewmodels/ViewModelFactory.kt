@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bonfire.shohojsheba.LocaleSetupApplication
+import com.bonfire.shohojsheba.data.repositories.AuthRepositoryImpl
 import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.data.repositories.SearchRepository
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +32,9 @@ class ViewModelFactory(
                 requireNotNull(appScope) { "appScope must be provided for SearchViewModel" }
                 val searchRepository = SearchRepository(repository.serviceDao, appScope)
                 SearchViewModel(searchRepository) as T
+            }
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
+                AuthViewModel(AuthRepositoryImpl.getInstance()) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

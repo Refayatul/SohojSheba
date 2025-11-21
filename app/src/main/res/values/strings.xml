@@ -3,7 +3,7 @@
     <!-- App Name -->
     <string name="app_name">Shohoj Sheba</string>
 
-    <!-- Splash Screen -->
+    <!-- Firebase -->
     <string name="tagline">Easy government services for everyone</string>
     <string name="version_label">Version</string>
     <string name="version_number">1.0.0</string>
