@@ -28,12 +28,14 @@ import com.bonfire.shohojsheba.navigation.BottomNavBar
 import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.theme.ShohojShebaTheme
 import com.bonfire.shohojsheba.ui.viewmodels.AuthViewModel
+import com.bonfire.shohojsheba.ui.viewmodels.AuthUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import com.bonfire.shohojsheba.utils.LocalLocale
 import com.bonfire.shohojsheba.utils.LocalOnLocaleChange
 import com.bonfire.shohojsheba.utils.ProvideLocale
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,6 +95,29 @@ class MainActivity : ComponentActivity() {
 
             // Get AuthViewModel at composable level (before launcher)
             val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
+
+            // Observe auth state changes for navigation
+            val authState by authViewModel.authState.collectAsState()
+            val googleSignInState by authViewModel.googleSignInState.collectAsState()
+
+            // Listen for toast messages from AuthViewModel
+            LaunchedEffect(Unit) {
+                authViewModel.toastMessage.collectLatest { message ->
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // Navigate when authentication succeeds
+            LaunchedEffect(authState, googleSignInState) {
+                val isAuthSuccess = authState is AuthUiState.Success || googleSignInState is AuthUiState.Success
+                
+                if (isAuthSuccess) {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(0) // Pop entire back stack
+                    }
+                    authViewModel.clearAuthState()
+                }
+            }
 
             // Google Sign-In Launcher - Created at MainActivity level to avoid ActivityResultRegistryOwner issues
             val googleSignInLauncher = rememberLauncherForActivityResult(
@@ -158,7 +183,7 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         actions = {
-                                            IconButton(onClick = { navController.navigate("settings") }) {
+                                            IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
                                                 Icon(
                                                     imageVector = Icons.Outlined.Settings,
                                                     contentDescription = stringResource(id = R.string.settings),

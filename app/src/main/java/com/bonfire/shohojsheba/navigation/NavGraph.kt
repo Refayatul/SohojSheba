@@ -30,8 +30,11 @@ fun AppNavGraph(
     val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
     val currentUser by authViewModel.currentUser.collectAsState()
 
-    // Determine initial destination based on auth state
-    val startDestination = if (currentUser != null) Routes.HOME else Routes.LOGIN
+    // Determine startDestination based on auth state - this will update when user logs in/out
+    // Using remember to ensure stable destination reference while allowing updates
+    val startDestination = remember(currentUser) {
+        if (currentUser != null) Routes.HOME else Routes.LOGIN
+    }
 
     NavHost(
         modifier = modifier,
