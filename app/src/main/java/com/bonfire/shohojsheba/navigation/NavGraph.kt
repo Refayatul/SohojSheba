@@ -21,13 +21,12 @@ fun AppNavGraph(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onVoiceSearchClick: () -> Unit,
-    // --- Added these two parameters ---
     currentThemeMode: String,
     onThemeChange: (String) -> Unit,
-    googleSignInLauncher: ActivityResultLauncher<Intent>? = null
+    googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
+    authViewModel: AuthViewModel // Added parameter
 ) {
-    val context = LocalContext.current
-    val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
+    // Removed local AuthViewModel creation. Using passed instance.
     val currentUser by authViewModel.currentUser.collectAsState()
 
     // Determine startDestination based on auth state - this will update when user logs in/out
@@ -42,10 +41,18 @@ fun AppNavGraph(
         startDestination = startDestination
     ) {
         composable(Routes.LOGIN) {
-            LoginScreen(navController = navController, googleSignInLauncher = googleSignInLauncher)
+            LoginScreen(
+                navController = navController, 
+                googleSignInLauncher = googleSignInLauncher,
+                authViewModel = authViewModel
+            )
         }
         composable(Routes.REGISTER) {
-            RegisterScreen(navController = navController, googleSignInLauncher = googleSignInLauncher)
+            RegisterScreen(
+                navController = navController, 
+                googleSignInLauncher = googleSignInLauncher,
+                authViewModel = authViewModel
+            )
         }
         composable(Routes.HOME) {
             HomeScreen(

@@ -162,13 +162,16 @@ class MainActivity : ComponentActivity() {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentRoute = navBackStackEntry?.destination?.route
 
+                        // Get currentUser to check auth
+                        val currentUser by authViewModel.currentUser.collectAsState()
+
                         // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
                         val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER
                         val isSettingsScreen = currentRoute == Routes.SETTINGS
                         val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
                         val isHomeScreen = currentRoute == Routes.HOME
 
-                        val showBottomNav = !isAuthScreen && !isSettingsScreen && !isServiceDetailScreen
+                        val showBottomNav = !isAuthScreen && !isSettingsScreen && !isServiceDetailScreen && currentUser != null
                         val showTopBar = isHomeScreen
 
                         Scaffold(
@@ -241,7 +244,8 @@ class MainActivity : ComponentActivity() {
                                 // Pass these to AppNavGraph -> SettingsScreen
                                 currentThemeMode = savedThemeMode.value,
                                 onThemeChange = onThemeChange,
-                                googleSignInLauncher = googleSignInLauncher
+                                googleSignInLauncher = googleSignInLauncher,
+                                authViewModel = authViewModel // Pass shared AuthViewModel
                             )
                         }
                     }

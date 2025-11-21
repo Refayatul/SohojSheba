@@ -70,6 +70,9 @@ fun SettingsScreen(
             onConfirm = {
                 showLogoutDialog = false
                 authViewModel.logout()
+                navController.navigate(Routes.LOGIN) {
+                    popUpTo(0) { inclusive = true }
+                }
             }
         )
     }

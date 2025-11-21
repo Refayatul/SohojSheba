@@ -34,7 +34,7 @@ class ViewModelFactory(
                 SearchViewModel(searchRepository) as T
             }
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
-                AuthViewModel(AuthRepositoryImpl.getInstance()) as T
+                AuthViewModel(AuthRepositoryImpl.getInstance(context.applicationContext)) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
