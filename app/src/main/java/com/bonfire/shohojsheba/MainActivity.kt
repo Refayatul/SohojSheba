@@ -20,15 +20,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bonfire.shohojsheba.navigation.AppNavGraph
 import com.bonfire.shohojsheba.navigation.BottomNavBar
 import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.theme.ShohojShebaTheme
+import com.bonfire.shohojsheba.ui.viewmodels.AuthViewModel
+import com.bonfire.shohojsheba.ui.viewmodels.AuthUiState
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import com.bonfire.shohojsheba.utils.LocalLocale
 import com.bonfire.shohojsheba.utils.LocalOnLocaleChange
 import com.bonfire.shohojsheba.utils.ProvideLocale
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,6 +86,62 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val navController = rememberNavController()
 
+            // Google Sign-In Setup
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("187859520695-03dpjg2k339oi3if24ts12ioip830a79.apps.googleusercontent.com")
+                .requestEmail()
+                .build()
+            val googleSignInClient = GoogleSignIn.getClient(context, gso)
+
+            // Get AuthViewModel at composable level (before launcher)
+            val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
+
+            // Observe auth state changes for navigation
+            val authState by authViewModel.authState.collectAsState()
+            val googleSignInState by authViewModel.googleSignInState.collectAsState()
+
+            // Listen for toast messages from AuthViewModel
+            LaunchedEffect(Unit) {
+                authViewModel.toastMessage.collectLatest { message ->
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // Navigate when authentication succeeds
+            LaunchedEffect(authState, googleSignInState) {
+                val isAuthSuccess = authState is AuthUiState.Success || googleSignInState is AuthUiState.Success
+                
+                if (isAuthSuccess) {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(0) // Pop entire back stack
+                    }
+                    authViewModel.clearAuthState()
+                }
+            }
+
+            // Google Sign-In Launcher - Created at MainActivity level to avoid ActivityResultRegistryOwner issues
+            val googleSignInLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                try {
+                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                    val account = task.getResult(Exception::class.java)
+                    if (account != null) {
+                        val idToken = account.idToken
+                        if (idToken != null) {
+                            // Use authViewModel obtained at composable level
+                            authViewModel.googleSignIn(idToken)
+                        } else {
+                            Toast.makeText(context, "Google Sign-In failed: No ID token received", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Google Sign-In failed: No account found", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Google Sign-In failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             val voiceLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) { result ->
@@ -99,12 +162,21 @@ class MainActivity : ComponentActivity() {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentRoute = navBackStackEntry?.destination?.route
 
-                        // Hide bottom nav on Settings and Service Detail screens
-                        val showBottomNav = currentRoute != "settings" && currentRoute?.startsWith("service_detail") != true
+                        // Get currentUser to check auth
+                        val currentUser by authViewModel.currentUser.collectAsState()
+
+                        // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
+                        val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER
+                        val isSettingsScreen = currentRoute == Routes.SETTINGS
+                        val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
+                        val isHomeScreen = currentRoute == Routes.HOME
+
+                        val showBottomNav = !isAuthScreen && !isSettingsScreen && !isServiceDetailScreen && currentUser != null
+                        val showTopBar = isHomeScreen
 
                         Scaffold(
                             topBar = {
-                                if (currentRoute == "home") {
+                                if (showTopBar) {
                                     CenterAlignedTopAppBar(
                                         title = {
                                             Text(
@@ -114,7 +186,7 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         actions = {
-                                            IconButton(onClick = { navController.navigate("settings") }) {
+                                            IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
                                                 Icon(
                                                     imageVector = Icons.Outlined.Settings,
                                                     contentDescription = stringResource(id = R.string.settings),
@@ -171,7 +243,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 // Pass these to AppNavGraph -> SettingsScreen
                                 currentThemeMode = savedThemeMode.value,
-                                onThemeChange = onThemeChange
+                                onThemeChange = onThemeChange,
+                                googleSignInLauncher = googleSignInLauncher,
+                                authViewModel = authViewModel // Pass shared AuthViewModel
                             )
                         }
                     }

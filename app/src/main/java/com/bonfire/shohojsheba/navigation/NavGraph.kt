@@ -1,12 +1,18 @@
 package com.bonfire.shohojsheba.navigation
 
-import androidx.compose.runtime.Composable
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.ui.screens.*
+import com.bonfire.shohojsheba.ui.viewmodels.AuthViewModel
+import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun AppNavGraph(
@@ -15,15 +21,39 @@ fun AppNavGraph(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onVoiceSearchClick: () -> Unit,
-    // --- Added these two parameters ---
     currentThemeMode: String,
-    onThemeChange: (String) -> Unit
+    onThemeChange: (String) -> Unit,
+    googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
+    authViewModel: AuthViewModel // Added parameter
 ) {
+    // Removed local AuthViewModel creation. Using passed instance.
+    val currentUser by authViewModel.currentUser.collectAsState()
+
+    // Determine startDestination based on auth state - this will update when user logs in/out
+    // Using remember to ensure stable destination reference while allowing updates
+    val startDestination = remember(currentUser) {
+        if (currentUser != null) Routes.HOME else Routes.LOGIN
+    }
+
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Routes.HOME
+        startDestination = startDestination
     ) {
+        composable(Routes.LOGIN) {
+            LoginScreen(
+                navController = navController, 
+                googleSignInLauncher = googleSignInLauncher,
+                authViewModel = authViewModel
+            )
+        }
+        composable(Routes.REGISTER) {
+            RegisterScreen(
+                navController = navController, 
+                googleSignInLauncher = googleSignInLauncher,
+                authViewModel = authViewModel
+            )
+        }
         composable(Routes.HOME) {
             HomeScreen(
                 navController = navController,
