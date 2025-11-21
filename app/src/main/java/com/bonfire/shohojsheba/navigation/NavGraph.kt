@@ -49,9 +49,15 @@ fun AppNavGraph(
         }
         composable(Routes.REGISTER) {
             RegisterScreen(
-                navController = navController, 
+                navController = navController,
                 googleSignInLauncher = googleSignInLauncher,
                 authViewModel = authViewModel
+            )
+        }
+        composable(Routes.FORGOT_PASSWORD) {
+            ForgotPasswordScreen(
+                navController = navController,
+                viewModel = authViewModel
             )
         }
         composable(Routes.HOME) {
