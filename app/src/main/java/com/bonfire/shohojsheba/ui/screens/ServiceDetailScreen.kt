@@ -8,7 +8,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +69,10 @@ fun ServiceDetailScreen(
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 // Top spacer to avoid overlapping with floating buttons
-                Spacer(modifier = Modifier.height(72.dp))
+                Spacer(modifier = Modifier.height(80.dp))
+
+                // Header
+                ServiceHeader(service!!, locale)
 
                 ServiceDetailContent(service!!, detail!!, locale)
 
@@ -83,14 +91,12 @@ fun ServiceDetailScreen(
                 .padding(16.dp)
                 .size(48.dp)
                 .align(Alignment.TopStart)
-                // CHANGED: Use Surface color instead of hardcoded White
                 .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                // CHANGED: Use OnSurface (Black in light, White in dark)
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -110,7 +116,6 @@ fun ServiceDetailScreen(
                 .padding(16.dp)
                 .size(48.dp)
                 .align(Alignment.TopEnd)
-                // CHANGED: Use Surface color instead of hardcoded White
                 .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), shape = RoundedCornerShape(12.dp))
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
 
@@ -118,10 +123,40 @@ fun ServiceDetailScreen(
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                 contentDescription = "Favorite",
-                // Keep primary color for favorite state, otherwise use onSurface
                 tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
             )
         }
+    }
+}
+
+@Composable
+private fun ServiceHeader(service: Service, locale: Locale) {
+    val title = if (locale.language == "bn") service.title.bn else service.title.en
+    val subtitle = if (locale.language == "bn") service.subtitle.bn else service.subtitle.en
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        if (subtitle.isNotBlank()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
+        }
+        HorizontalDivider(
+            modifier = Modifier.padding(top = 16.dp),
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+        )
     }
 }
 
@@ -139,8 +174,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .shadow(4.dp, RoundedCornerShape(16.dp)),
-                // CHANGED: Use Surface color (White in Light Mode, Dark Grey in Dark Mode)
+                    .shadow(2.dp, RoundedCornerShape(16.dp)), // Reduced shadow for cleaner look
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -156,10 +190,10 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp))
-                                .shadow(2.dp, RoundedCornerShape(16.dp))
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     if (index < instructionBlocks.size) {
@@ -167,27 +201,25 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         val annotatedText = buildAnnotatedString {
                             val stepKeyword = if (locale.language == "bn") "ধাপ" else "Step"
                             val delimiter = "—"
-                            val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*$delimiter)")
+                            val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*[$delimiter:-])") // Added colon and hyphen support
                             val match = stepRegex.find(blockText)
 
                             if (match != null) {
                                 val stepHeader = match.value
                                 val restOfText = blockText.substring(stepHeader.length)
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)) {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)) {
                                     append(stepHeader)
                                 }
-                                append(restOfText)
+                                appendMarkdown(restOfText)
                             } else {
-                                append(blockText)
+                                appendMarkdown(blockText)
                             }
                         }
                         Text(
                             text = annotatedText,
-                            // CHANGED: Explicitly set text color to onSurface
                             color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = 16.sp,
-                                lineHeight = 24.sp
+                            style = MaterialTheme.typography.bodyLarge.copy( // Increased text size for readability
+                                lineHeight = 26.sp
                             )
                         )
                     }
@@ -206,25 +238,100 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
     Column(
         Modifier
             .padding(horizontal = 16.dp)
-            // CHANGED: Use Surface color instead of Color.White
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
             .shadow(2.dp, RoundedCornerShape(16.dp))
-            .padding(20.dp)
+            .padding(vertical = 12.dp) // Reduced vertical padding as items have own padding
     ) {
-        // CHANGED: Added color = MaterialTheme.colorScheme.onSurface to all Texts
+        InfoRow(
+            icon = Icons.Default.Description,
+            title = "Required Documents",
+            content = requiredDocuments
+        )
+        Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), modifier = Modifier.padding(horizontal = 16.dp))
+        
+        InfoRow(
+            icon = Icons.Default.Schedule,
+            title = "Processing Time",
+            content = processingTime
+        )
+        Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), modifier = Modifier.padding(horizontal = 16.dp))
+        
+        InfoRow(
+            icon = Icons.Default.Phone,
+            title = "Contact Info",
+            content = contactInfo
+        )
+    }
+}
 
-        Text("Required Documents", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(requiredDocuments, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-        Spacer(Modifier.height(16.dp))
+@Composable
+private fun InfoRow(
+    icon: ImageVector,
+    title: String,
+    content: String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.Top
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(10.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+        
+        Spacer(modifier = Modifier.width(16.dp))
+        
+        Column {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            // Parse Markdown for content here too
+            val annotatedContent = buildAnnotatedString {
+                 appendMarkdown(content)
+            }
+            
+            Text(
+                text = annotatedContent,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 22.sp
+            )
+        }
+    }
+}
 
-        Text("Processing Time", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(processingTime, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-        Spacer(Modifier.height(16.dp))
-
-        Text("Contact Info", fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(contactInfo, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+// Helper function to parse Markdown bold (**text**)
+fun AnnotatedString.Builder.appendMarkdown(text: String) {
+    val parts = text.split("**")
+    parts.forEachIndexed { index, part ->
+        if (index % 2 == 1) { // Inside ** **
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black)) { // Ensure bold text is distinct
+                // Check for dark mode color adjustment if needed, but usually bold is enough.
+                // Let's use current content color logic but just bold.
+            }
+            // Actually, span style inherits color unless specified. 
+            // Let's just force bold.
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                append(part)
+            }
+        } else {
+            append(part)
+        }
     }
 }

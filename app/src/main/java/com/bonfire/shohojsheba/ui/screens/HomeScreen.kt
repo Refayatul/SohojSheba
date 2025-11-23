@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
@@ -13,6 +15,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -21,6 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -63,14 +68,6 @@ fun HomeScreen(
         }
     }
 
-    LaunchedEffect(searchQuery) {
-        if (searchQuery.isNotBlank()) {
-            viewModel.searchServices(searchQuery)
-        } else {
-            viewModel.clearSearch()
-        }
-    }
-
     LaunchedEffect(aiResponse) {
         if (aiResponse != null) {
             keyboardController?.hide()
@@ -85,7 +82,15 @@ fun HomeScreen(
         // 🔍 Search bar with voice mic
         TextField(
             value = searchQuery,
-            onValueChange = onSearchQueryChange,
+            onValueChange = { 
+                onSearchQueryChange(it)
+                if (it.isBlank()) {
+                    viewModel.clearSearch()
+                } else {
+                    // Local search while typing (enableAI = false)
+                    viewModel.searchServices(it, enableAI = false)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
@@ -112,6 +117,16 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.secondary
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    if (searchQuery.isNotBlank()) {
+                        // AI search on Enter (enableAI = true)
+                        viewModel.searchServices(searchQuery, enableAI = true)
+                        keyboardController?.hide()
+                    }
+                }
+            ),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -124,7 +139,7 @@ fun HomeScreen(
         )
 
         if (searchQuery.isBlank()) {
-            // 🏠 Default content (unchanged)
+            // 🏠 Default content (Categories)
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(
@@ -190,31 +205,48 @@ fun HomeScreen(
         } else {
             when (val state = uiState) {
                 is ServicesUiState.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    // Show loading indicator (Usually implies AI search is running if triggered by Enter)
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(48.dp),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Searching with AI...",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
                     }
                 }
 
                 is ServicesUiState.Success -> {
                     if (state.services.isEmpty()) {
-                        // Show loading while AI is generating
+                        // Show "No results" message
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(48.dp),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
-                                    text = "Searching with AI...",
+                                    text = "No local results found.",
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Press Enter to search with AI assistant.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -236,7 +268,8 @@ fun HomeScreen(
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = state.message,
-                            modifier = Modifier.align(Alignment.Center)
+                            modifier = Modifier.align(Alignment.Center),
+                            color = MaterialTheme.colorScheme.error
                         )
                     }
                 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bonfire.shohojsheba.data.repositories.RepositoryProvider
 import com.bonfire.shohojsheba.navigation.AppNavGraph
 import com.bonfire.shohojsheba.navigation.BottomNavBar
 import com.bonfire.shohojsheba.navigation.Routes
@@ -120,7 +121,7 @@ class MainActivity : ComponentActivity() {
                     authViewModel.clearAuthState()
                     
                     // Sync user data from Firestore
-                    val repository = com.bonfire.shohojsheba.data.repositories.RepositoryProvider.getRepository(context)
+                    val repository = RepositoryProvider.getRepository(context)
                     repository.syncUserDataFromFirestore()
                 }
             }

@@ -100,14 +100,18 @@ class ServicesViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun searchServices(query: String) {
+    fun searchServices(query: String, enableAI: Boolean = false) {
         currentCategory = null
         _aiResponse.value = null
         repository.searchServices(query)
             .onEach { services ->
                 if (services.isEmpty()) {
-                    // Auto-trigger AI search when no results found
-                    searchWithAI(query)
+                    if (enableAI) {
+                        // Auto-trigger AI search when no results found AND AI is enabled
+                        searchWithAI(query)
+                    } else {
+                         _uiState.value = ServicesUiState.Success(emptyList())
+                    }
                 } else {
                     _uiState.value = ServicesUiState.Success(services)
                 }
