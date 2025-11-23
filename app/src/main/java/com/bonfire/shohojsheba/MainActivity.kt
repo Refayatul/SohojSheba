@@ -53,6 +53,8 @@ class MainActivity : ComponentActivity() {
             val onLocaleChange: (Locale) -> Unit = { newLocale ->
                 setLocale(newLocale)
                 sharedPreferences.edit().putString("language", newLocale.language).apply()
+                // Recreate activity to apply language change throughout the app
+                recreate()
             }
 
             // ------------------------------------------------------------
@@ -116,6 +118,10 @@ class MainActivity : ComponentActivity() {
                         popUpTo(0) // Pop entire back stack
                     }
                     authViewModel.clearAuthState()
+                    
+                    // Sync user data from Firestore
+                    val repository = com.bonfire.shohojsheba.data.repositories.RepositoryProvider.getRepository(context)
+                    repository.syncUserDataFromFirestore()
                 }
             }
 

@@ -3,7 +3,6 @@ package com.bonfire.shohojsheba.data.repositories
 import com.bonfire.shohojsheba.data.database.dao.ServiceDao
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.mappers.toEntity
-import com.bonfire.shohojsheba.data.mappers.toRemote
 import com.bonfire.shohojsheba.data.remote.FirestoreApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,17 +30,16 @@ class SearchRepository(
                     }
 
                     if (isRelevant) {
+                        // Save Firestore results to local DB for display
                         serviceDao.insertServices(remote)
                     } else {
                         // Gemini Fallback - Trigger if no relevant results found
                         geminiRepository.generateService(query).collect { result ->
                             if (result != null) {
                                 val (service, detail) = result
-                                // Save to Firestore
-                                FirestoreApi.saveService(service.toRemote())
-                                FirestoreApi.saveServiceDetails(detail.toRemote())
-                                
-                                // Save to Local
+                                // Save to Local DB only (for display)
+                                // Will be saved to Firestore when user opens it
+                                // Note: REPLACE strategy prevents true duplicates
                                 serviceDao.insertServices(listOf(service))
                                 serviceDao.insertServiceDetails(listOf(detail))
                             }

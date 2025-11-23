@@ -21,12 +21,18 @@ interface UserDataDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM user_favorites WHERE serviceId = :serviceId)")
     fun isFavorite(serviceId: String): Flow<Boolean>
+    
+    @Query("SELECT EXISTS(SELECT 1 FROM user_favorites WHERE serviceId = :serviceId)")
+    suspend fun isFavoriteOnce(serviceId: String): Boolean
 
     @Insert
     suspend fun addHistory(userHistory: UserHistory): Long
 
     @Query("SELECT * FROM user_history ORDER BY accessedDate DESC LIMIT :limit")
     fun getRecentHistory(limit: Int): Flow<List<UserHistory>>
+    
+    @Query("SELECT EXISTS(SELECT 1 FROM user_history WHERE serviceId = :serviceId)")
+    suspend fun isInHistoryOnce(serviceId: String): Boolean
 
     @Query("DELETE FROM user_history WHERE accessedDate < :cutoffDate")
     suspend fun clearOldHistory(cutoffDate: Long): Int

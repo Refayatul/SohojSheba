@@ -131,7 +131,8 @@ class ServicesViewModel(
                 geminiRepository.generateService(query).collect { result ->
                     if (result != null) {
                         val (service, detail) = result
-                        // Save to database
+                        // Save to local DB only (for display)
+                        // Will be saved to Firestore when user opens it
                         repository.serviceDao.insertServices(listOf(service))
                         repository.serviceDao.insertServiceDetails(listOf(detail))
                         // Show the generated service
