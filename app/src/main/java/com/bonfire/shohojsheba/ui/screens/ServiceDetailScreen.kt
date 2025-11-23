@@ -1,10 +1,15 @@
 package com.bonfire.shohojsheba.ui.screens
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Patterns
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -23,10 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +49,7 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServiceDetailViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import kotlinx.coroutines.launch
 import java.util.Locale
+import java.util.regex.Pattern
 import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -162,6 +171,8 @@ private fun ServiceHeader(service: Service, locale: Locale) {
 
 @Composable
 private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale: Locale) {
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val imageUrls = detail.images.split(",").filter { it.isNotBlank() }
     val instructionBlocks = (if (locale.language == "bn") detail.instructions.bn else detail.instructions.en)
         .split("\n\n").filter { it.isNotBlank() }
@@ -174,7 +185,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .shadow(2.dp, RoundedCornerShape(16.dp)), // Reduced shadow for cleaner look
+                    .shadow(2.dp, RoundedCornerShape(16.dp)),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -201,7 +212,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         val annotatedText = buildAnnotatedString {
                             val stepKeyword = if (locale.language == "bn") "ধাপ" else "Step"
                             val delimiter = "—"
-                            val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*[$delimiter:-])") // Added colon and hyphen support
+                            val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*[$delimiter:-])")
                             val match = stepRegex.find(blockText)
 
                             if (match != null) {
@@ -210,17 +221,21 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)) {
                                     append(stepHeader)
                                 }
-                                appendMarkdown(restOfText)
+                                appendMarkdownAndLinks(restOfText)
                             } else {
-                                appendMarkdown(blockText)
+                                appendMarkdownAndLinks(blockText)
                             }
                         }
-                        Text(
+                        
+                        ClickableText(
                             text = annotatedText,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyLarge.copy( // Increased text size for readability
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = MaterialTheme.colorScheme.onSurface,
                                 lineHeight = 26.sp
-                            )
+                            ),
+                            onClick = { offset ->
+                                annotatedText.handleLinkClick(offset, context, uriHandler)
+                            }
                         )
                     }
                 }
@@ -240,7 +255,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
             .padding(horizontal = 16.dp)
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
             .shadow(2.dp, RoundedCornerShape(16.dp))
-            .padding(vertical = 12.dp) // Reduced vertical padding as items have own padding
+            .padding(vertical = 12.dp)
     ) {
         InfoRow(
             icon = Icons.Default.Description,
@@ -270,6 +285,9 @@ private fun InfoRow(
     title: String,
     content: String
 ) {
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
+    
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -301,37 +319,125 @@ private fun InfoRow(
             )
             Spacer(modifier = Modifier.height(4.dp))
             
-            // Parse Markdown for content here too
+            // Parse Markdown and Links for content
             val annotatedContent = buildAnnotatedString {
-                 appendMarkdown(content)
+                 appendMarkdownAndLinks(content)
             }
             
-            Text(
+            ClickableText(
                 text = annotatedContent,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 22.sp
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    lineHeight = 22.sp
+                ),
+                onClick = { offset ->
+                    annotatedContent.handleLinkClick(offset, context, uriHandler)
+                }
             )
         }
     }
 }
 
-// Helper function to parse Markdown bold (**text**)
-fun AnnotatedString.Builder.appendMarkdown(text: String) {
+// Helper to handle link clicks
+fun AnnotatedString.handleLinkClick(offset: Int, context: Context, uriHandler: UriHandler) {
+    getStringAnnotations(tag = "URL", start = offset, end = offset).firstOrNull()?.let { 
+        try { uriHandler.openUri(it.item) } catch(e: Exception) { e.printStackTrace() }
+    }
+    getStringAnnotations(tag = "EMAIL", start = offset, end = offset).firstOrNull()?.let { 
+        try {
+            val intent = Intent(Intent.ACTION_SENDTO).apply { data = Uri.parse("mailto:${it.item}") }
+            context.startActivity(intent)
+        } catch(e: Exception) { e.printStackTrace() }
+    }
+    getStringAnnotations(tag = "PHONE", start = offset, end = offset).firstOrNull()?.let { 
+        try {
+            val intent = Intent(Intent.ACTION_DIAL).apply { data = Uri.parse("tel:${it.item}") }
+            context.startActivity(intent)
+        } catch(e: Exception) { e.printStackTrace() }
+    }
+}
+
+// Helper to append text with markdown bold and auto-linking
+fun AnnotatedString.Builder.appendMarkdownAndLinks(text: String) {
     val parts = text.split("**")
     parts.forEachIndexed { index, part ->
-        if (index % 2 == 1) { // Inside ** **
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black)) { // Ensure bold text is distinct
-                // Check for dark mode color adjustment if needed, but usually bold is enough.
-                // Let's use current content color logic but just bold.
-            }
-            // Actually, span style inherits color unless specified. 
-            // Let's just force bold.
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(part)
-            }
-        } else {
-            append(part)
+        val isBold = index % 2 == 1
+        appendWithLinks(part, isBold)
+    }
+}
+
+fun AnnotatedString.Builder.appendWithLinks(text: String, isBold: Boolean) {
+    val urlMatcher = Patterns.WEB_URL.matcher(text)
+    val emailMatcher = Patterns.EMAIL_ADDRESS.matcher(text)
+    val phoneMatcher = Patterns.PHONE.matcher(text)
+    // Regex for Markdown links: [Title](URL)
+    val markdownLinkMatcher = Pattern.compile("\\[([^]]+)\\]\\(([^)]+)\\)").matcher(text)
+
+    data class LinkMatch(val start: Int, val end: Int, val type: String, val value: String, val displayText: String? = null)
+    val matches = mutableListOf<LinkMatch>()
+
+    while (markdownLinkMatcher.find()) {
+        matches.add(LinkMatch(
+            start = markdownLinkMatcher.start(), 
+            end = markdownLinkMatcher.end(), 
+            type = "URL", 
+            value = markdownLinkMatcher.group(2) ?: "",
+            displayText = markdownLinkMatcher.group(1)
+        ))
+    }
+    while (urlMatcher.find()) {
+        matches.add(LinkMatch(urlMatcher.start(), urlMatcher.end(), "URL", urlMatcher.group()))
+    }
+    while (emailMatcher.find()) {
+        matches.add(LinkMatch(emailMatcher.start(), emailMatcher.end(), "EMAIL", emailMatcher.group()))
+    }
+    while (phoneMatcher.find()) {
+        val phone = phoneMatcher.group()
+        if (phone.length >= 6) { 
+             matches.add(LinkMatch(phoneMatcher.start(), phoneMatcher.end(), "PHONE", phone))
         }
+    }
+
+    matches.sortBy { it.start }
+    
+    val uniqueMatches = mutableListOf<LinkMatch>()
+    var lastEnd = 0
+    for (m in matches) {
+        if (m.start >= lastEnd) {
+            uniqueMatches.add(m)
+            lastEnd = m.end
+        }
+    }
+
+    var currentIndex = 0
+    for (match in uniqueMatches) {
+        if (match.start > currentIndex) {
+             val plainText = text.substring(currentIndex, match.start)
+             if (isBold) {
+                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(plainText) }
+             } else {
+                 append(plainText)
+             }
+        }
+        
+        // Use displayText for Markdown links, otherwise substring
+        val linkText = match.displayText ?: text.substring(match.start, match.end)
+        
+        pushStringAnnotation(tag = match.type, annotation = match.value)
+        withStyle(SpanStyle(color = Color(0xFF1E88E5), textDecoration = TextDecoration.Underline, fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal)) {
+            append(linkText)
+        }
+        pop()
+        
+        currentIndex = match.end
+    }
+    
+    if (currentIndex < text.length) {
+        val remaining = text.substring(currentIndex)
+        if (isBold) {
+             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(remaining) }
+         } else {
+             append(remaining)
+         }
     }
 }
