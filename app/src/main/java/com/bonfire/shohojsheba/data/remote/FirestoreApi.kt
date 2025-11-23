@@ -64,4 +64,12 @@ object FirestoreApi {
         val snap = fs.collection("services").whereArrayContainsAny("searchKeywords", tokens).get().await()
         return snap.documents.mapNotNull { it.toObject(ServiceSummary::class.java) }
     }
+
+    suspend fun saveService(service: ServiceSummary) {
+        fs.collection("services").document(service.id).set(service).await()
+    }
+
+    suspend fun saveServiceDetails(details: ServiceDetails) {
+        fs.collection("service_details").document(details.serviceId).set(details).await()
+    }
 }

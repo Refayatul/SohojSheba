@@ -51,7 +51,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
     val currentUser by authViewModel.currentUser.collectAsState()
-    val showLanguageOption = false
+    val showLanguageOption = true
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showEditProfileDialog by remember { mutableStateOf(false) }
 

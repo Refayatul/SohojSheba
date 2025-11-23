@@ -116,8 +116,10 @@ fun HomeScreen(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                unfocusedContainerColor = SearchBarBackground,
-                focusedContainerColor = SearchBarBackground
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                focusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         )
 
@@ -195,31 +197,25 @@ fun HomeScreen(
 
                 is ServicesUiState.Success -> {
                     if (state.services.isEmpty()) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 32.dp)
-                                .verticalScroll(rememberScrollState()),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        // Show loading while AI is generating
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            aiResponse?.let {
-                                Text(
-                                    text = it,
-                                    modifier = Modifier.padding(top = 8.dp)
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(48.dp),
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Text(
-                                    text = "AI-generated. Verify critical info with official sources.",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.secondary
+                                    text = "Searching with AI...",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground
                                 )
-
-                            } ?: run {
-                                Text("No services found for \"$searchQuery\"")
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Button(onClick = { viewModel.searchWithAI(searchQuery) }) {
-                                    Text("Search with AI")
-                                }
                             }
                         }
                     } else {

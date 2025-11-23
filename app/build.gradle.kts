@@ -3,9 +3,11 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 // Load local.properties
@@ -122,11 +124,26 @@ dependencies {
     // Gemini AI - FIXED: Use version catalog instead of hardcoded dependency
     implementation(libs.gemini.ai)
 
+    // Hilt
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // Kotlinx Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // Gson
+    implementation(libs.gson)
+
+    // Timber
+    implementation(libs.timber)
+
     // Firebase - FIXED: Use correct dependencies with BoM
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics) // Added missing analytics
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.functions)
 
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
