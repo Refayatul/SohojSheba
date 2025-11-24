@@ -46,6 +46,7 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -53,11 +54,11 @@ fun HomeScreen(
     navController: NavController,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onVoiceSearchClick: () -> Unit
+    onVoiceSearchClick: () -> Unit,
+    locale: Locale  // Add locale parameter
 ) {
     val context = LocalContext.current
     val appScope = rememberCoroutineScope()
-    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context, appScope = appScope)
     )
@@ -240,11 +241,11 @@ fun HomeScreen(
                         
                         // "View All" link
                         TextButton(
-                            onClick = { navController.navigate(Routes.HISTORY) },
-                            modifier = Modifier.align(Alignment.End)
-                        ) {
-                            Text("View All History")
-                        }
+                    onClick = { navController.navigate(Routes.HISTORY) },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(stringResource(R.string.view_all_history))
+                }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 }

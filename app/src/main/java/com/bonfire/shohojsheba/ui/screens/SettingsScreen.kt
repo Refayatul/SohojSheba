@@ -57,7 +57,7 @@ fun SettingsScreen(
     // Listen for logout messages
     LaunchedEffect(Unit) {
         authViewModel.toastMessage.collectLatest {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, it.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -145,7 +145,7 @@ private fun ThemeSection(
     onModeSelected: (String) -> Unit
 ) {
     Column {
-        SectionTitle(title = "Appearance")
+        SectionTitle(title = stringResource(id = R.string.section_appearance))
         Spacer(modifier = Modifier.height(8.dp))
         Box(
             modifier = Modifier
@@ -159,21 +159,21 @@ private fun ThemeSection(
             ) {
                 // System chip
                 ThemeChip(
-                    text = "System",
+                    text = stringResource(id = R.string.theme_system),
                     selected = currentMode == "system",
                     onClick = { onModeSelected("system") },
                     modifier = Modifier.weight(1f)
                 )
                 // Light chip
                 ThemeChip(
-                    text = "Light",
+                    text = stringResource(id = R.string.theme_light),
                     selected = currentMode == "light",
                     onClick = { onModeSelected("light") },
                     modifier = Modifier.weight(1f)
                 )
                 // Dark chip
                 ThemeChip(
-                    text = "Dark",
+                    text = stringResource(id = R.string.theme_dark),
                     selected = currentMode == "dark",
                     onClick = { onModeSelected("dark") },
                     modifier = Modifier.weight(1f)
@@ -214,9 +214,9 @@ private fun ThemeChip(
 
 @Composable
 private fun LanguageSection() {
-    val context = LocalContext.current
-    val appLocaleManager = remember { AppLocaleManager(context.applicationContext) }
-    val currentLanguage = appLocaleManager.getCurrentLanguageCode()
+    val locale = com.bonfire.shohojsheba.utils.LocalLocale.current
+    val onLocaleChange = com.bonfire.shohojsheba.utils.LocalOnLocaleChange.current
+    val currentLanguage = locale.language
 
     Column {
         SectionTitle(title = stringResource(id = R.string.section_language))
@@ -246,9 +246,8 @@ private fun LanguageSection() {
                     checked = currentLanguage == "bn",
                     onCheckedChange = { isBangla ->
                         val newLanguage = if (isBangla) "bn" else "en"
-                        // Use AppLocaleManager which calls AppCompatDelegate.setApplicationLocales()
-                        // This automatically recreates the activity and updates the UI
-                        appLocaleManager.changeLanguage(newLanguage)
+                        val newLocale = if (newLanguage == "bn") java.util.Locale("bn", "BD") else java.util.Locale("en", "US")
+                        onLocaleChange(newLocale)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
@@ -446,7 +445,7 @@ private fun UserProfileSection(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Edit Profile")
+                    Text(stringResource(id = R.string.edit_profile))
                 }
 
                 Button(
@@ -458,7 +457,7 @@ private fun UserProfileSection(
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Logout")
+                    Text(stringResource(id = R.string.logout))
                 }
             }
         }
@@ -472,8 +471,8 @@ private fun LogoutConfirmDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Logout") },
-        text = { Text("Are you sure you want to logout?") },
+        title = { Text(stringResource(id = R.string.logout)) },
+        text = { Text(stringResource(id = R.string.logout_confirm)) },
         confirmButton = {
             TextButton(
                 onClick = onConfirm,
@@ -481,12 +480,12 @@ private fun LogoutConfirmDialog(
                     contentColor = MaterialTheme.colorScheme.error
                 )
             ) {
-                Text("Logout")
+                Text(stringResource(id = R.string.logout))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(id = R.string.cancel))
             }
         },
         containerColor = MaterialTheme.colorScheme.surface,
@@ -505,12 +504,12 @@ private fun EditProfileDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Edit Profile") },
+        title = { Text(stringResource(id = R.string.edit_profile)) },
         text = {
             OutlinedTextField(
                 value = newName,
                 onValueChange = { newName = it },
-                label = { Text("Name") },
+                label = { Text(stringResource(id = R.string.name)) },
                 modifier = Modifier.fillMaxWidth()
             )
         },
@@ -519,12 +518,12 @@ private fun EditProfileDialog(
                 onClick = { onSave(newName) },
                 enabled = newName.isNotBlank()
             ) {
-                Text("Save")
+                Text(stringResource(id = R.string.save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(id = R.string.cancel))
             }
         },
         containerColor = MaterialTheme.colorScheme.surface,

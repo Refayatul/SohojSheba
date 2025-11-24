@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -59,24 +60,22 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             // 1. LANGUAGE LOGIC - Using AppLocaleManager
             // ------------------------------------------------------------
             val currentLang = appLocaleManager.getCurrentLanguageCode()
-            var locale by remember { mutableStateOf(
-                if (currentLang == "bn") Locale("bn", "BD") else Locale("en", "US")
-            ) }
-            var localeChangeKey by remember { mutableIntStateOf(0) }
+            Log.d("MainActivity", "=== LOCALE SETUP ===")
+            Log.d("MainActivity", "Current language code: $currentLang")
             
-            // Monitor locale changes from AppCompatDelegate
-            DisposableEffect(localeChangeKey) {
-                val lang = appLocaleManager.getCurrentLanguageCode()
-                locale = if (lang == "bn") Locale("bn", "BD") else Locale("en", "US")
-                onDispose { }
-            }
+            // Derive locale directly from currentLang - no remember/mutableStateOf!
+            // This ensures locale updates when currentLang changes after activity recreation
+            val locale = if (currentLang == "bn") Locale("bn", "BD") else Locale("en", "US")
+            
+            Log.d("MainActivity", "Locale object: ${locale.language} (${locale.displayLanguage})")
             
             val onLocaleChange: (Locale) -> Unit = { newLocale ->
-                // Use AppLocaleManager to change language
+                Log.d("MainActivity", "=== LOCALE CHANGE REQUESTED ===")
+                Log.d("MainActivity", "New locale: ${newLocale.language} (${newLocale.displayLanguage})")
+                // AppCompatDelegate.setApplicationLocales() will recreate the activity
+                // and the new locale will be read when onCreate runs again
                 appLocaleManager.changeLanguage(newLocale.language)
-                
-                // Trigger recomposition
-                localeChangeKey++
+                Log.d("MainActivity", "Activity will now recreate...")
             }
 
 
@@ -126,12 +125,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             val googleSignInState by authViewModel.googleSignInState.collectAsState()
             val isAuthCheckComplete by authViewModel.isAuthCheckComplete.collectAsState()
 
-            // Listen for toast messages from AuthViewModel
-            LaunchedEffect(Unit) {
-                authViewModel.toastMessage.collectLatest { message ->
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                }
-            }
+
 
             // Navigate when authentication succeeds
             LaunchedEffect(authState, googleSignInState) {
@@ -162,13 +156,13 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                             // Use authViewModel obtained at composable level
                             authViewModel.googleSignIn(idToken)
                         } else {
-                            Toast.makeText(context, "Google Sign-In failed: No ID token received", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "Google Sign-In failed: No account found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(context, "Google Sign-In failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -186,9 +180,15 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             ShohojShebaTheme(darkTheme = useDarkTheme) {
                 ProvideLocale(locale = locale) {
                     CompositionLocalProvider(
-                        LocalLocale provides locale,
                         LocalOnLocaleChange provides onLocaleChange
                     ) {
+                        val localizedContext = LocalContext.current
+                        // Listen for toast messages from AuthViewModel using localized context
+                        LaunchedEffect(Unit) {
+                            authViewModel.toastMessage.collectLatest { message ->
+                                Toast.makeText(localizedContext, message.asString(localizedContext), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                         if (!isAuthCheckComplete) {
                             // Show Splash Screen / Loading Indicator
                             Box(
@@ -205,7 +205,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                             val currentUser by authViewModel.currentUser.collectAsState()
 
                             // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
-                            val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER
+                            val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER || currentRoute == Routes.FORGOT_PASSWORD
                             val isSettingsScreen = currentRoute == Routes.SETTINGS
                             val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
                             val isHomeScreen = currentRoute == Routes.HOME
@@ -264,12 +264,14 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                     onSearchQueryChange = { searchQuery = it },
                                     onVoiceSearchClick = {
                                         try {
+                                            // Use current app locale for voice search
+                                            val voiceLocale = if (locale.language == "bn") "bn-BD" else "en-US"
                                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                                                 putExtra(
                                                     RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                                                     RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
                                                 )
-                                                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD")
+                                                putExtra(RecognizerIntent.EXTRA_LANGUAGE, voiceLocale)
                                             }
                                             voiceLauncher.launch(intent)
                                         } catch (e: Exception) {
@@ -283,6 +285,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                     // Pass these to AppNavGraph -> SettingsScreen
                                     currentThemeMode = savedThemeMode.value,
                                     onThemeChange = onThemeChange,
+                                    locale = locale,  // Pass locale to navigation graph
                                     googleSignInLauncher = googleSignInLauncher,
                                     authViewModel = authViewModel // Pass shared AuthViewModel
                                 )

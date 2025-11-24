@@ -26,6 +26,7 @@ fun AppNavGraph(
     onVoiceSearchClick: () -> Unit,
     currentThemeMode: String,
     onThemeChange: (String) -> Unit,
+    locale: java.util.Locale,  // Add locale parameter
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
     authViewModel: AuthViewModel
 ) {
@@ -125,7 +126,8 @@ fun AppNavGraph(
                 navController = navController,
                 searchQuery = searchQuery,
                 onSearchQueryChange = onSearchQueryChange,
-                onVoiceSearchClick = onVoiceSearchClick
+                onVoiceSearchClick = onVoiceSearchClick,
+                locale = locale
             )
         }
 
@@ -162,7 +164,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "citizen", R.string.category_citizen)
+            ServiceListScreen(navController, "citizen", R.string.category_citizen, locale)
         }
 
         composable(
@@ -180,7 +182,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "farmer", R.string.category_farmer)
+            ServiceListScreen(navController, "farmer", R.string.category_farmer, locale)
         }
 
         composable(
@@ -198,7 +200,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "entrepreneur", R.string.category_entrepreneur)
+            ServiceListScreen(navController, "entrepreneur", R.string.category_entrepreneur, locale)
         }
 
         composable(
@@ -216,7 +218,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "govt_office", R.string.category_govt_office)
+            ServiceListScreen(navController, "govt_office", R.string.category_govt_office, locale)
         }
 
         composable(
@@ -236,7 +238,7 @@ fun AppNavGraph(
         ) { backStackEntry ->
             val serviceId = backStackEntry.arguments?.getString("serviceId")
             if (!serviceId.isNullOrBlank()) {
-                ServiceDetailScreen(navController = navController, serviceId = serviceId)
+                ServiceDetailScreen(navController = navController, serviceId = serviceId, locale = locale)
             }
         }
 
@@ -273,7 +275,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            HistoryScreen(navController = navController)
+            HistoryScreen(navController = navController, locale = locale)
         }
 
         composable(
@@ -291,7 +293,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            FavoritesScreen(navController = navController)
+            FavoritesScreen(navController = navController, locale = locale)
         }
 
         composable(

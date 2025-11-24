@@ -192,4 +192,106 @@
         </ul>
     ]]></string>
 
+    <!-- Missing Strings -->
+    <string name="search_content_desc">Search</string>
+    <string name="voice_search_content_desc">Voice Search</string>
+    <string name="view_all_history">View All History</string>
+    <string name="searching_ai">Searching with AI...</string>
+    <string name="no_local_results">No local results found.</string>
+    <string name="press_enter_ai">Press Enter to search with AI assistant.</string>
+    
+    <string name="attachment_default">attachment</string>
+    <string name="voice_input_error">Voice input not available</string>
+    <string name="image_filename">Image</string>
+    <string name="sent_image">Sent an image</string>
+    <string name="sent_pdf">Sent a PDF</string>
+    <string name="photo">Photo</string>
+    <string name="pdf_document">PDF Document</string>
+    <string name="voice_content_desc">Voice</string>
+    <string name="send_content_desc">Send</string>
+    <string name="chat_intro">Ask me anything about government services</string>
+    <string name="attach_content_desc">Attach</string>
+    <string name="remove_content_desc">Remove</string>
+    <string name="copy_content_desc">Copy</string>
+    <string name="ai_content_desc">AI</string>
+    <string name="navigate_back_content_desc">Navigate back</string>
+
+    <string name="back_content_desc">Back</string>
+    <string name="source_label">Source: %1$s</string>
+    <string name="no_services_found">No services found.</string>
+    <string name="retry">Retry</string>
+    
+    <string name="clear_all_history_content_desc">Clear All History</string>
+    <string name="no_history_yet">No history yet.</string>
+    
+    <string name="clear_all_favorites_content_desc">Clear All Favorites</string>
+    <string name="no_favorites_yet">No favorites yet.</string>
+
+    <string name="welcome_title">Welcome to Sohoj Sheba</string>
+    <string name="password_label">Password</string>
+    <string name="hide_password_desc">Hide password</string>
+    <string name="show_password_desc">Show password</string>
+    <string name="login_button">Login</string>
+    <string name="google_signin_button">Sign in with Google</string>
+    <string name="google_signin_error">Google Sign-In not available</string>
+    <string name="forgot_password_link">Forgot Password?</string>
+    <string name="register_link">Don\'t have an account? Register</string>
+
+    <string name="create_account_title">Create Account</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="passwords_mismatch">Passwords do not match</string>
+    <string name="register_button">Register</string>
+    <string name="google_signup_button">Sign up with Google</string>
+    <string name="login_link">Already have an account? Login</string>
+
+    <string name="back_to_login_desc">Back to Login</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="forgot_password_subtitle">Enter your email to reset password</string>
+    <string name="reset_email_sent">If you have an account with this email, you\'ll receive a password reset link shortly.\n\nPlease check your inbox.</string>
+    <string name="back_to_login_button">Back to Login</string>
+    <string name="email_address_label">Email Address</string>
+    <string name="enter_registered_email">Enter your registered email</string>
+    <string name="email_icon_desc">Email Icon</string>
+    <string name="valid_email_required">Valid email is required</string>
+    <string name="try_again">Try Again</string>
+    <string name="reset_password_button">Reset Password</string>
+
+    <string name="favorite_content_desc">Favorite</string>
+    <string name="step_image_desc">Step %1$d Image</string>
+    <string name="step_label">Step</string>
+    <string name="required_documents">Required Documents</string>
+    <string name="processing_time">Processing Time</string>
+    <string name="contact_info">Contact Info</string>
+    <string name="no_email_app">No email app found</string>
+    <string name="no_dialer_app">No dialer app found</string>
+
+    <string name="passport_application">Passport Application</string>
+    <string name="guide_step_1">Step 1: Fill out the online application form.</string>
+    <string name="guide_step_2">Step 2: Upload required documents.</string>
+    <string name="guide_step_3">Step 3: Pay the fee and schedule an appointment.</string>
+    <string name="guide_step_4">Step 4: Complete verification at the office.</string>
+    <string name="view_offline_service">View Offline Service</string>
+    
+    <!-- Toast Messages -->
+    <string name="fill_all_fields">Please fill all fields</string>
+    <string name="registration_successful">Registration successful</string>
+    <string name="registration_failed">Registration failed</string>
+    <string name="enter_email_password">Please enter email and password</string>
+    <string name="login_successful">Login successful</string>
+    <string name="login_failed">Login failed</string>
+    <string name="invalid_google_token">Invalid Google token</string>
+    <string name="google_signin_successful">Google sign-in successful</string>
+    <string name="google_signin_failed">Google sign-in failed</string>
+    <string name="logout_successful">Logged out successfully</string>
+    <string name="logout_failed">Logout failed</string>
+    <string name="profile_update_successful">Profile updated successfully</string>
+    <string name="update_failed">Update failed</string>
+    <string name="enter_valid_email">Please enter a valid email address</string>
+    <string name="reset_email_sent_success">Password reset email sent successfully</string>
+    <string name="reset_email_failed">Failed to send reset email</string>
+    
+    <!-- Chat Screen -->
+    <string name="chat_placeholder">Ask me anything about services</string>
+
 </resources>

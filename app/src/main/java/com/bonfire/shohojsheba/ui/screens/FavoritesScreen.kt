@@ -37,12 +37,12 @@ import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesScreen(navController: NavController) {
+fun FavoritesScreen(navController: NavController, locale: Locale) {
     val context = LocalContext.current
-    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context)
     )
@@ -61,7 +61,7 @@ fun FavoritesScreen(navController: NavController) {
                         IconButton(onClick = { viewModel.clearFavorites() }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Clear All Favorites",
+                                contentDescription = stringResource(R.string.clear_all_favorites_content_desc),
                                 tint = MaterialTheme.colorScheme.error
                             )
                         }

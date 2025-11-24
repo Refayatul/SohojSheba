@@ -39,7 +39,9 @@ interface ServiceDao {
 
     @Query("""
     SELECT * FROM services
-    WHERE title LIKE '%' || :q || '%' OR subtitle LIKE '%' || :q || '%'
+    WHERE title LIKE '%' || :q || '%'
+       OR subtitle LIKE '%' || :q || '%'
+       OR searchKeywords LIKE '%' || :q || '%'
     """)
     fun searchServices(q: String): Flow<List<Service>>
 

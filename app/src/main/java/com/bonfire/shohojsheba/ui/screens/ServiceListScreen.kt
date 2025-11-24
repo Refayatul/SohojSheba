@@ -1,5 +1,7 @@
 package com.bonfire.shohojsheba.ui.screens
 
+import android.util.Log
+
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,20 +44,31 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceListScreen(
     navController: NavController,
     category: String,
-    title: Int
+    title: Int,
+    locale: Locale  // Add locale parameter
 ) {
+    // DEBUG: Log when screen is composed
+    Log.d("ServiceListScreen", "=== COMPOSING ServiceListScreen ===")
+    Log.d("ServiceListScreen", "Category: $category")
+    Log.d("ServiceListScreen", "Locale: ${locale.language} (${locale.displayLanguage})")
+    
     val context = LocalContext.current
-    val locale = LocalLocale.current
+    val viewModelKey = "$category-${locale.language}"
+    Log.d("ServiceListScreen", "ViewModel Key: $viewModelKey")
+    
     val viewModel: ServicesViewModel = viewModel(
-        key = category,
+        key = viewModelKey,
         factory = ViewModelFactory(context)
     )
+    
+    Log.d("ServiceListScreen", "ViewModel instance: ${viewModel.hashCode()}")
 
     LaunchedEffect(key1 = Unit) {
         viewModel.toastMessage.collectLatest {
@@ -63,7 +76,9 @@ fun ServiceListScreen(
         }
     }
 
-    LaunchedEffect(category) {
+    // Re-fetch services when locale changes
+    LaunchedEffect(category, locale) {
+        Log.d("ServiceListScreen", "LaunchedEffect triggered - Category: $category, Locale: ${locale.language}")
         viewModel.loadServicesByCategory(category)
     }
 
@@ -108,7 +123,10 @@ fun ServiceListScreen(
                                 contentPadding = PaddingValues(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                items(state.services) { service ->
+                                items(
+                                    items = state.services,
+                                    key = { it.id + locale.language }
+                                ) { service ->
                                     ServiceRow(service = service, locale = locale) {
                                         navController.navigate("${Routes.SERVICE_DETAIL}/${service.id}")
                                     }
@@ -125,7 +143,7 @@ fun ServiceListScreen(
                             onClick = { viewModel.loadServicesByCategory(category) },
                             modifier = Modifier.align(Alignment.Center)
                         ) {
-                            Text("Retry")
+                            Text(stringResource(R.string.retry))
                         }
                     }
                 }

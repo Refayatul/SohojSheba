@@ -1,11 +1,13 @@
 package com.bonfire.shohojsheba.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.BuildConfig
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.repositories.Repository
 import com.bonfire.shohojsheba.util.NetworkStatusTracker
+import com.bonfire.shohojsheba.utils.fuzzyFilter
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +49,8 @@ class ServicesViewModel(
     private var currentCategory: String? = null
 
     init {
+        Log.d("ServicesViewModel", "=== NEW ViewModel INSTANCE CREATED ===")
+        Log.d("ServicesViewModel", "Instance hashCode: ${this.hashCode()}")
         // Initial data load
         viewModelScope.launch {
             val source = repository.refreshIfNeeded()
@@ -87,13 +91,21 @@ class ServicesViewModel(
     }
 
     fun loadServicesByCategory(category: String) {
+        Log.d("ServicesViewModel", "=== loadServicesByCategory CALLED ===")
+        Log.d("ServicesViewModel", "Category: $category")
+        Log.d("ServicesViewModel", "ViewModel instance: ${this.hashCode()}")
+        
         currentCategory = category
         repository.getServicesByCategory(category)
-            .onEach {
-                _uiState.value = if (it.isEmpty()) {
+            .onEach { services ->
+                Log.d("ServicesViewModel", "Received ${services.size} services for category: $category")
+                if (services.isNotEmpty()) {
+                    Log.d("ServicesViewModel", "First service title: ${services.first().title}")
+                }
+                _uiState.value = if (services.isEmpty()) {
                     ServicesUiState.Error("No services found for this category.")
                 } else {
-                    ServicesUiState.Success(it)
+                    ServicesUiState.Success(services)
                 }
             }
             .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }
@@ -109,7 +121,22 @@ class ServicesViewModel(
         
         searchJob = repository.searchServices(query)
             .onEach { services ->
-                if (services.isEmpty()) {
+                // Apply fuzzy matching to rank results by relevance
+                val fuzzyResults = services.fuzzyFilter(
+                    query = query,
+                    minScore = 0.3  // Minimum 30% similarity
+                ) { service ->
+                    // Search in multiple fields
+                    listOf(
+                        service.title.en,
+                        service.title.bn,
+                        service.subtitle.en,
+                        service.subtitle.bn,
+                        service.searchKeywords
+                    )
+                }
+                
+                if (fuzzyResults.isEmpty()) {
                     if (enableAI) {
                         // Auto-trigger AI search when no results found AND AI is enabled
                         // Stop listening to this flow to prevent overwriting AI results with empty list
@@ -119,7 +146,8 @@ class ServicesViewModel(
                          _uiState.value = ServicesUiState.Success(emptyList())
                     }
                 } else {
-                    _uiState.value = ServicesUiState.Success(services)
+                    // Return fuzzy-matched and sorted results
+                    _uiState.value = ServicesUiState.Success(fuzzyResults)
                 }
             }
             .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }
