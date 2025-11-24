@@ -26,6 +26,7 @@ fun AppNavGraph(
     onVoiceSearchClick: () -> Unit,
     currentThemeMode: String,
     onThemeChange: (String) -> Unit,
+    locale: java.util.Locale,  // Add locale parameter
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
     authViewModel: AuthViewModel
 ) {
@@ -162,7 +163,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "citizen", R.string.category_citizen)
+            ServiceListScreen(navController, "citizen", R.string.category_citizen, locale)
         }
 
         composable(
@@ -180,7 +181,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "farmer", R.string.category_farmer)
+            ServiceListScreen(navController, "farmer", R.string.category_farmer, locale)
         }
 
         composable(
@@ -198,7 +199,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "entrepreneur", R.string.category_entrepreneur)
+            ServiceListScreen(navController, "entrepreneur", R.string.category_entrepreneur, locale)
         }
 
         composable(
@@ -216,7 +217,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            ServiceListScreen(navController, "govt_office", R.string.category_govt_office)
+            ServiceListScreen(navController, "govt_office", R.string.category_govt_office, locale)
         }
 
         composable(

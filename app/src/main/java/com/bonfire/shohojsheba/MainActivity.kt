@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -59,24 +60,22 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             // 1. LANGUAGE LOGIC - Using AppLocaleManager
             // ------------------------------------------------------------
             val currentLang = appLocaleManager.getCurrentLanguageCode()
-            var locale by remember { mutableStateOf(
-                if (currentLang == "bn") Locale("bn", "BD") else Locale("en", "US")
-            ) }
-            var localeChangeKey by remember { mutableIntStateOf(0) }
+            Log.d("MainActivity", "=== LOCALE SETUP ===")
+            Log.d("MainActivity", "Current language code: $currentLang")
             
-            // Monitor locale changes from AppCompatDelegate
-            DisposableEffect(localeChangeKey) {
-                val lang = appLocaleManager.getCurrentLanguageCode()
-                locale = if (lang == "bn") Locale("bn", "BD") else Locale("en", "US")
-                onDispose { }
-            }
+            // Derive locale directly from currentLang - no remember/mutableStateOf!
+            // This ensures locale updates when currentLang changes after activity recreation
+            val locale = if (currentLang == "bn") Locale("bn", "BD") else Locale("en", "US")
+            
+            Log.d("MainActivity", "Locale object: ${locale.language} (${locale.displayLanguage})")
             
             val onLocaleChange: (Locale) -> Unit = { newLocale ->
-                // Use AppLocaleManager to change language
+                Log.d("MainActivity", "=== LOCALE CHANGE REQUESTED ===")
+                Log.d("MainActivity", "New locale: ${newLocale.language} (${newLocale.displayLanguage})")
+                // AppCompatDelegate.setApplicationLocales() will recreate the activity
+                // and the new locale will be read when onCreate runs again
                 appLocaleManager.changeLanguage(newLocale.language)
-                
-                // Trigger recomposition
-                localeChangeKey++
+                Log.d("MainActivity", "Activity will now recreate...")
             }
 
 
@@ -286,6 +285,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                     // Pass these to AppNavGraph -> SettingsScreen
                                     currentThemeMode = savedThemeMode.value,
                                     onThemeChange = onThemeChange,
+                                    locale = locale,  // Pass locale to navigation graph
                                     googleSignInLauncher = googleSignInLauncher,
                                     authViewModel = authViewModel // Pass shared AuthViewModel
                                 )

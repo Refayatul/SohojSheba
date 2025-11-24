@@ -214,9 +214,9 @@ private fun ThemeChip(
 
 @Composable
 private fun LanguageSection() {
-    val context = LocalContext.current
-    val appLocaleManager = remember { AppLocaleManager(context.applicationContext) }
-    val currentLanguage = appLocaleManager.getCurrentLanguageCode()
+    val locale = com.bonfire.shohojsheba.utils.LocalLocale.current
+    val onLocaleChange = com.bonfire.shohojsheba.utils.LocalOnLocaleChange.current
+    val currentLanguage = locale.language
 
     Column {
         SectionTitle(title = stringResource(id = R.string.section_language))
@@ -246,9 +246,8 @@ private fun LanguageSection() {
                     checked = currentLanguage == "bn",
                     onCheckedChange = { isBangla ->
                         val newLanguage = if (isBangla) "bn" else "en"
-                        // Use AppLocaleManager which calls AppCompatDelegate.setApplicationLocales()
-                        // This automatically recreates the activity and updates the UI
-                        appLocaleManager.changeLanguage(newLanguage)
+                        val newLocale = if (newLanguage == "bn") java.util.Locale("bn", "BD") else java.util.Locale("en", "US")
+                        onLocaleChange(newLocale)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,

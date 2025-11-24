@@ -1,5 +1,6 @@
 package com.bonfire.shohojsheba.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.BuildConfig
@@ -48,6 +49,8 @@ class ServicesViewModel(
     private var currentCategory: String? = null
 
     init {
+        Log.d("ServicesViewModel", "=== NEW ViewModel INSTANCE CREATED ===")
+        Log.d("ServicesViewModel", "Instance hashCode: ${this.hashCode()}")
         // Initial data load
         viewModelScope.launch {
             val source = repository.refreshIfNeeded()
@@ -88,13 +91,21 @@ class ServicesViewModel(
     }
 
     fun loadServicesByCategory(category: String) {
+        Log.d("ServicesViewModel", "=== loadServicesByCategory CALLED ===")
+        Log.d("ServicesViewModel", "Category: $category")
+        Log.d("ServicesViewModel", "ViewModel instance: ${this.hashCode()}")
+        
         currentCategory = category
         repository.getServicesByCategory(category)
-            .onEach {
-                _uiState.value = if (it.isEmpty()) {
+            .onEach { services ->
+                Log.d("ServicesViewModel", "Received ${services.size} services for category: $category")
+                if (services.isNotEmpty()) {
+                    Log.d("ServicesViewModel", "First service title: ${services.first().title}")
+                }
+                _uiState.value = if (services.isEmpty()) {
                     ServicesUiState.Error("No services found for this category.")
                 } else {
-                    ServicesUiState.Success(it)
+                    ServicesUiState.Success(services)
                 }
             }
             .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }

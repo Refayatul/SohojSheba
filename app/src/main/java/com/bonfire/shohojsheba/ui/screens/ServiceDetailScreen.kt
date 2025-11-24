@@ -3,6 +3,7 @@ package com.bonfire.shohojsheba.ui.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.animation.*
@@ -62,12 +63,24 @@ fun ServiceDetailScreen(
     navController: NavController,
     serviceId: String
 ) {
+    // DEBUG: Log when screen is composed
+    Log.d("ServiceDetailScreen", "=== COMPOSING ServiceDetailScreen ===")
+    Log.d("ServiceDetailScreen", "Service ID: $serviceId")
+    
     val context = LocalContext.current
     val locale = LocalLocale.current
+    
+    Log.d("ServiceDetailScreen", "Locale: ${locale.language} (${locale.displayLanguage})")
+    
+    val viewModelKey = "$serviceId-${locale.language}"
+    Log.d("ServiceDetailScreen", "ViewModel Key: $viewModelKey")
+    
     val viewModel: ServiceDetailViewModel = viewModel(
-        key = "$serviceId-${locale.language}",
+        key = viewModelKey,
         factory = ViewModelFactory(context, serviceId = serviceId)
     )
+    
+    Log.d("ServiceDetailScreen", "ViewModel instance: ${viewModel.hashCode()}")
 
     val service by viewModel.service.collectAsState(initial = null)
     val detail by viewModel.serviceDetail.collectAsState(initial = null)
