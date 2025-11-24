@@ -11,6 +11,7 @@
 
     <!-- Home Screen -->
     <string name="search_hint">সেবা খুঁজুন...</string>
+    <string name="search_ai_hint">এআই সার্চের জন্য এন্টার চাপুন</string>
     <string name="service_categories">সেবার বিভাগ</string>
     <string name="category_citizen">নাগরিক</string>
     <string name="category_farmer">কৃষক</string>

@@ -22,6 +22,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -55,6 +57,8 @@ fun HomeScreen(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onVoiceSearchClick: () -> Unit,
+    isVoiceInput: Boolean,
+    onVoiceInputReset: () -> Unit,
     locale: Locale  // Add locale parameter
 ) {
     val context = LocalContext.current
@@ -62,7 +66,8 @@ fun HomeScreen(
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context, appScope = appScope)
     )
-
+    
+    val focusRequester = remember { FocusRequester() }
     val uiState by viewModel.uiState.collectAsState()
     val aiResponse by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -80,6 +85,26 @@ fun HomeScreen(
         }
     }
 
+    // Debounced live search for manual typing (not for voice input)
+    LaunchedEffect(searchQuery) {
+        if (searchQuery.isBlank()) {
+            viewModel.clearSearch()
+        } else {
+            // Wait 300ms after user stops typing before searching
+            kotlinx.coroutines.delay(300)
+            // Local search only (no AI) for live suggestions
+            viewModel.searchServices(searchQuery, enableAI = false)
+        }
+    }
+    
+    // Auto-open keyboard if voice search returns no results
+    LaunchedEffect(uiState) {
+        if (isVoiceInput && uiState is ServicesUiState.Success && (uiState as ServicesUiState.Success).services.isEmpty()) {
+            focusRequester.requestFocus()
+            onVoiceInputReset() // Reset flag so it doesn't trigger again
+        }
+    }
+
     DecorativeBackground {
         Column(
             modifier = Modifier
@@ -91,14 +116,10 @@ fun HomeScreen(
                 value = searchQuery,
                 onValueChange = {
                     onSearchQueryChange(it)
-                    if (it.isBlank()) {
-                        viewModel.clearSearch()
-                    } else {
-                        // Local search while typing (enableAI = false)
-                        viewModel.searchServices(it, enableAI = false)
-                    }
+                    // No auto-search here! Debounced LaunchedEffect handles it
                 },
                 shape = RoundedCornerShape(50),
+
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -142,6 +163,7 @@ fun HomeScreen(
             ),
             modifier = Modifier
                 .fillMaxWidth()
+                .focusRequester(focusRequester)
                 .padding(top = 16.dp)
                 .shadow(
                     elevation = 8.dp, 
@@ -149,6 +171,14 @@ fun HomeScreen(
                     clip = false,
                     spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                 )
+        )
+        
+        // Hint text below search bar
+        Text(
+            text = stringResource(id = R.string.search_ai_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            modifier = Modifier.padding(start = 16.dp, top = 4.dp)
         )
 
         if (searchQuery.isBlank()) {
@@ -314,6 +344,8 @@ fun HomeScreen(
                         ) {
                             items(state.services) { service ->
                                 ServiceRow(service = service, locale = locale) {
+                                    // Save to DB if it's a temporary AI result
+                                    viewModel.onServiceClicked(service)
                                     navController.navigate("service_detail/${service.id}")
                                 }
                             }

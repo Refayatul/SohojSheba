@@ -26,6 +26,8 @@ fun AppNavGraph(
     onVoiceSearchClick: () -> Unit,
     currentThemeMode: String,
     onThemeChange: (String) -> Unit,
+    isVoiceInput: Boolean,
+    onVoiceInputReset: () -> Unit,
     locale: java.util.Locale,  // Add locale parameter
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
     authViewModel: AuthViewModel
@@ -126,6 +128,8 @@ fun AppNavGraph(
                 navController = navController,
                 searchQuery = searchQuery,
                 onSearchQueryChange = onSearchQueryChange,
+                isVoiceInput = isVoiceInput,
+                onVoiceInputReset = onVoiceInputReset,
                 onVoiceSearchClick = onVoiceSearchClick,
                 locale = locale
             )
