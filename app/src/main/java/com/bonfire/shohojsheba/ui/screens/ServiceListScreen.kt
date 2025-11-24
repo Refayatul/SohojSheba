@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.navigation.Routes
+import com.bonfire.shohojsheba.ui.components.DecorativeBackground
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
@@ -85,39 +86,47 @@ fun ServiceListScreen(
             )
         },
         containerColor = MaterialTheme.colorScheme.background
-    ) { padding ->
-        val uiState by viewModel.uiState.collectAsState()
+    ) { paddingValues ->
+        DecorativeBackground {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                val uiState by viewModel.uiState.collectAsState()
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            when (val state = uiState) {
-                is ServicesUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                is ServicesUiState.Success -> {
-                    if (state.services.isEmpty()) {
-                        Text("No services found.", modifier = Modifier.align(Alignment.Center))
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(state.services) { service ->
-                                ServiceRow(service = service, locale = locale) {
-                                    navController.navigate("${Routes.SERVICE_DETAIL}/${service.id}")
+                when (val state = uiState) {
+                    is ServicesUiState.Loading -> {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                    is ServicesUiState.Success -> {
+                        if (state.services.isEmpty()) {
+                            Text("No services found.", modifier = Modifier.align(Alignment.Center))
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(state.services) { service ->
+                                    ServiceRow(service = service, locale = locale) {
+                                        navController.navigate("${Routes.SERVICE_DETAIL}/${service.id}")
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                is ServicesUiState.Error -> {
-                    Text(state.message, modifier = Modifier.align(Alignment.Center))
-                    Button(onClick = { viewModel.loadServicesByCategory(category) }) {
-                        Text("Retry")
+                    is ServicesUiState.Error -> {
+                        Text(
+                            text = state.message,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                        Button(
+                            onClick = { viewModel.loadServicesByCategory(category) },
+                            modifier = Modifier.align(Alignment.Center)
+                        ) {
+                            Text("Retry")
+                        }
                     }
                 }
             }

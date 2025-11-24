@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonfire.shohojsheba.data.database.entities.UserFavorite
 import com.bonfire.shohojsheba.data.database.entities.UserHistory
+import com.bonfire.shohojsheba.data.mappers.toRemote
+import com.bonfire.shohojsheba.data.remote.FirestoreApi
 import com.bonfire.shohojsheba.data.repositories.Repository
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ServiceDetailViewModel(private val repository: Repository, private val serviceId: String) : ViewModel() {
@@ -16,8 +19,29 @@ class ServiceDetailViewModel(private val repository: Repository, private val ser
     init {
         viewModelScope.launch {
             repository.ensureDetail(serviceId)
-            // This line was missing and is now re-added
+            // Add to history
             repository.addHistory(UserHistory(serviceId = serviceId, accessedDate = System.currentTimeMillis()))
+            
+            // Sync AI-generated service to Firestore if it exists locally
+            syncServiceToFirestore()
+        }
+    }
+    
+    private suspend fun syncServiceToFirestore() {
+        try {
+            // Get the service from local database
+            val serviceEntity = service.first()
+            val detailEntity = serviceDetail.first()
+            
+            if (serviceEntity != null && detailEntity != null) {
+                // Check if this is an AI-generated service (has recent timestamp)
+                // Save to Firestore so it's available globally
+                FirestoreApi.saveService(serviceEntity.toRemote())
+                FirestoreApi.saveServiceDetails(detailEntity.toRemote())
+            }
+        } catch (e: Exception) {
+            // Silently fail - not critical
+            e.printStackTrace()
         }
     }
 

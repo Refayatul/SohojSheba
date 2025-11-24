@@ -100,11 +100,28 @@ class ServicesViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun searchServices(query: String) {
+    private var searchJob: kotlinx.coroutines.Job? = null
+
+    fun searchServices(query: String, enableAI: Boolean = false) {
+        searchJob?.cancel()
         currentCategory = null
         _aiResponse.value = null
-        repository.searchServices(query)
-            .onEach { services -> _uiState.value = ServicesUiState.Success(services) }
+        
+        searchJob = repository.searchServices(query)
+            .onEach { services ->
+                if (services.isEmpty()) {
+                    if (enableAI) {
+                        // Auto-trigger AI search when no results found AND AI is enabled
+                        // Stop listening to this flow to prevent overwriting AI results with empty list
+                        searchJob?.cancel()
+                        searchWithAI(query)
+                    } else {
+                         _uiState.value = ServicesUiState.Success(emptyList())
+                    }
+                } else {
+                    _uiState.value = ServicesUiState.Success(services)
+                }
+            }
             .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }
             .launchIn(viewModelScope)
     }
@@ -120,15 +137,37 @@ class ServicesViewModel(
             }
 
             try {
-                val generativeModel = GenerativeModel("gemini-2.5-flash-lite", apiKey)
-                val prompt = "Provide a detailed, step-by-step guide for the following service: '$query'. Assume the service is for Bangladesh unless another country is specified. Respond in the same language as the query. Do not use any markdown formatting like asterisks. Use new lines for clear spacing on a mobile screen. Do not introduce yourself as an AI. Just provide the steps."
-                val response = generativeModel.generateContent(prompt)
-                _aiResponse.value = response.text
-                _uiState.value = ServicesUiState.Success(emptyList())
+                val geminiRepository = com.bonfire.shohojsheba.data.repositories.GeminiRepository()
+                geminiRepository.generateService(query).collect { result ->
+                    if (result != null) {
+                        val (service, detail) = result
+                        // Save to local DB only (for display)
+                        // Will be saved to Firestore when user opens it
+                        repository.serviceDao.insertServices(listOf(service))
+                        repository.serviceDao.insertServiceDetails(listOf(detail))
+                        // Show the generated service
+                        _uiState.value = ServicesUiState.Success(listOf(service))
+                        _aiResponse.value = null
+                    } else {
+                        _aiResponse.value = "⚠️ Could not generate service information."
+                        _uiState.value = ServicesUiState.Success(emptyList())
+                    }
+                }
             } catch (e: Exception) {
                 _aiResponse.value = "⚠️ Something went wrong: ${e.localizedMessage ?: "Unknown error"}"
                 _uiState.value = ServicesUiState.Success(emptyList())
             }
+        }
+    }
+    fun clearHistory() {
+        viewModelScope.launch {
+            repository.clearAllHistory()
+        }
+    }
+
+    fun clearFavorites() {
+        viewModelScope.launch {
+            repository.clearAllFavorites()
         }
     }
 }

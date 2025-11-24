@@ -30,7 +30,8 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
                 requireNotNull(appScope) { "appScope must be provided for SearchViewModel" }
-                val searchRepository = SearchRepository(repository.serviceDao, appScope)
+                val geminiRepository = com.bonfire.shohojsheba.data.repositories.GeminiRepository()
+                val searchRepository = SearchRepository(repository.serviceDao, appScope, geminiRepository)
                 SearchViewModel(searchRepository) as T
             }
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> {

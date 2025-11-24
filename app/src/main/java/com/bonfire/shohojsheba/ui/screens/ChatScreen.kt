@@ -15,8 +15,15 @@ import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background // Added this just in case
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -38,6 +45,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -51,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.ui.components.EnhancedTopAppBar
 import com.bonfire.shohojsheba.ui.viewmodels.AiResponseState
 import com.bonfire.shohojsheba.ui.viewmodels.ChatViewModel
 import kotlinx.coroutines.Dispatchers
@@ -63,10 +77,11 @@ data class ChatMessage(
     val text: String,
     val isFromUser: Boolean,
     val attachmentName: String? = null,
-    val isImage: Boolean = false
+    val isImage: Boolean = false,
+    val timestamp: Long = System.currentTimeMillis()
 )
 
-// --- HELPERS ---
+// --- HELPERS ----
 
 fun Context.findActivity(): ComponentActivity? {
     return when (this) {
@@ -256,79 +271,93 @@ private fun ChatScreenContent(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Filled.SmartToy,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.chat_screen_title),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
+    // Background colors
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val secondaryColor = MaterialTheme.colorScheme.secondary
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Decorative Canvas (subtle, behind content)
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+        ) {
+            val width = size.width
+            val height = size.height
+            val radius = 60.dp.toPx()
+
+            // Draw some subtle, semi-transparent circles
+            drawCircle(
+                color = primaryColor.copy(alpha = 0.03f),
+                radius = radius,
+                center = Offset(width * 0.8f, height * 0.1f)
+            )
+            drawCircle(
+                color = secondaryColor.copy(alpha = 0.03f),
+                radius = radius * 0.8f,
+                center = Offset(width * 0.2f, height * 0.9f)
             )
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(paddingValues).imePadding()
-        ) {
-            Box(modifier = Modifier.weight(1f)) {
-                if (messages.isEmpty()) {
-                    EmptyChatState(onSuggestionClick = { onSendMessage(it) })
-                } else {
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(messages, key = { it.id }) { message ->
-                            ChatBubble(message = message)
-                        }
-                        if (aiState is AiResponseState.Loading) {
-                            item { TypingIndicator() }
+
+        Scaffold(
+            topBar = {
+                EnhancedTopAppBar(
+                    title = stringResource(id = R.string.chat_screen_title),
+                    navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                    onNavigationClick = { navController.popBackStack() }
+                )
+            },
+            containerColor = Color.Transparent
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .imePadding()
+            ) {
+                Box(modifier = Modifier.weight(1f)) {
+                    if (messages.isEmpty()) {
+                        EmptyChatState(onSuggestionClick = { onSendMessage(it) })
+                    } else {
+                        LazyColumn(
+                            state = listState,
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(messages, key = { it.id }) { message ->
+                                ChatBubble(message = message)
+                            }
+                            if (aiState is AiResponseState.Loading) {
+                                item { TypingIndicator() }
+                            }
                         }
                     }
                 }
-            }
 
-            ChatInputBar(
-                input = textInput,
-                attachmentName = selectedFileName,
-                isImage = isImageAttachment,
-                onInputChange = { textInput = it },
-                onSendClick = { onSendMessage(textInput) },
-                onVoiceClick = onVoiceInputClick,
-                onPickImage = {
-                    imageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                },
-                onPickPdf = {
-                    pdfLauncher.launch("application/pdf")
-                },
-                onRemoveAttachment = {
-                    selectedUri = null
-                    selectedFileName = null
-                    selectedBitmap = null
-                    selectedPdfBytes = null
-                },
-                isLoading = aiState is AiResponseState.Loading
-            )
+                ChatInputBar(
+                    input = textInput,
+                    attachmentName = selectedFileName,
+                    isImage = isImageAttachment,
+                    onInputChange = { textInput = it },
+                    onSendClick = { onSendMessage(textInput) },
+                    onVoiceClick = onVoiceInputClick,
+                    onPickImage = {
+                        imageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    onPickPdf = {
+                        pdfLauncher.launch("application/pdf")
+                    },
+                    onRemoveAttachment = {
+                        selectedUri = null
+                        selectedFileName = null
+                        selectedBitmap = null
+                        selectedPdfBytes = null
+                    },
+                    isLoading = aiState is AiResponseState.Loading
+                )
+            }
         }
     }
 }
@@ -337,6 +366,30 @@ private fun ChatScreenContent(
 fun ChatBubble(message: ChatMessage) {
     val isUser = message.isFromUser
     val clipboardManager = LocalClipboardManager.current
+    
+    // Custom shapes for bubbles
+    val bubbleShape = if (isUser) {
+        RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomStart = 20.dp, bottomEnd = 4.dp)
+    } else {
+        RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomStart = 4.dp, bottomEnd = 20.dp)
+    }
+
+    val bubbleBrush = if (isUser) {
+        Brush.horizontalGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.tertiary
+            )
+        )
+    } else {
+        SolidColor(MaterialTheme.colorScheme.surfaceVariant)
+    }
+
+    val contentColor = if (isUser) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -344,44 +397,48 @@ fun ChatBubble(message: ChatMessage) {
     ) {
         Row(
             verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.widthIn(max = 320.dp)
+            modifier = Modifier.widthIn(max = 340.dp)
         ) {
             if (!isUser) {
                 Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.size(28.dp)
+                    modifier = Modifier.size(32.dp)
                 ) {
-                    Icon(Icons.Filled.SmartToy, "AI", Modifier.padding(4.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Icon(
+                        Icons.Filled.SmartToy, 
+                        "AI", 
+                        Modifier.padding(6.dp), 
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-                ),
-                modifier = Modifier.weight(1f, fill = false)
+            Box(
+                modifier = Modifier
+                    .shadow(elevation = 2.dp, shape = bubbleShape)
+                    .background(bubbleBrush, shape = bubbleShape)
+                    .clip(bubbleShape)
             ) {
                 Column {
                     if (message.attachmentName != null) {
                         Row(
-                            modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp),
+                            modifier = Modifier.padding(top = 10.dp, start = 12.dp, end = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             val icon = if (message.isImage) Icons.Default.Image else Icons.Default.Description
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
-                                tint = if (isUser) MaterialTheme.colorScheme.onPrimary.copy(0.8f) else MaterialTheme.colorScheme.onSurface,
+                                tint = contentColor.copy(alpha = 0.9f),
                                 modifier = Modifier.size(16.dp)
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = message.attachmentName,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = if (isUser) MaterialTheme.colorScheme.onPrimary.copy(0.8f) else MaterialTheme.colorScheme.onSurface
+                                color = contentColor.copy(alpha = 0.9f)
                             )
                         }
                     }
@@ -390,22 +447,45 @@ fun ChatBubble(message: ChatMessage) {
                         Text(
                             text = message.text.ifBlank { if (message.isImage) "Sent an image" else "Sent a PDF" },
                             modifier = Modifier.padding(12.dp),
-                            color = if (isUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = contentColor,
                             style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 22.sp)
                         )
                     }
 
                     if (!isUser) {
-                        HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.1f), thickness = 1.dp)
-                        Row(Modifier.fillMaxWidth().padding(4.dp), horizontalArrangement = Arrangement.End) {
-                            IconButton(onClick = { clipboardManager.setText(AnnotatedString(message.text)) }, modifier = Modifier.size(32.dp)) {
-                                Icon(Icons.Default.ContentCopy, "Copy", Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.7f))
+                        HorizontalDivider(
+                            color = contentColor.copy(alpha = 0.1f), 
+                            thickness = 1.dp,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                        Row(
+                            Modifier.fillMaxWidth().padding(4.dp), 
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            IconButton(
+                                onClick = { clipboardManager.setText(AnnotatedString(message.text)) }, 
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.ContentCopy, 
+                                    "Copy", 
+                                    Modifier.size(16.dp), 
+                                    tint = contentColor.copy(alpha = 0.7f)
+                                )
                             }
                         }
                     }
                 }
             }
         }
+        
+        // Timestamp
+        Text(
+            text = java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault()).format(message.timestamp),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            modifier = Modifier.padding(top = 4.dp, start = if(!isUser) 40.dp else 0.dp)
+        )
     }
 }
 
@@ -424,97 +504,135 @@ fun ChatInputBar(
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
-    Surface(tonalElevation = 2.dp, color = MaterialTheme.colorScheme.surface) {
-        Column {
-            if (attachmentName != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.size(50.dp)) {
-                        Box(contentAlignment = Alignment.Center) {
-                            val icon = if (isImage) Icons.Default.Image else Icons.Default.Description
-                            Icon(icon, contentDescription = null)
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(text = attachmentName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, maxLines = 1)
-                        Text(text = stringResource(id = R.string.ready_to_send_status), style = MaterialTheme.typography.labelSmall)
-                    }
-                    IconButton(onClick = onRemoveAttachment) {
-                        Icon(Icons.Default.Close, "Remove")
-                    }
-                }
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(0.2f))
-            }
-
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent) // Transparent to show background
+            .padding(16.dp)
+    ) {
+        if (attachmentName != null) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f), RoundedCornerShape(12.dp))
+                    .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box {
-                    IconButton(onClick = { showMenu = true }, enabled = !isLoading) {
-                        Icon(Icons.Default.AttachFile, "Attach", tint = MaterialTheme.colorScheme.secondary)
-                    }
-                    // --- FIX IS HERE: Used containerColor instead of Modifier.background ---
-                    DropdownMenu(
-                        expanded = showMenu,
-                        onDismissRequest = { showMenu = false },
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Photo") },
-                            leadingIcon = { Icon(Icons.Default.Image, null) },
-                            onClick = {
-                                showMenu = false
-                                onPickImage()
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("PDF Document") },
-                            leadingIcon = { Icon(Icons.Default.Description, null) },
-                            onClick = {
-                                showMenu = false
-                                onPickPdf()
-                            }
-                        )
+                Surface(
+                    shape = RoundedCornerShape(8.dp), 
+                    color = MaterialTheme.colorScheme.secondary, 
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        val icon = if (isImage) Icons.Default.Image else Icons.Default.Description
+                        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondary)
                     }
                 }
+                Spacer(modifier = Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = attachmentName, 
+                        style = MaterialTheme.typography.bodyMedium, 
+                        fontWeight = FontWeight.Bold, 
+                        maxLines = 1,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+                IconButton(onClick = onRemoveAttachment) {
+                    Icon(Icons.Default.Close, "Remove", tint = MaterialTheme.colorScheme.onSecondaryContainer)
+                }
+            }
+        }
 
-                OutlinedTextField(
-                    value = input,
-                    onValueChange = onInputChange,
-                    modifier = Modifier.weight(1f).heightIn(min = 50.dp, max = 120.dp),
-                    placeholder = { Text(stringResource(id = R.string.type_your_question)) },
-                    shape = RoundedCornerShape(24.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(0.5f),
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                    ),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            // Attachment Button
+            Box {
+                IconButton(
+                    onClick = { showMenu = true }, 
                     enabled = !isLoading,
-                    maxLines = 4,
-                    trailingIcon = {
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f), CircleShape)
+                ) {
+                    Icon(Icons.Default.AttachFile, "Attach", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false },
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Photo") },
+                        leadingIcon = { Icon(Icons.Default.Image, null) },
+                        onClick = {
+                            showMenu = false
+                            onPickImage()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("PDF Document") },
+                        leadingIcon = { Icon(Icons.Default.Description, null) },
+                        onClick = {
+                            showMenu = false
+                            onPickPdf()
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // Input Field
+            OutlinedTextField(
+                value = input,
+                onValueChange = onInputChange,
+                modifier = Modifier.weight(1f),
+                placeholder = { Text(stringResource(id = R.string.type_your_question)) },
+                shape = RoundedCornerShape(24.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f),
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+                ),
+                enabled = !isLoading,
+                maxLines = 4,
+                trailingIcon = {
+                    if (input.isEmpty()) {
                         IconButton(onClick = onVoiceClick) {
-                            Icon(Icons.Default.Mic, "Voice", tint = MaterialTheme.colorScheme.secondary)
+                            Icon(Icons.Default.Mic, "Voice", tint = MaterialTheme.colorScheme.primary)
                         }
                     }
-                )
+                }
+            )
 
-                Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
-                FilledIconButton(
-                    onClick = onSendClick,
-                    enabled = (input.isNotBlank() || attachmentName != null) && !isLoading,
-                    modifier = Modifier.size(50.dp)
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
-                    } else {
-                        Icon(Icons.AutoMirrored.Filled.Send, "Send")
-                    }
+            // Send Button
+            val isEnabled = (input.isNotBlank() || attachmentName != null) && !isLoading
+            val containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+            val contentColor = if (isEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+
+            IconButton(
+                onClick = onSendClick,
+                enabled = isEnabled,
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(containerColor, CircleShape)
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        Modifier.size(20.dp), 
+                        color = contentColor, 
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Icon(Icons.AutoMirrored.Filled.Send, "Send", tint = contentColor)
                 }
             }
         }
@@ -524,18 +642,51 @@ fun ChatInputBar(
 @Composable
 fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(32.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(Icons.Filled.SmartToy, null, Modifier.size(80.dp).padding(bottom = 16.dp), tint = MaterialTheme.colorScheme.primary.copy(0.4f))
+        Box(
+            modifier = Modifier
+                .size(120.dp)
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.tertiaryContainer
+                        )
+                    ), 
+                    CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                Icons.Filled.SmartToy, 
+                null, 
+                Modifier.size(64.dp), 
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(32.dp))
+        
         Text(
             text = stringResource(id = R.string.chat_greeting),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Ask me anything about government services",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(48.dp))
 
         val suggestions = listOf(
             stringResource(id = R.string.sugg_passport),
@@ -549,25 +700,85 @@ fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
 
 @Composable
 fun WrapContent(suggestions: List<String>, onClick: (String) -> Unit) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        suggestions.forEach { text ->
-            SuggestionChip(
-                onClick = { onClick(text) },
-                label = { Text(text) },
-                colors = SuggestionChipDefaults.suggestionChipColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(0.3f)),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(0.3f))
-            )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, 
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        suggestions.chunked(2).forEach { rowItems ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                rowItems.forEach { text ->
+                    SuggestionChip(
+                        onClick = { onClick(text) },
+                        label = { Text(text, modifier = Modifier.padding(vertical = 8.dp)) },
+                        colors = SuggestionChipDefaults.suggestionChipColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        ),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
 fun TypingIndicator() {
-    Row(Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.size(28.dp)) {
-            Icon(Icons.Filled.SmartToy, null, Modifier.padding(4.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
+    val dotSize = 8.dp
+    val delayUnit = 300 
+    
+    val infiniteTransition = rememberInfiniteTransition(label = "typing")
+    
+    @Composable
+    fun animateAlpha(delay: Int): State<Float> {
+        return infiniteTransition.animateFloat(
+            initialValue = 0.3f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(600, delayMillis = delay, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "alpha"
+        )
+    }
+
+    val alpha1 by animateAlpha(0)
+    val alpha2 by animateAlpha(delayUnit)
+    val alpha3 by animateAlpha(delayUnit * 2)
+
+    Row(
+        Modifier.padding(vertical = 12.dp, horizontal = 16.dp), 
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Surface(
+            shape = CircleShape, 
+            color = MaterialTheme.colorScheme.primaryContainer, 
+            modifier = Modifier.size(32.dp)
+        ) {
+            Icon(
+                Icons.Filled.SmartToy, 
+                null, 
+                Modifier.padding(6.dp), 
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
-        Spacer(modifier = Modifier.width(8.dp))
-        Text("Thinking...", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
+        Spacer(modifier = Modifier.width(12.dp))
+        Surface(
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomStart = 4.dp, bottomEnd = 20.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            modifier = Modifier.height(40.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Box(Modifier.size(dotSize).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha1), CircleShape))
+                Box(Modifier.size(dotSize).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha2), CircleShape))
+                Box(Modifier.size(dotSize).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha3), CircleShape))
+            }
+        }
     }
 }

@@ -25,6 +25,9 @@ interface ServiceDao {
     @Query("SELECT * FROM services WHERE id = :serviceId")
     fun getServiceById(serviceId: String): Flow<Service?>
 
+    @Query("SELECT * FROM services WHERE id = :serviceId")
+    suspend fun getServiceByIdOnce(serviceId: String): Service?
+
     @Query("SELECT * FROM service_details WHERE serviceId = :serviceId")
     fun getServiceDetail(serviceId: String): Flow<ServiceDetail?>
 

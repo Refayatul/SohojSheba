@@ -1,11 +1,12 @@
 package com.bonfire.shohojsheba.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -32,26 +32,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bonfire.shohojsheba.LocalLocale
-import com.bonfire.shohojsheba.LocalOnLocaleChange
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.navigation.Routes
+import com.bonfire.shohojsheba.ui.components.EnhancedTopAppBar
 import com.bonfire.shohojsheba.ui.viewmodels.AuthViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import com.bonfire.shohojsheba.utils.AppLocaleManager
 import kotlinx.coroutines.flow.collectLatest
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    currentThemeMode: String,       // Added Parameter
-    onThemeChange: (String) -> Unit // Added Parameter
+    currentThemeMode: String,
+    onThemeChange: (String) -> Unit
 ) {
     val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
     val currentUser by authViewModel.currentUser.collectAsState()
-    val showLanguageOption = false
+    val showLanguageOption = true
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showEditProfileDialog by remember { mutableStateOf(false) }
 
@@ -61,8 +60,6 @@ fun SettingsScreen(
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
-
-    // After logout, NavGraph will automatically redirect when currentUser becomes null
 
     if (showLogoutDialog) {
         LogoutConfirmDialog(
@@ -91,30 +88,12 @@ fun SettingsScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        stringResource(id = R.string.settings),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface // Fix text color
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onSurface // Fix icon color
-                        )
-                    }
-                },
-                // Changed from Color.White to Surface so it respects dark mode
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
+            EnhancedTopAppBar(
+                title = stringResource(id = R.string.settings),
+                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                onNavigationClick = { navController.popBackStack() }
             )
-        },
-        containerColor = MaterialTheme.colorScheme.background
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -166,40 +145,68 @@ private fun ThemeSection(
     onModeSelected: (String) -> Unit
 ) {
     Column {
-        SectionTitle(title = "Appearance") // You can add string resource later
+        SectionTitle(title = "Appearance")
         Spacer(modifier = Modifier.height(8.dp))
-        Column(
+        Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Adapt to dark mode
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp)
         ) {
-            ThemeOptionRow("System Default", currentMode == "system") { onModeSelected("system") }
-            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
-            ThemeOptionRow("Light Mode", currentMode == "light") { onModeSelected("light") }
-            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
-            ThemeOptionRow("Dark Mode", currentMode == "dark") { onModeSelected("dark") }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // System chip
+                ThemeChip(
+                    text = "System",
+                    selected = currentMode == "system",
+                    onClick = { onModeSelected("system") },
+                    modifier = Modifier.weight(1f)
+                )
+                // Light chip
+                ThemeChip(
+                    text = "Light",
+                    selected = currentMode == "light",
+                    onClick = { onModeSelected("light") },
+                    modifier = Modifier.weight(1f)
+                )
+                // Dark chip
+                ThemeChip(
+                    text = "Dark",
+                    selected = currentMode == "dark",
+                    onClick = { onModeSelected("dark") },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun ThemeOptionRow(text: String, selected: Boolean, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+private fun ThemeChip(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(
+                if (selected) MaterialTheme.colorScheme.primaryContainer
+                else MaterialTheme.colorScheme.surfaceVariant
+            )
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp, horizontal = 8.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
-            fontSize = 18.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.weight(1f)
-        )
-        RadioButton(
-            selected = selected,
-            onClick = null // Handled by Row
+            fontSize = 14.sp,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+            else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -207,8 +214,9 @@ private fun ThemeOptionRow(text: String, selected: Boolean, onClick: () -> Unit)
 
 @Composable
 private fun LanguageSection() {
-    val locale = LocalLocale.current
-    val onLocaleChange = LocalOnLocaleChange.current
+    val context = LocalContext.current
+    val appLocaleManager = remember { AppLocaleManager(context.applicationContext) }
+    val currentLanguage = appLocaleManager.getCurrentLanguageCode()
 
     Column {
         SectionTitle(title = stringResource(id = R.string.section_language))
@@ -216,7 +224,7 @@ private fun LanguageSection() {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Fix: use surface
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             Row(
                 modifier = Modifier
@@ -227,18 +235,20 @@ private fun LanguageSection() {
             ) {
                 Text(
                     text = stringResource(
-                        if (locale.language == "bn") R.string.language_bangla
+                        if (currentLanguage == "bn") R.string.language_bangla
                         else R.string.language_english
                     ),
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface // Fix text color
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Switch(
-                    checked = locale.language == "bn",
-                    onCheckedChange = {
-                        val newLocale = if (locale.language == "bn") Locale("en") else Locale("bn")
-                        onLocaleChange(newLocale)
+                    checked = currentLanguage == "bn",
+                    onCheckedChange = { isBangla ->
+                        val newLanguage = if (isBangla) "bn" else "en"
+                        // Use AppLocaleManager which calls AppCompatDelegate.setApplicationLocales()
+                        // This automatically recreates the activity and updates the UI
+                        appLocaleManager.changeLanguage(newLanguage)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
@@ -367,101 +377,89 @@ private fun UserProfileSection(
     onEditClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    Column(
+    Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Text(
-            text = "Profile",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        // Name
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column {
+            // Avatar Placeholder
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
-                    text = "Name",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = user.name,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text = user.name.take(1).uppercase(),
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
-        }
 
-        // Email
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
+            // User Info
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Text(
-                    text = "Email",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = user.name,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = user.email,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        // Edit and Logout Buttons
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Button(
-                onClick = onEditClick,
-                modifier = Modifier
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+            // Actions
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit",
-                    modifier = Modifier.size(18.dp),
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text("Edit")
-            }
+                OutlinedButton(
+                    onClick = onEditClick,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Edit Profile")
+                }
 
-            Button(
-                onClick = onLogoutClick,
-                modifier = Modifier
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
-                )
-            ) {
-                Text("Logout")
+                Button(
+                    onClick = onLogoutClick,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Logout")
+                }
             }
         }
     }

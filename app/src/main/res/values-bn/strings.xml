@@ -44,10 +44,24 @@
     <string name="github">গিটহাব</string>
     <string name="dev_dialog_title">আমাদের টিম</string>
     <string name="dialog_close">বন্ধ করুন</string>
+    <string name="appearance">থিম</string>
     <string name="section_appearance">থিম</string>
     <string name="theme_system">সিস্টেম ডিফল্ট</string>
     <string name="theme_light">লাইট মোড</string>
     <string name="theme_dark">ডার্ক মোড</string>
+    <string name="language">ভাষা</string>
+    <string name="support">সহায়তা</string>
+    <string name="about">সম্পর্কে</string>
+    <string name="email_label">ইমেইল</string>
+    <string name="profile">প্রোফাইল</string>
+    <string name="name">নাম</string>
+    <string name="edit">এডিট</string>
+    <string name="logout">লগআউট</string>
+    <string name="logout_confirm">আপনি কি লগআউট করতে চান?</string>
+    <string name="cancel">বাতিল</string>
+    <string name="edit_profile">প্রোফাইল এডিট</string>
+    <string name="save">সংরক্ষণ</string>
+    <string name="profile_updated">প্রোফাইল আপডেট হয়েছে</string>
 
     <!-- Other Screens -->
     <string name="departments_page_title">বিভাগ</string>

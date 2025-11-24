@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Name -->
-    <string name="app_name">Shohoj Sheba</string>
+    <string name="app_name">Sohoj Sheba</string>
 
     <!-- Firebase -->
     <string name="tagline">Easy government services for everyone</string>
@@ -43,10 +43,24 @@
     <string name="github">GitHub</string>
     <string name="dev_dialog_title">Our Team</string>
     <string name="dialog_close">Close</string>
+    <string name="appearance">Appearance</string>
     <string name="section_appearance">Appearance</string>
     <string name="theme_system">System Default</string>
     <string name="theme_light">Light Mode</string>
     <string name="theme_dark">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="support">Support</string>
+    <string name="about">About</string>
+    <string name="email_label">Email</string>
+    <string name="profile">Profile</string>
+    <string name="name">Name</string>
+    <string name="edit">Edit</string>
+    <string name="logout">Logout</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save">Save</string>
+    <string name="profile_updated">Profile updated</string>
 
     <!-- Other Screens -->
     <string name="departments_page_title">Departments</string>
@@ -57,7 +71,7 @@
     <!-- History Content Screen -->
     <string name="clear_history_title">Clear all history</string>
     <string name="clear_history_button">Clear History</string>
-    <string name="chat_screen_title">Shohoj Sheba</string>
+    <string name="chat_screen_title">Sohoj Sheba</string>
     <string name="chat_greeting">How can I help you today?</string>
     <string name="sugg_passport">Renew Passport</string>
     <string name="sugg_trade_license">Trade License Fee</string>
