@@ -19,6 +19,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
+import com.bonfire.shohojsheba.data.database.entities.UserHistory
+import com.bonfire.shohojsheba.data.database.entities.UserFavorite
+import com.bonfire.shohojsheba.data.database.entities.ServiceDetail
 
 sealed class ServicesUiState {
     object Loading : ServicesUiState()
@@ -30,23 +36,31 @@ class ServicesViewModel(
     private val repository: Repository,
     private val networkStatusTracker: NetworkStatusTracker
 ) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<ServicesUiState>(ServicesUiState.Loading)
-    val uiState: StateFlow<ServicesUiState> = _uiState
+    private val _uiState = MutableStateFlow<ServicesUiState>(ServicesUiState.Success(emptyList()))
+    val uiState: StateFlow<ServicesUiState> = _uiState.asStateFlow()
 
     private val _aiResponse = MutableStateFlow<String?>(null)
-    val aiResponse: StateFlow<String?> = _aiResponse
+    val aiResponse: StateFlow<String?> = _aiResponse.asStateFlow()
 
-    private val _toastMessage = MutableSharedFlow<String>(replay = 1)
-    val toastMessage = _toastMessage.asSharedFlow()
+    private val _toastMessage = MutableSharedFlow<String>()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
 
-    val allServices = repository.getAllServices()
-    val history = repository.getRecentHistory()
-    val favorites = repository.getFavorites()
+    private var searchJob: Job? = null
+    private var currentCategory: String? = null
+    
+    // Query caching to prevent redundant searches
+    private var lastQuery: String? = null
+    private var lastResults: List<Service>? = null
+    private var currentAiQuery: String? = null // Track active AI search to prevent race conditions
+    
+    // Temporary storage for AI result (not saved to DB until clicked)
+    private var tempAiResult: Pair<Service, ServiceDetail>? = null
+
+    val allServices: Flow<List<Service>> = repository.getAllServices()
+    val history: Flow<List<UserHistory>> = repository.getRecentHistory()
+    val favorites: Flow<List<UserFavorite>> = repository.getFavorites()
     private val _dataSource = MutableStateFlow("Cache")
     val dataSource = _dataSource.asStateFlow()
-
-    private var currentCategory: String? = null
 
     init {
         Log.d("ServicesViewModel", "=== NEW ViewModel INSTANCE CREATED ===")
@@ -85,7 +99,10 @@ class ServicesViewModel(
     }
 
     fun clearSearch() {
+        searchJob?.cancel()
         currentCategory = null
+        lastQuery = null
+        lastResults = null
         _uiState.value = ServicesUiState.Success(emptyList())
         _aiResponse.value = null
     }
@@ -112,14 +129,28 @@ class ServicesViewModel(
             .launchIn(viewModelScope)
     }
 
-    private var searchJob: kotlinx.coroutines.Job? = null
-
     fun searchServices(query: String, enableAI: Boolean = false) {
+        // Normalize query for comparison
+        val normalizedQuery = query.trim().lowercase()
+        
+        // Skip if same query as last search (cache hit)
+        if (normalizedQuery == lastQuery && !enableAI && lastResults != null) {
+            _uiState.value = ServicesUiState.Success(lastResults!!)
+            return
+        }
+
+        // If AI search is running for this query, ignore local search request
+        // This prevents the delayed LaunchedEffect from overwriting the AI Loading state
+        if (normalizedQuery == currentAiQuery && !enableAI) {
+            return
+        }
+        
+        lastQuery = normalizedQuery
         searchJob?.cancel()
         currentCategory = null
         _aiResponse.value = null
         
-        searchJob = repository.searchServices(query)
+        searchJob = repository.getAllServices()
             .onEach { services ->
                 // Apply fuzzy matching to rank results by relevance
                 val fuzzyResults = services.fuzzyFilter(
@@ -136,17 +167,18 @@ class ServicesViewModel(
                     )
                 }
                 
-                if (fuzzyResults.isEmpty()) {
-                    if (enableAI) {
-                        // Auto-trigger AI search when no results found AND AI is enabled
-                        // Stop listening to this flow to prevent overwriting AI results with empty list
-                        searchJob?.cancel()
-                        searchWithAI(query)
-                    } else {
-                         _uiState.value = ServicesUiState.Success(emptyList())
-                    }
+                // If enableAI is true (user pressed Enter), ALWAYS trigger AI search
+                // This allows AI search even when fuzzy results exist but aren't what user wants
+                if (enableAI) {
+                    searchJob?.cancel()
+                    searchWithAI(query)
+                } else if (fuzzyResults.isEmpty()) {
+                    // No AI requested and no results found
+                    lastResults = emptyList()
+                    _uiState.value = ServicesUiState.Success(emptyList())
                 } else {
-                    // Return fuzzy-matched and sorted results
+                    // No AI requested but we have fuzzy results - show them
+                    lastResults = fuzzyResults
                     _uiState.value = ServicesUiState.Success(fuzzyResults)
                 }
             }
@@ -155,6 +187,9 @@ class ServicesViewModel(
     }
 
     fun searchWithAI(query: String) {
+        val normalizedQuery = query.trim().lowercase()
+        currentAiQuery = normalizedQuery
+        
         viewModelScope.launch {
             _uiState.value = ServicesUiState.Loading
             val apiKey = BuildConfig.GEMINI_API_KEY
@@ -169,10 +204,9 @@ class ServicesViewModel(
                 geminiRepository.generateService(query).collect { result ->
                     if (result != null) {
                         val (service, detail) = result
-                        // Save to local DB only (for display)
-                        // Will be saved to Firestore when user opens it
-                        repository.serviceDao.insertServices(listOf(service))
-                        repository.serviceDao.insertServiceDetails(listOf(detail))
+                        // Store temporarily (do NOT save to DB yet)
+                        tempAiResult = service to detail
+                        
                         // Show the generated service
                         _uiState.value = ServicesUiState.Success(listOf(service))
                         _aiResponse.value = null
@@ -184,9 +218,25 @@ class ServicesViewModel(
             } catch (e: Exception) {
                 _aiResponse.value = "⚠️ Something went wrong: ${e.localizedMessage ?: "Unknown error"}"
                 _uiState.value = ServicesUiState.Success(emptyList())
+            } finally {
+                currentAiQuery = null // Reset flag when done
             }
         }
     }
+    fun onServiceClicked(service: Service) {
+        viewModelScope.launch {
+            // Check if this is the temporary AI result
+            if (tempAiResult != null && tempAiResult!!.first.id == service.id) {
+                val (aiService, aiDetail) = tempAiResult!!
+                // NOW save to DB since user clicked it
+                repository.serviceDao.insertServices(listOf(aiService))
+                repository.serviceDao.insertServiceDetails(listOf(aiDetail))
+                Log.d("ServicesViewModel", "Persisted AI result to DB: ${aiService.title.en}")
+                tempAiResult = null // Clear temp storage
+            }
+        }
+    }
+
     fun clearHistory() {
         viewModelScope.launch {
             repository.clearAllHistory()

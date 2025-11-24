@@ -166,6 +166,8 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                 }
             }
 
+            var isVoiceInput by remember { mutableStateOf(false) }
+
             val voiceLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) { result ->
@@ -173,6 +175,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                 val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 results?.firstOrNull()?.let {
                     searchQuery = it
+                    isVoiceInput = true // Flag that this update came from voice
                 }
             }
 
@@ -262,6 +265,8 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                     navController = navController,
                                     searchQuery = searchQuery,
                                     onSearchQueryChange = { searchQuery = it },
+                                    isVoiceInput = isVoiceInput,
+                                    onVoiceInputReset = { isVoiceInput = false },
                                     onVoiceSearchClick = {
                                         try {
                                             // Use current app locale for voice search

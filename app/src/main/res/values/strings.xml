@@ -11,6 +11,7 @@
 
     <!-- Home Screen -->
     <string name="search_hint">Search for services…</string>
+    <string name="search_ai_hint">Press Enter for AI-powered search</string>
     <string name="service_categories">Service Categories</string>
     <string name="category_citizen">Citizen</string>
     <string name="category_farmer">Farmer</string>
