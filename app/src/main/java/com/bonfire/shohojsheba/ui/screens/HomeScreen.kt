@@ -1,6 +1,8 @@
 package com.bonfire.shohojsheba.ui.screens
 
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,10 +17,12 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.shadow
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -34,6 +38,7 @@ import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.CategoryCard
+import com.bonfire.shohojsheba.ui.components.DecorativeBackground
 import com.bonfire.shohojsheba.ui.components.ServiceListItem
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.theme.*
@@ -74,27 +79,25 @@ fun HomeScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-    ) {
-        // 🔍 Search bar with voice mic
-        TextField(
-            value = searchQuery,
-            onValueChange = { 
-                onSearchQueryChange(it)
-                if (it.isBlank()) {
-                    viewModel.clearSearch()
-                } else {
-                    // Local search while typing (enableAI = false)
-                    viewModel.searchServices(it, enableAI = false)
-                }
-            },
+    DecorativeBackground {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            shape = RoundedCornerShape(50),
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            // 🔍 Search bar with voice mic
+            TextField(
+                value = searchQuery,
+                onValueChange = {
+                    onSearchQueryChange(it)
+                    if (it.isBlank()) {
+                        viewModel.clearSearch()
+                    } else {
+                        // Local search while typing (enableAI = false)
+                        viewModel.searchServices(it, enableAI = false)
+                    }
+                },
+                shape = RoundedCornerShape(50),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -131,69 +134,126 @@ fun HomeScreen(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                focusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
                 unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .shadow(
+                    elevation = 8.dp, 
+                    shape = RoundedCornerShape(50), 
+                    clip = false,
+                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                )
         )
 
         if (searchQuery.isBlank()) {
             // 🏠 Default content (Categories)
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(40.dp))
+                // Service Categories Section
                 Text(
                     text = stringResource(id = R.string.service_categories),
-                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        CategoryCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.category_citizen),
-                            icon = Icons.Outlined.Person,
-                            iconBackgroundColor = IconBgLightGreen,
-                            iconTintColor = IconTintDarkGreen,
-                            onClick = { navController.navigate(Routes.CITIZEN_SERVICES) }
-                        )
-                        CategoryCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.category_farmer),
-                            icon = Icons.Outlined.Agriculture,
-                            iconBackgroundColor = IconBgLightBlue,
-                            iconTintColor = IconTintDarkBlue,
-                            onClick = { navController.navigate(Routes.FARMER_SERVICES) }
-                        )
+                
+                // 2x2 Grid of Categories
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            CategoryCard(
+                                title = stringResource(id = R.string.category_citizen),
+                                icon = Icons.Outlined.Person,
+                                iconBgColor = IconBgLightGreen,
+                                iconTintColor = IconTintDarkGreen,
+                                onClick = { navController.navigate(Routes.CITIZEN_SERVICES) }
+                            )
+                        }
+                        Box(modifier = Modifier.weight(1f)) {
+                            CategoryCard(
+                                title = stringResource(id = R.string.category_farmer),
+                                icon = Icons.Outlined.Agriculture,
+                                iconBgColor = IconBgLightBlue,
+                                iconTintColor = IconTintDarkBlue,
+                                onClick = { navController.navigate(Routes.FARMER_SERVICES) }
+                            )
+                        }
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        CategoryCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.category_entrepreneur),
-                            icon = Icons.Outlined.Storefront,
-                            iconBackgroundColor = IconBgLightPurple,
-                            iconTintColor = IconTintDarkPurple,
-                            onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) }
-                        )
-                        CategoryCard(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(id = R.string.category_govt_office),
-                            icon = Icons.Outlined.Apartment,
-                            iconBackgroundColor = IconBgLightYellow,
-                            iconTintColor = IconTintDarkYellow,
-                            onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) }
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            CategoryCard(
+                                title = stringResource(id = R.string.category_entrepreneur),
+                                icon = Icons.Outlined.Storefront,
+                                iconBgColor = IconBgLightPurple,
+                                iconTintColor = IconTintDarkPurple,
+                                onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) }
+                            )
+                        }
+                        Box(modifier = Modifier.weight(1f)) {
+                            CategoryCard(
+                                title = stringResource(id = R.string.category_govt_office),
+                                icon = Icons.Outlined.Apartment,
+                                iconBgColor = IconBgLightYellow,
+                                iconTintColor = IconTintDarkYellow,
+                                onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) }
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
+                // Recent History Section
+                val history by viewModel.history.collectAsState(initial = emptyList())
+                val allServices by viewModel.allServices.collectAsState(initial = emptyList())
+                
+                if (history.isNotEmpty()) {
+                    val recentHistory = history.take(2)
+                    val historyServiceIds = recentHistory.map { it.serviceId }.toSet()
+                    val historyServices = allServices.filter { it.id in historyServiceIds }
+                        .sortedBy { service -> 
+                            // Sort by access date (descending)
+                            recentHistory.find { it.serviceId == service.id }?.accessedDate?.times(-1) ?: 0L 
+                        }
+
+                    if (historyServices.isNotEmpty()) {
+                        Text(
+                            text = stringResource(id = R.string.recent_services_title),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            historyServices.forEach { service ->
+                                ServiceRow(service = service, locale = locale) {
+                                    navController.navigate("service_detail/${service.id}")
+                                }
+                            }
+                        }
+                        
+                        // "View All" link
+                        TextButton(
+                            onClick = { navController.navigate(Routes.HISTORY) },
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            Text("View All History")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ServiceListItem(
-                        title = stringResource(id = R.string.recent_services_title),
-                        subtitle = stringResource(id = R.string.recent_services_subtitle),
-                        onClick = { navController.navigate(Routes.HISTORY) }
-                    )
                     ServiceListItem(
                         title = stringResource(id = R.string.favorite_services_title),
                         subtitle = stringResource(id = R.string.favorite_services_subtitle),
@@ -275,5 +335,6 @@ fun HomeScreen(
                 }
             }
         }
+    }
     }
 }

@@ -1,10 +1,12 @@
 package com.bonfire.shohojsheba.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -26,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bonfire.shohojsheba.R
+import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.CategoryCard
+import com.bonfire.shohojsheba.ui.components.DecorativeBackground
 import com.bonfire.shohojsheba.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,56 +41,72 @@ fun DepartmentsScreen(navController: NavController) {
             TopAppBar(title = { Text(stringResource(id = R.string.departments_page_title), fontWeight = FontWeight.Bold) })
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+        DecorativeBackground {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
             Text(
                 text = stringResource(id = R.string.service_categories),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                CategoryCard(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(id = R.string.category_citizen),
-                    icon = Icons.Outlined.Person,
-                    iconBackgroundColor = IconBgLightGreen,
-                    iconTintColor = IconTintDarkGreen,
-                    onClick = { navController.navigate("citizen_services") }
-                )
-                CategoryCard(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(id = R.string.category_farmer),
-                    icon = Icons.Outlined.Agriculture,
-                    iconBackgroundColor = IconBgLightBlue,
-                    iconTintColor = IconTintDarkBlue,
-                    onClick = { navController.navigate("farmer_services") }
-                )
+            
+            // 2x2 Grid of Categories
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_citizen),
+                            icon = Icons.Outlined.Person,
+                            iconBgColor = IconBgLightGreen,
+                            iconTintColor = IconTintDarkGreen,
+                            onClick = { navController.navigate(Routes.CITIZEN_SERVICES) }
+                        )
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_farmer),
+                            icon = Icons.Outlined.Agriculture,
+                            iconBgColor = IconBgLightBlue,
+                            iconTintColor = IconTintDarkBlue,
+                            onClick = { navController.navigate(Routes.FARMER_SERVICES) }
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_entrepreneur),
+                            icon = Icons.Outlined.Storefront,
+                            iconBgColor = IconBgLightPurple,
+                            iconTintColor = IconTintDarkPurple,
+                            onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) }
+                        )
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_govt_office),
+                            icon = Icons.Outlined.Apartment,
+                            iconBgColor = IconBgLightYellow,
+                            iconTintColor = IconTintDarkYellow,
+                            onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) }
+                        )
+                    }
+                }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                CategoryCard(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(id = R.string.category_entrepreneur),
-                    icon = Icons.Outlined.Storefront,
-                    iconBackgroundColor = IconBgLightPurple,
-                    iconTintColor = IconTintDarkPurple,
-                    onClick = { navController.navigate("entrepreneur_services") }
-                )
-                CategoryCard(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(id = R.string.category_govt_office),
-                    icon = Icons.Outlined.Apartment,
-                    iconBackgroundColor = IconBgLightYellow,
-                    iconTintColor = IconTintDarkYellow,
-                    onClick = { navController.navigate("govt_office_services") }
-                )
-            }
+        }
         }
     }
 }

@@ -87,6 +87,14 @@ class Repository(
             Log.e("Repository", "Failed to remove favorite from Firestore: ${e.message}")
         }
     }
+    suspend fun clearAllFavorites() {
+        userDataDao.clearAllFavorites()
+        try {
+            FirestoreApi.clearAllFavoritesFromFirestore()
+        } catch (e: Exception) {
+            Log.e("Repository", "Failed to clear favorites from Firestore: ${e.message}")
+        }
+    }
 
     fun getRecentHistory(limit: Int = 20): Flow<List<UserHistory>> = userDataDao.getRecentHistory(limit)
     suspend fun addHistory(h: UserHistory) {
@@ -99,6 +107,14 @@ class Repository(
         }
     }
     suspend fun clearOldHistory(cutoffDate: Long) = userDataDao.clearOldHistory(cutoffDate)
+    suspend fun clearAllHistory() {
+        userDataDao.clearAllHistory()
+        try {
+            FirestoreApi.clearAllHistoryFromFirestore()
+        } catch (e: Exception) {
+            Log.e("Repository", "Failed to clear history from Firestore: ${e.message}")
+        }
+    }
     
     // Sync user data from Firestore on app start
     suspend fun syncUserDataFromFirestore() {

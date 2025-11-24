@@ -36,8 +36,10 @@ import com.bonfire.shohojsheba.LocalLocale
 import com.bonfire.shohojsheba.LocalOnLocaleChange
 import com.bonfire.shohojsheba.R
 import com.bonfire.shohojsheba.navigation.Routes
+import com.bonfire.shohojsheba.ui.components.DecorativeBackground
 import com.bonfire.shohojsheba.ui.viewmodels.AuthViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import com.bonfire.shohojsheba.utils.AppLocaleManager
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
@@ -96,7 +98,7 @@ fun SettingsScreen(
                     Text(
                         stringResource(id = R.string.settings),
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface // Fix text color
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -104,11 +106,10 @@ fun SettingsScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onSurface // Fix icon color
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
-                // Changed from Color.White to Surface so it respects dark mode
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -116,34 +117,36 @@ fun SettingsScreen(
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            // --- User Profile Section ---
-            if (currentUser != null) {
-                UserProfileSection(
-                    user = currentUser!!,
-                    onEditClick = { showEditProfileDialog = true },
-                    onLogoutClick = { showLogoutDialog = true }
+        DecorativeBackground {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                // --- User Profile Section ---
+                if (currentUser != null) {
+                    UserProfileSection(
+                        user = currentUser!!,
+                        onEditClick = { showEditProfileDialog = true },
+                        onLogoutClick = { showLogoutDialog = true }
+                    )
+                }
+
+                // --- Added Theme Section ---
+                ThemeSection(
+                    currentMode = currentThemeMode,
+                    onModeSelected = onThemeChange
                 )
-            }
 
-            // --- Added Theme Section ---
-            ThemeSection(
-                currentMode = currentThemeMode,
-                onModeSelected = onThemeChange
-            )
-
-            if (showLanguageOption) {
-                LanguageSection()
+                if (showLanguageOption) {
+                    LanguageSection()
+                }
+                SupportSection()
+                AboutSection()
             }
-            SupportSection()
-            AboutSection()
         }
     }
 }
@@ -207,8 +210,9 @@ private fun ThemeOptionRow(text: String, selected: Boolean, onClick: () -> Unit)
 
 @Composable
 private fun LanguageSection() {
-    val locale = LocalLocale.current
-    val onLocaleChange = LocalOnLocaleChange.current
+    val context = LocalContext.current
+    val appLocaleManager = remember { AppLocaleManager(context.applicationContext) }
+    val currentLanguage = appLocaleManager.getCurrentLanguageCode()
 
     Column {
         SectionTitle(title = stringResource(id = R.string.section_language))
@@ -216,7 +220,7 @@ private fun LanguageSection() {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Fix: use surface
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             Row(
                 modifier = Modifier
@@ -227,18 +231,20 @@ private fun LanguageSection() {
             ) {
                 Text(
                     text = stringResource(
-                        if (locale.language == "bn") R.string.language_bangla
+                        if (currentLanguage == "bn") R.string.language_bangla
                         else R.string.language_english
                     ),
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface // Fix text color
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Switch(
-                    checked = locale.language == "bn",
-                    onCheckedChange = {
-                        val newLocale = if (locale.language == "bn") Locale("en") else Locale("bn")
-                        onLocaleChange(newLocale)
+                    checked = currentLanguage == "bn",
+                    onCheckedChange = { isBangla ->
+                        val newLanguage = if (isBangla) "bn" else "en"
+                        // Use AppLocaleManager which calls AppCompatDelegate.setApplicationLocales()
+                        // This automatically recreates the activity and updates the UI
+                        appLocaleManager.changeLanguage(newLanguage)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,

@@ -9,8 +9,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.outlined.Settings
@@ -31,6 +35,7 @@ import com.bonfire.shohojsheba.ui.theme.ShohojShebaTheme
 import com.bonfire.shohojsheba.ui.viewmodels.AuthViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.AuthUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import com.bonfire.shohojsheba.utils.AppLocaleManager
 import com.bonfire.shohojsheba.utils.LocalLocale
 import com.bonfire.shohojsheba.utils.LocalOnLocaleChange
 import com.bonfire.shohojsheba.utils.ProvideLocale
@@ -39,24 +44,41 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
+import android.content.res.Configuration
+
 @OptIn(ExperimentalMaterial3Api::class)
-class MainActivity : ComponentActivity() {
+class MainActivity : androidx.appcompat.app.AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            val appLocaleManager = remember { AppLocaleManager(applicationContext) }
 
             // ------------------------------------------------------------
-            // 1. LANGUAGE LOGIC
+            // 1. LANGUAGE LOGIC - Using AppLocaleManager
             // ------------------------------------------------------------
-            val savedLang = remember { sharedPreferences.getString("language", "bn") ?: "bn" }
-            val (locale, setLocale) = remember { mutableStateOf(Locale(savedLang)) }
-            val onLocaleChange: (Locale) -> Unit = { newLocale ->
-                setLocale(newLocale)
-                sharedPreferences.edit().putString("language", newLocale.language).apply()
-                // Recreate activity to apply language change throughout the app
-                recreate()
+            val currentLang = appLocaleManager.getCurrentLanguageCode()
+            var locale by remember { mutableStateOf(
+                if (currentLang == "bn") Locale("bn", "BD") else Locale("en", "US")
+            ) }
+            var localeChangeKey by remember { mutableIntStateOf(0) }
+            
+            // Monitor locale changes from AppCompatDelegate
+            DisposableEffect(localeChangeKey) {
+                val lang = appLocaleManager.getCurrentLanguageCode()
+                locale = if (lang == "bn") Locale("bn", "BD") else Locale("en", "US")
+                onDispose { }
             }
+            
+            val onLocaleChange: (Locale) -> Unit = { newLocale ->
+                // Use AppLocaleManager to change language
+                appLocaleManager.changeLanguage(newLocale.language)
+                
+                // Trigger recomposition
+                localeChangeKey++
+            }
+
 
             // ------------------------------------------------------------
             // 2. THEME LOGIC (NEW)
@@ -102,6 +124,7 @@ class MainActivity : ComponentActivity() {
             // Observe auth state changes for navigation
             val authState by authViewModel.authState.collectAsState()
             val googleSignInState by authViewModel.googleSignInState.collectAsState()
+            val isAuthCheckComplete by authViewModel.isAuthCheckComplete.collectAsState()
 
             // Listen for toast messages from AuthViewModel
             LaunchedEffect(Unit) {
@@ -166,94 +189,104 @@ class MainActivity : ComponentActivity() {
                         LocalLocale provides locale,
                         LocalOnLocaleChange provides onLocaleChange
                     ) {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentRoute = navBackStackEntry?.destination?.route
-
-                        // Get currentUser to check auth
-                        val currentUser by authViewModel.currentUser.collectAsState()
-
-                        // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
-                        val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER
-                        val isSettingsScreen = currentRoute == Routes.SETTINGS
-                        val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
-                        val isHomeScreen = currentRoute == Routes.HOME
-
-                        val showBottomNav = !isAuthScreen && !isSettingsScreen && !isServiceDetailScreen && currentUser != null
-                        val showTopBar = isHomeScreen
-
-                        Scaffold(
-                            topBar = {
-                                if (showTopBar) {
-                                    CenterAlignedTopAppBar(
-                                        title = {
-                                            Text(
-                                                text = stringResource(id = R.string.app_name),
-                                                color = MaterialTheme.colorScheme.onBackground,
-                                                fontWeight = FontWeight.Bold
-                                            )
-                                        },
-                                        actions = {
-                                            IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
-                                                Icon(
-                                                    imageVector = Icons.Outlined.Settings,
-                                                    contentDescription = stringResource(id = R.string.settings),
-                                                    tint = MaterialTheme.colorScheme.secondary
-                                                )
-                                            }
-                                        },
-                                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                            // Use 'surface' so it adapts to dark/light mode
-                                            containerColor = MaterialTheme.colorScheme.surface
-                                        )
-                                    )
-                                }
-                            },
-                            bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) },
-                            floatingActionButton = {
-                                // We only want to show this button on the home screen
-                                if (currentRoute == Routes.HOME) {
-                                    FloatingActionButton(
-                                        onClick = { navController.navigate(Routes.CHAT) }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Chat,
-                                            contentDescription = stringResource(id = R.string.ai_assistant)
-                                        )
-                                    }
-                                }
+                        if (!isAuthCheckComplete) {
+                            // Show Splash Screen / Loading Indicator
+                            Box(
+                                modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                             }
-                        ) { paddingValues ->
-                            // IMPORTANT: Your AppNavGraph must be updated to accept
-                            // currentThemeMode and onThemeChange params!
-                            AppNavGraph(
-                                modifier = Modifier.padding(paddingValues),
-                                navController = navController,
-                                searchQuery = searchQuery,
-                                onSearchQueryChange = { searchQuery = it },
-                                onVoiceSearchClick = {
-                                    try {
-                                        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                                            putExtra(
-                                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                        } else {
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentRoute = navBackStackEntry?.destination?.route
+
+                            // Get currentUser to check auth
+                            val currentUser by authViewModel.currentUser.collectAsState()
+
+                            // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
+                            val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER
+                            val isSettingsScreen = currentRoute == Routes.SETTINGS
+                            val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
+                            val isHomeScreen = currentRoute == Routes.HOME
+
+                            val showBottomNav = !isAuthScreen && !isSettingsScreen && !isServiceDetailScreen && currentUser != null
+                            val showTopBar = isHomeScreen
+
+                            Scaffold(
+                                topBar = {
+                                    if (showTopBar) {
+                                        CenterAlignedTopAppBar(
+                                            title = {
+                                                Text(
+                                                    text = stringResource(id = R.string.app_name),
+                                                    color = MaterialTheme.colorScheme.onBackground,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            },
+                                            actions = {
+                                                IconButton(onClick = { navController.navigate(Routes.SETTINGS) }) {
+                                                    Icon(
+                                                        imageVector = Icons.Outlined.Settings,
+                                                        contentDescription = stringResource(id = R.string.settings),
+                                                        tint = MaterialTheme.colorScheme.secondary
+                                                    )
+                                                }
+                                            },
+                                            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                                // Use 'surface' so it adapts to dark/light mode
+                                                containerColor = MaterialTheme.colorScheme.surface
                                             )
-                                            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD")
-                                        }
-                                        voiceLauncher.launch(intent)
-                                    } catch (e: Exception) {
-                                        Toast.makeText(
-                                            context,
-                                            "Voice input not supported on this device",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        )
                                     }
                                 },
-                                // Pass these to AppNavGraph -> SettingsScreen
-                                currentThemeMode = savedThemeMode.value,
-                                onThemeChange = onThemeChange,
-                                googleSignInLauncher = googleSignInLauncher,
-                                authViewModel = authViewModel // Pass shared AuthViewModel
-                            )
+                                bottomBar = { if (showBottomNav) BottomNavBar(navController = navController) },
+                                floatingActionButton = {
+                                    // We only want to show this button on the home screen
+                                    if (currentRoute == Routes.HOME) {
+                                        FloatingActionButton(
+                                            onClick = { navController.navigate(Routes.CHAT) }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Chat,
+                                                contentDescription = stringResource(id = R.string.ai_assistant)
+                                            )
+                                        }
+                                    }
+                                }
+                            ) { paddingValues ->
+                                // IMPORTANT: Your AppNavGraph must be updated to accept
+                                // currentThemeMode and onThemeChange params!
+                                AppNavGraph(
+                                    modifier = Modifier.padding(paddingValues),
+                                    navController = navController,
+                                    searchQuery = searchQuery,
+                                    onSearchQueryChange = { searchQuery = it },
+                                    onVoiceSearchClick = {
+                                        try {
+                                            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                                                putExtra(
+                                                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                                                )
+                                                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD")
+                                            }
+                                            voiceLauncher.launch(intent)
+                                        } catch (e: Exception) {
+                                            Toast.makeText(
+                                                context,
+                                                "Voice input not supported on this device",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    },
+                                    // Pass these to AppNavGraph -> SettingsScreen
+                                    currentThemeMode = savedThemeMode.value,
+                                    onThemeChange = onThemeChange,
+                                    googleSignInLauncher = googleSignInLauncher,
+                                    authViewModel = authViewModel // Pass shared AuthViewModel
+                                )
+                            }
                         }
                     }
                 }

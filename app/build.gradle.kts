@@ -44,6 +44,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        
+        // Specify supported languages
+        resourceConfigurations += listOf("en", "bn")
+    }
+    
+    androidResources {
+        generateLocaleConfig = true
     }
 
     buildTypes {

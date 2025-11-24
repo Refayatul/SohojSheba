@@ -16,6 +16,9 @@ interface UserDataDao {
     @Query("DELETE FROM user_favorites WHERE serviceId = :serviceId")
     suspend fun removeFavorite(serviceId: String): Int
 
+    @Query("DELETE FROM user_favorites")
+    suspend fun clearAllFavorites()
+
     @Query("SELECT * FROM user_favorites ORDER BY addedDate DESC")
     fun getFavorites(): Flow<List<UserFavorite>>
 
@@ -36,4 +39,7 @@ interface UserDataDao {
 
     @Query("DELETE FROM user_history WHERE accessedDate < :cutoffDate")
     suspend fun clearOldHistory(cutoffDate: Long): Int
+
+    @Query("DELETE FROM user_history")
+    suspend fun clearAllHistory()
 }

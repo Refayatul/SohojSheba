@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -146,25 +148,31 @@ private fun ServiceHeader(service: Service, locale: Locale) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.5).sp
+            ),
             color = MaterialTheme.colorScheme.onBackground
         )
         if (subtitle.isNotBlank()) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 0.15.sp
+                ),
                 color = MaterialTheme.colorScheme.secondary
             )
         }
+        Spacer(modifier = Modifier.height(24.dp))
         HorizontalDivider(
-            modifier = Modifier.padding(top = 16.dp),
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
     }
 }
@@ -179,20 +187,24 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
 
     val stepCount = max(instructionBlocks.size, imageUrls.size)
 
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(24.dp)) { // Increased spacing
         (0 until stepCount).forEach { index ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .shadow(2.dp, RoundedCornerShape(16.dp)),
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(24.dp),
+                        spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    ),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(24.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp)
+                        .padding(24.dp) // Increased internal padding
                 ) {
                     if (index < imageUrls.size) {
                         AsyncImage(
@@ -201,10 +213,11 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
+                                .wrapContentHeight() // Allow full height
+                                .clip(RoundedCornerShape(16.dp))
                                 .background(MaterialTheme.colorScheme.surfaceVariant)
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
 
                     if (index < instructionBlocks.size) {
@@ -218,10 +231,17 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                             if (match != null) {
                                 val stepHeader = match.value
                                 val restOfText = blockText.substring(stepHeader.length)
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)) {
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                ) {
                                     append(stepHeader)
                                 }
-                                appendMarkdownAndLinks(restOfText)
+                                append("\n\n") // Add spacing after header
+                                appendMarkdownAndLinks(restOfText.trim())
                             } else {
                                 appendMarkdownAndLinks(blockText)
                             }
@@ -230,8 +250,9 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         ClickableText(
                             text = annotatedText,
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurface,
-                                lineHeight = 26.sp
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+                                lineHeight = 32.sp, // Increased line height for readability
+                                letterSpacing = 0.5.sp
                             ),
                             onClick = { offset ->
                                 annotatedText.handleLinkClick(offset, context, uriHandler)
@@ -243,7 +264,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
         }
     }
 
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Bottom Info Section
     val requiredDocuments = if (locale.language == "bn") detail.requiredDocuments.bn else detail.requiredDocuments.en
@@ -253,28 +274,44 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
     Column(
         Modifier
             .padding(horizontal = 16.dp)
-            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .shadow(2.dp, RoundedCornerShape(16.dp))
-            .padding(vertical = 12.dp)
+            .shadow(
+                elevation = 4.dp,
+                shape = RoundedCornerShape(24.dp),
+                spotColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+            )
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
+            .padding(vertical = 8.dp)
     ) {
         InfoRow(
             icon = Icons.Default.Description,
-            title = "Required Documents",
-            content = requiredDocuments
+            title = if (locale.language == "bn") "প্রয়োজনীয় কাগজপত্র" else "Required Documents",
+            content = requiredDocuments,
+            iconColor = Color(0xFF8E24AA), // Purple
+            iconBg = Color(0xFFF3E5F5)
         )
-        Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant
+        )
         
         InfoRow(
             icon = Icons.Default.Schedule,
-            title = "Processing Time",
-            content = processingTime
+            title = if (locale.language == "bn") "প্রক্রিয়াকরণ সময়" else "Processing Time",
+            content = processingTime,
+            iconColor = Color(0xFFF9A825), // Yellow/Orange
+            iconBg = Color(0xFFFFFDE7)
         )
-        Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant
+        )
         
         InfoRow(
             icon = Icons.Default.Phone,
-            title = "Contact Info",
-            content = contactInfo
+            title = if (locale.language == "bn") "যোগাযোগ" else "Contact Info",
+            content = contactInfo,
+            iconColor = Color(0xFF2E7D32), // Green
+            iconBg = Color(0xFFE8F5E9)
         )
     }
 }
@@ -283,7 +320,9 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
 private fun InfoRow(
     icon: ImageVector,
     title: String,
-    content: String
+    content: String,
+    iconColor: Color = MaterialTheme.colorScheme.primary,
+    iconBg: Color = MaterialTheme.colorScheme.primaryContainer
 ) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
@@ -291,33 +330,32 @@ private fun InfoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(20.dp),
         verticalAlignment = Alignment.Top
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(10.dp)),
+                .size(48.dp)
+                .background(iconBg, RoundedCornerShape(16.dp)),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = iconColor,
                 modifier = Modifier.size(24.dp)
             )
         }
         
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(20.dp))
         
         Column {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             
             // Parse Markdown and Links for content
             val annotatedContent = buildAnnotatedString {
@@ -328,7 +366,7 @@ private fun InfoRow(
                 text = annotatedContent,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    lineHeight = 22.sp
+                    lineHeight = 24.sp
                 ),
                 onClick = { offset ->
                     annotatedContent.handleLinkClick(offset, context, uriHandler)
@@ -345,15 +383,27 @@ fun AnnotatedString.handleLinkClick(offset: Int, context: Context, uriHandler: U
     }
     getStringAnnotations(tag = "EMAIL", start = offset, end = offset).firstOrNull()?.let { 
         try {
-            val intent = Intent(Intent.ACTION_SENDTO).apply { data = Uri.parse("mailto:${it.item}") }
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:${it.item}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             context.startActivity(intent)
-        } catch(e: Exception) { e.printStackTrace() }
+        } catch(e: Exception) { 
+            Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show()
+            e.printStackTrace() 
+        }
     }
     getStringAnnotations(tag = "PHONE", start = offset, end = offset).firstOrNull()?.let { 
         try {
-            val intent = Intent(Intent.ACTION_DIAL).apply { data = Uri.parse("tel:${it.item}") }
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:${it.item}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             context.startActivity(intent)
-        } catch(e: Exception) { e.printStackTrace() }
+        } catch(e: Exception) { 
+            Toast.makeText(context, "No dialer app found", Toast.LENGTH_SHORT).show()
+            e.printStackTrace() 
+        }
     }
 }
 

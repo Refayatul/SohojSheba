@@ -158,5 +158,26 @@ object FirestoreApi {
             emptyList()
         }
     }
+    suspend fun clearAllFavoritesFromFirestore() {
+        try {
+            val uid = auth.currentUser?.uid ?: return
+            fs.collection("users").document(uid)
+                .update("favoriteServiceIds", emptyList<String>())
+                .await()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    suspend fun clearAllHistoryFromFirestore() {
+        try {
+            val uid = auth.currentUser?.uid ?: return
+            fs.collection("users").document(uid)
+                .update("historyServiceIds", emptyList<String>())
+                .await()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
 

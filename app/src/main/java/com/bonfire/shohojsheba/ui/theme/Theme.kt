@@ -16,30 +16,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-// 1. Define the Light Scheme (Inspired by DiaBite)
+// 1. Define the Light Scheme (Premium)
 private val LightColors = lightColorScheme(
-    primary = PrimaryBlue, // Main buttons, focus state
-    secondary = SupportingTeal, // Secondary buttons, icons, highlights
-    tertiary = PrimaryBlue, // Fallback
-    background = BackgroundLightGray, // Soft background
-    surface = NeutralWhite, // Card background
-    onPrimary = NeutralWhite, // Text on primary blue buttons
-    onSecondary = NeutralWhite, // Text on supporting teal
-    onBackground = TextDarkGray, // Body text color
-    onSurface = TextDarkGray, // Text on white cards
+    primary = PrimaryBlue,
+    secondary = SecondaryTeal,
+    tertiary = PrimaryBlue,
+    background = BackgroundLight,
+    surface = SurfaceLight,
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onBackground = OnBackgroundLight,
+    onSurface = OnSurfaceLight,
 )
 
-// 2. Define the Dark Scheme
+// 2. Define the Dark Scheme (Premium)
 private val DarkColors = darkColorScheme(
-    primary = DarkPrimaryBlue,
-    secondary = DarkSupportingTeal,
-    tertiary = DarkPrimaryBlue,
-    background = DarkBackground,
-    surface = DarkSurface,
-    onPrimary = DarkBackground, // Dark text on light primary
-    onSecondary = DarkBackground,
-    onBackground = DarkOnSurface,
-    onSurface = DarkOnSurface
+    primary = PrimaryBlueDark,
+    secondary = SecondaryTealDark,
+    tertiary = PrimaryBlueDark,
+    background = BackgroundDark,
+    surface = SurfaceDark,
+    onPrimary = BackgroundDark,
+    onSecondary = BackgroundDark,
+    onBackground = OnBackgroundDark,
+    onSurface = OnSurfaceDark
 )
 
 @Composable

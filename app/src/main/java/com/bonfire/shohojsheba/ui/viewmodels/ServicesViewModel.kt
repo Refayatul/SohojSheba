@@ -100,14 +100,20 @@ class ServicesViewModel(
             .launchIn(viewModelScope)
     }
 
+    private var searchJob: kotlinx.coroutines.Job? = null
+
     fun searchServices(query: String, enableAI: Boolean = false) {
+        searchJob?.cancel()
         currentCategory = null
         _aiResponse.value = null
-        repository.searchServices(query)
+        
+        searchJob = repository.searchServices(query)
             .onEach { services ->
                 if (services.isEmpty()) {
                     if (enableAI) {
                         // Auto-trigger AI search when no results found AND AI is enabled
+                        // Stop listening to this flow to prevent overwriting AI results with empty list
+                        searchJob?.cancel()
                         searchWithAI(query)
                     } else {
                          _uiState.value = ServicesUiState.Success(emptyList())
@@ -151,6 +157,17 @@ class ServicesViewModel(
                 _aiResponse.value = "⚠️ Something went wrong: ${e.localizedMessage ?: "Unknown error"}"
                 _uiState.value = ServicesUiState.Success(emptyList())
             }
+        }
+    }
+    fun clearHistory() {
+        viewModelScope.launch {
+            repository.clearAllHistory()
+        }
+    }
+
+    fun clearFavorites() {
+        viewModelScope.launch {
+            repository.clearAllFavorites()
         }
     }
 }
