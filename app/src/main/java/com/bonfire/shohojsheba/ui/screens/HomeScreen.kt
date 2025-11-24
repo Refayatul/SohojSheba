@@ -28,6 +28,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -68,6 +70,10 @@ fun HomeScreen(
     )
     
     val focusRequester = remember { FocusRequester() }
+    
+    // Text selection state for cursor positioning
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue("")) }
+    
     val uiState by viewModel.uiState.collectAsState()
     val aiResponse by viewModel.aiResponse.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -97,11 +103,29 @@ fun HomeScreen(
         }
     }
     
-    // Auto-open keyboard if voice search returns no results
-    LaunchedEffect(uiState) {
-        if (isVoiceInput && uiState is ServicesUiState.Success && (uiState as ServicesUiState.Success).services.isEmpty()) {
+    // Auto-open keyboard after voice input (always, not just when no results)
+    // This allows user to immediately press Enter for AI search
+    // Also move cursor to end of text
+    LaunchedEffect(isVoiceInput) {
+        if (isVoiceInput) {
+            // Update text field value with cursor at the end
+            textFieldValueState = TextFieldValue(
+                text = searchQuery,
+                selection = TextRange(searchQuery.length)
+            )
             focusRequester.requestFocus()
+            keyboardController?.show()
             onVoiceInputReset() // Reset flag so it doesn't trigger again
+        }
+    }
+    
+    // Sync search query changes with TextFieldValue
+    LaunchedEffect(searchQuery) {
+        if (!isVoiceInput && textFieldValueState.text != searchQuery) {
+            textFieldValueState = TextFieldValue(
+                text = searchQuery,
+                selection = TextRange(searchQuery.length)
+            )
         }
     }
 
@@ -113,9 +137,10 @@ fun HomeScreen(
         ) {
             // 🔍 Search bar with voice mic
             TextField(
-                value = searchQuery,
-                onValueChange = {
-                    onSearchQueryChange(it)
+                value = textFieldValueState,
+                onValueChange = { newValue ->
+                    textFieldValueState = newValue
+                    onSearchQueryChange(newValue.text)
                     // No auto-search here! Debounced LaunchedEffect handles it
                 },
                 shape = RoundedCornerShape(50),
