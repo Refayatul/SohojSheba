@@ -81,7 +81,7 @@ data class ChatMessage(
     val timestamp: Long = System.currentTimeMillis()
 )
 
-// --- HELPERS ---
+// --- HELPERS ----
 
 fun Context.findActivity(): ComponentActivity? {
     return when (this) {
