@@ -2,6 +2,9 @@ package com.bonfire.shohojsheba.navigation
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,13 +27,11 @@ fun AppNavGraph(
     currentThemeMode: String,
     onThemeChange: (String) -> Unit,
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
-    authViewModel: AuthViewModel // Added parameter
+    authViewModel: AuthViewModel
 ) {
-    // Removed local AuthViewModel creation. Using passed instance.
     val currentUser by authViewModel.currentUser.collectAsState()
 
-    // Determine startDestination based on auth state - this will update when user logs in/out
-    // Using remember to ensure stable destination reference while allowing updates
+    // Determine startDestination based on auth state
     val startDestination = remember(currentUser) {
         if (currentUser != null) Routes.HOME else Routes.LOGIN
     }
@@ -40,27 +41,86 @@ fun AppNavGraph(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(Routes.LOGIN) {
+        composable(
+            route = Routes.LOGIN,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             LoginScreen(
-                navController = navController, 
+                navController = navController,
                 googleSignInLauncher = googleSignInLauncher,
                 authViewModel = authViewModel
             )
         }
-        composable(Routes.REGISTER) {
+
+        composable(
+            route = Routes.REGISTER,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             RegisterScreen(
                 navController = navController,
                 googleSignInLauncher = googleSignInLauncher,
                 authViewModel = authViewModel
             )
         }
-        composable(Routes.FORGOT_PASSWORD) {
+
+        composable(
+            route = Routes.FORGOT_PASSWORD,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             ForgotPasswordScreen(
                 navController = navController,
                 viewModel = authViewModel
             )
         }
-        composable(Routes.HOME) {
+
+        composable(
+            route = Routes.HOME,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             HomeScreen(
                 navController = navController,
                 searchQuery = searchQuery,
@@ -69,38 +129,186 @@ fun AppNavGraph(
             )
         }
 
-        composable(Routes.DEPARTMENTS) { DepartmentsScreen(navController = navController) }
-        composable(Routes.CITIZEN_SERVICES) {
+        composable(
+            route = Routes.DEPARTMENTS,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
+            DepartmentsScreen(navController = navController)
+        }
+
+        composable(
+            route = Routes.CITIZEN_SERVICES,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             ServiceListScreen(navController, "citizen", R.string.category_citizen)
         }
-        composable(Routes.FARMER_SERVICES) {
+
+        composable(
+            route = Routes.FARMER_SERVICES,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             ServiceListScreen(navController, "farmer", R.string.category_farmer)
         }
-        composable(Routes.ENTREPRENEUR_SERVICES) {
+
+        composable(
+            route = Routes.ENTREPRENEUR_SERVICES,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             ServiceListScreen(navController, "entrepreneur", R.string.category_entrepreneur)
         }
-        composable(Routes.GOVT_OFFICE_SERVICES) {
+
+        composable(
+            route = Routes.GOVT_OFFICE_SERVICES,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             ServiceListScreen(navController, "govt_office", R.string.category_govt_office)
         }
 
-        composable("${Routes.SERVICE_DETAIL}/{serviceId}") { backStackEntry ->
+        composable(
+            route = "${Routes.SERVICE_DETAIL}/{serviceId}",
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) { backStackEntry ->
             val serviceId = backStackEntry.arguments?.getString("serviceId")
             if (!serviceId.isNullOrBlank()) {
-                ServiceDetailScreen(
-                    navController = navController,
-                    serviceId = serviceId
-                )
+                ServiceDetailScreen(navController = navController, serviceId = serviceId)
             }
         }
-        composable(Routes.CHAT) {
+
+        composable(
+            route = Routes.CHAT,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             ChatScreen(navController = navController)
         }
 
-        composable(Routes.HISTORY) { HistoryScreen(navController) }
-        composable(Routes.FAVORITES) { FavoritesScreen(navController) }
+        composable(
+            route = Routes.HISTORY,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
+            HistoryScreen(navController = navController)
+        }
 
-        // --- Updated Settings Route to pass theme data ---
-        composable(Routes.SETTINGS) {
+        composable(
+            route = Routes.FAVORITES,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
+            FavoritesScreen(navController = navController)
+        }
+
+        composable(
+            route = Routes.SETTINGS,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeIn(tween(500))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
+            }
+        ) {
             SettingsScreen(
                 navController = navController,
                 currentThemeMode = currentThemeMode,

@@ -39,15 +39,21 @@ val GradientEnd = Color(0xFF10B981)
 val PrimaryColor = PrimaryBlue
 val SupportingColor = SecondaryTeal
 
-// Category Icon Colors (Refined)
-val IconBgLightGreen = Color(0xFFDCFCE7) // Emerald 100
-val IconTintDarkGreen = Color(0xFF15803D) // Emerald 700
+// Category Icon Colors (Enhanced with better backgrounds)
+val IconBgLightGreen = Color(0xFFD1FAE5) // Emerald 100 - brighter
+val IconTintDarkGreen = Color(0xFF059669) // Emerald 600 - more vibrant
 val IconBgLightBlue = Color(0xFFDBEAFE) // Blue 100
-val IconTintDarkBlue = Color(0xFF1D4ED8) // Blue 700
-val IconBgLightPurple = Color(0xFFF3E8FF) // Purple 100
-val IconTintDarkPurple = Color(0xFF7E22CE) // Purple 700
-val IconBgLightYellow = Color(0xFFFEF9C3) // Yellow 100
-val IconTintDarkYellow = Color(0xFFA16207) // Yellow 700
+val IconTintDarkBlue = Color(0xFF2563EB) // Blue 600 - more vibrant
+val IconBgLightPurple = Color(0xFFEDE9FE) // Purple 100 - softer
+val IconTintDarkPurple = Color(0xFF9333EA) // Purple 600 - more vibrant
+val IconBgLightYellow = Color(0xFFFEF3C7) // Amber 100 - warmer
+val IconTintDarkYellow = Color(0xFFD97706) // Amber 600 - more vibrant
+
+// Category Card Background Colors
+val CategoryCardGreen = Color(0xFFF0FDF4) // Emerald 50
+val CategoryCardBlue = Color(0xFFEFF6FF) // Blue 50
+val CategoryCardPurple = Color(0xFFFAF5FF) // Purple 50
+val CategoryCardYellow = Color(0xFFFFFBEB) // Amber 50
 
 // Splash Screen Colors
 val SplashBackground = Color(0xFFE0F2F1)

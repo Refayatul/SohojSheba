@@ -168,47 +168,43 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            CategoryCard(
-                                title = stringResource(id = R.string.category_citizen),
-                                icon = Icons.Outlined.Person,
-                                iconBgColor = IconBgLightGreen,
-                                iconTintColor = IconTintDarkGreen,
-                                onClick = { navController.navigate(Routes.CITIZEN_SERVICES) }
-                            )
-                        }
-                        Box(modifier = Modifier.weight(1f)) {
-                            CategoryCard(
-                                title = stringResource(id = R.string.category_farmer),
-                                icon = Icons.Outlined.Agriculture,
-                                iconBgColor = IconBgLightBlue,
-                                iconTintColor = IconTintDarkBlue,
-                                onClick = { navController.navigate(Routes.FARMER_SERVICES) }
-                            )
-                        }
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_citizen),
+                            icon = Icons.Outlined.Person,
+                            iconBgColor = IconBgLightGreen,
+                            iconTintColor = IconTintDarkGreen,
+                            onClick = { navController.navigate(Routes.CITIZEN_SERVICES) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_farmer),
+                            icon = Icons.Outlined.Agriculture,
+                            iconBgColor = IconBgLightBlue,
+                            iconTintColor = IconTintDarkBlue,
+                            onClick = { navController.navigate(Routes.FARMER_SERVICES) },
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            CategoryCard(
-                                title = stringResource(id = R.string.category_entrepreneur),
-                                icon = Icons.Outlined.Storefront,
-                                iconBgColor = IconBgLightPurple,
-                                iconTintColor = IconTintDarkPurple,
-                                onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) }
-                            )
-                        }
-                        Box(modifier = Modifier.weight(1f)) {
-                            CategoryCard(
-                                title = stringResource(id = R.string.category_govt_office),
-                                icon = Icons.Outlined.Apartment,
-                                iconBgColor = IconBgLightYellow,
-                                iconTintColor = IconTintDarkYellow,
-                                onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) }
-                            )
-                        }
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_entrepreneur),
+                            icon = Icons.Outlined.Storefront,
+                            iconBgColor = IconBgLightPurple,
+                            iconTintColor = IconTintDarkPurple,
+                            onClick = { navController.navigate(Routes.ENTREPRENEUR_SERVICES) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        CategoryCard(
+                            title = stringResource(id = R.string.category_govt_office),
+                            icon = Icons.Outlined.Apartment,
+                            iconBgColor = IconBgLightYellow,
+                            iconTintColor = IconTintDarkYellow,
+                            onClick = { navController.navigate(Routes.GOVT_OFFICE_SERVICES) },
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
