@@ -8,17 +8,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun ServiceGuideScreen(navController: NavController) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("পাসপোর্ট আবেদন", fontSize = 24.sp, color = MaterialTheme.colorScheme.primary)
+        Text(stringResource(com.bonfire.shohojsheba.R.string.passport_application), fontSize = 24.sp, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text("ধাপ ১: অনলাইনে আবেদন ফর্ম পূরণ করুন।", fontSize = 18.sp)
-        Text("ধাপ ২: প্রয়োজনীয় ডকুমেন্ট আপলোড করুন।", fontSize = 18.sp)
-        Text("ধাপ ৩: ফি প্রদান করুন এবং সময় নির্ধারণ করুন।", fontSize = 18.sp)
-        Text("ধাপ ৪: অফিসে গিয়ে যাচাই সম্পন্ন করুন।", fontSize = 18.sp)
+        Text(stringResource(com.bonfire.shohojsheba.R.string.guide_step_1), fontSize = 18.sp)
+        Text(stringResource(com.bonfire.shohojsheba.R.string.guide_step_2), fontSize = 18.sp)
+        Text(stringResource(com.bonfire.shohojsheba.R.string.guide_step_3), fontSize = 18.sp)
+        Text(stringResource(com.bonfire.shohojsheba.R.string.guide_step_4), fontSize = 18.sp)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -26,7 +27,7 @@ fun ServiceGuideScreen(navController: NavController) {
             onClick = { navController.navigate("offline") },
             shape = RoundedCornerShape(16.dp)
         ) {
-            Text("অফলাইনে সেবা দেখুন")
+            Text(stringResource(com.bonfire.shohojsheba.R.string.view_offline_service))
         }
     }
 }

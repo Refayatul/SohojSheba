@@ -39,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.bonfire.shohojsheba.R
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -63,6 +65,7 @@ fun ServiceDetailScreen(
     val context = LocalContext.current
     val locale = LocalLocale.current
     val viewModel: ServiceDetailViewModel = viewModel(
+        key = "$serviceId-${locale.language}",
         factory = ViewModelFactory(context, serviceId = serviceId)
     )
 
@@ -107,7 +110,7 @@ fun ServiceDetailScreen(
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
+                contentDescription = stringResource(R.string.back_content_desc),
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -133,7 +136,7 @@ fun ServiceDetailScreen(
         ) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                contentDescription = "Favorite",
+                contentDescription = stringResource(R.string.favorite_content_desc),
                 tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
             )
         }
@@ -209,7 +212,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                     if (index < imageUrls.size) {
                         AsyncImage(
                             model = imageUrls[index],
-                            contentDescription = "Step ${index + 1} Image",
+                            contentDescription = stringResource(R.string.step_image_desc, index + 1),
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -223,7 +226,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                     if (index < instructionBlocks.size) {
                         val blockText = instructionBlocks[index].trim()
                         val annotatedText = buildAnnotatedString {
-                            val stepKeyword = if (locale.language == "bn") "ধাপ" else "Step"
+                            val stepKeyword = stringResource(R.string.step_label)
                             val delimiter = "—"
                             val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*[$delimiter:-])")
                             val match = stepRegex.find(blockText)
@@ -284,7 +287,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
     ) {
         InfoRow(
             icon = Icons.Default.Description,
-            title = if (locale.language == "bn") "প্রয়োজনীয় কাগজপত্র" else "Required Documents",
+            title = stringResource(R.string.required_documents),
             content = requiredDocuments,
             iconColor = Color(0xFF8E24AA), // Purple
             iconBg = Color(0xFFF3E5F5)
@@ -296,7 +299,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
         
         InfoRow(
             icon = Icons.Default.Schedule,
-            title = if (locale.language == "bn") "প্রক্রিয়াকরণ সময়" else "Processing Time",
+            title = stringResource(R.string.processing_time),
             content = processingTime,
             iconColor = Color(0xFFF9A825), // Yellow/Orange
             iconBg = Color(0xFFFFFDE7)
@@ -308,7 +311,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
         
         InfoRow(
             icon = Icons.Default.Phone,
-            title = if (locale.language == "bn") "যোগাযোগ" else "Contact Info",
+            title = stringResource(R.string.contact_info),
             content = contactInfo,
             iconColor = Color(0xFF2E7D32), // Green
             iconBg = Color(0xFFE8F5E9)
@@ -389,7 +392,7 @@ fun AnnotatedString.handleLinkClick(offset: Int, context: Context, uriHandler: U
             }
             context.startActivity(intent)
         } catch(e: Exception) { 
-            Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.no_email_app), Toast.LENGTH_SHORT).show()
             e.printStackTrace() 
         }
     }
@@ -401,7 +404,7 @@ fun AnnotatedString.handleLinkClick(offset: Int, context: Context, uriHandler: U
             }
             context.startActivity(intent)
         } catch(e: Exception) { 
-            Toast.makeText(context, "No dialer app found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.no_dialer_app), Toast.LENGTH_SHORT).show()
             e.printStackTrace() 
         }
     }

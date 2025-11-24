@@ -203,4 +203,106 @@
         </ul>
     ]]></string>
 
+    <!-- Missing Strings -->
+    <string name="search_content_desc">অনুসন্ধান</string>
+    <string name="voice_search_content_desc">ভয়েস অনুসন্ধান</string>
+    <string name="view_all_history">সব ইতিহাস দেখুন</string>
+    <string name="searching_ai">এআই দিয়ে অনুসন্ধান করা হচ্ছে...</string>
+    <string name="no_local_results">কোনো স্থানীয় ফলাফল পাওয়া যায়নি।</string>
+    <string name="press_enter_ai">এআই অ্যাসিস্ট্যান্ট দিয়ে খুঁজতে এন্টার চাপুন।</string>
+    
+    <string name="attachment_default">সংযুক্তি</string>
+    <string name="voice_input_error">ভয়েস ইনপুট উপলব্ধ নয়</string>
+    <string name="image_filename">ছবি</string>
+    <string name="sent_image">একটি ছবি পাঠিয়েছে</string>
+    <string name="sent_pdf">একটি পিডিএফ পাঠিয়েছে</string>
+    <string name="photo">ছবি</string>
+    <string name="pdf_document">পিডিএফ ডকুমেন্ট</string>
+    <string name="voice_content_desc">ভয়েস</string>
+    <string name="send_content_desc">পাঠান</string>
+    <string name="chat_intro">সরকারি সেবা সম্পর্কে আমাকে যা খুশি জিজ্ঞাসা করুন</string>
+    <string name="attach_content_desc">সংযুক্ত করুন</string>
+    <string name="remove_content_desc">সরান</string>
+    <string name="copy_content_desc">কপি করুন</string>
+    <string name="ai_content_desc">এআই</string>
+    <string name="navigate_back_content_desc">ফিরে যান</string>
+
+    <string name="back_content_desc">ফিরে যান</string>
+    <string name="source_label">উৎস: %1$s</string>
+    <string name="no_services_found">কোনো সেবা পাওয়া যায়নি।</string>
+    <string name="retry">পুনরায় চেষ্টা করুন</string>
+    
+    <string name="clear_all_history_content_desc">সব ইতিহাস মুছুন</string>
+    <string name="no_history_yet">এখনো কোনো ইতিহাস নেই।</string>
+    
+    <string name="clear_all_favorites_content_desc">সব প্রিয় মুছুন</string>
+    <string name="no_favorites_yet">এখনো কোনো প্রিয় নেই।</string>
+
+    <string name="welcome_title">সহজ সেবায় স্বাগতম</string>
+    <string name="password_label">পাসওয়ার্ড</string>
+    <string name="hide_password_desc">পাসওয়ার্ড লুকান</string>
+    <string name="show_password_desc">পাসওয়ার্ড দেখান</string>
+    <string name="login_button">লগইন</string>
+    <string name="google_signin_button">গুগল দিয়ে সাইন ইন করুন</string>
+    <string name="google_signin_error">গুগল সাইন-ইন উপলব্ধ নয়</string>
+    <string name="forgot_password_link">পাসওয়ার্ড ভুলে গেছেন?</string>
+    <string name="register_link">অ্যাকাউন্ট নেই? নিবন্ধন করুন</string>
+
+    <string name="create_account_title">অ্যাকাউন্ট তৈরি করুন</string>
+    <string name="full_name_label">পুরো নাম</string>
+    <string name="confirm_password_label">পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="passwords_mismatch">পাসওয়ার্ড মিলছে না</string>
+    <string name="register_button">নিবন্ধন করুন</string>
+    <string name="google_signup_button">গুগল দিয়ে সাইন আপ করুন</string>
+    <string name="login_link">ইতিমধ্যে একটি অ্যাকাউন্ট আছে? লগইন</string>
+
+    <string name="back_to_login_desc">লগইনে ফিরে যান</string>
+    <string name="forgot_password_title">পাসওয়ার্ড ভুলে গেছেন</string>
+    <string name="forgot_password_subtitle">পাসওয়ার্ড রিসেট করতে আপনার ইমেইল দিন</string>
+    <string name="reset_email_sent">যদি এই ইমেইলে কোনো অ্যাকাউন্ট থাকে, তবে আপনি শীঘ্রই একটি পাসওয়ার্ড রিসেট লিংক পাবেন।\n\nঅনুগ্রহ করে আপনার ইনবক্স চেক করুন।</string>
+    <string name="back_to_login_button">লগইনে ফিরে যান</string>
+    <string name="email_address_label">ইমেইল ঠিকানা</string>
+    <string name="enter_registered_email">আপনার নিবন্ধিত ইমেইল দিন</string>
+    <string name="email_icon_desc">ইমেইল আইকন</string>
+    <string name="valid_email_required">সঠিক ইমেইল প্রয়োজন</string>
+    <string name="try_again">আবার চেষ্টা করুন</string>
+    <string name="reset_password_button">পাসওয়ার্ড রিসেট করুন</string>
+
+    <string name="favorite_content_desc">প্রিয়</string>
+    <string name="step_image_desc">ধাপ %1$d ছবি</string>
+    <string name="step_label">ধাপ</string>
+    <string name="required_documents">প্রয়োজনীয় কাগজপত্র</string>
+    <string name="processing_time">প্রক্রিয়াকরণ সময়</string>
+    <string name="contact_info">যোগাযোগ</string>
+    <string name="no_email_app">কোনো ইমেইল অ্যাপ পাওয়া যায়নি</string>
+    <string name="no_dialer_app">কোনো ডায়ালার অ্যাপ পাওয়া যায়নি</string>
+
+    <string name="passport_application">পাসপোর্ট আবেদন</string>
+    <string name="guide_step_1">ধাপ ১: অনলাইনে আবেদন ফর্ম পূরণ করুন।</string>
+    <string name="guide_step_2">ধাপ ২: প্রয়োজনীয় ডকুমেন্ট আপলোড করুন।</string>
+    <string name="guide_step_3">ধাপ ৩: ফি প্রদান করুন এবং সময় নির্ধারণ করুন।</string>
+    <string name="guide_step_4">ধাপ ৪: অফিসে গিয়ে যাচাই সম্পন্ন করুন।</string>
+    <string name="view_offline_service">অফলাইনে সেবা দেখুন</string>
+
+    <!-- Toast Messages -->
+    <string name="fill_all_fields">অনুগ্রহ করে সব তথ্য দিন</string>
+    <string name="registration_successful">নিবন্ধন সফল হয়েছে</string>
+    <string name="registration_failed">নিবন্ধন ব্যর্থ হয়েছে</string>
+    <string name="enter_email_password">অনুগ্রহ করে ইমেইল এবং পাসওয়ার্ড দিন</string>
+    <string name="login_successful">লগইন সফল হয়েছে</string>
+    <string name="login_failed">লগইন ব্যর্থ হয়েছে</string>
+    <string name="invalid_google_token">অবৈধ গুগল টোকেন</string>
+    <string name="google_signin_successful">গুগল সাইন-ইন সফল হয়েছে</string>
+    <string name="google_signin_failed">গুগল সাইন-ইন ব্যর্থ হয়েছে</string>
+    <string name="logout_successful">লগআউট সফল হয়েছে</string>
+    <string name="logout_failed">লগআউট ব্যর্থ হয়েছে</string>
+    <string name="profile_update_successful">প্রোফাইল আপডেট সফল হয়েছে</string>
+    <string name="update_failed">আপডেট ব্যর্থ হয়েছে</string>
+    <string name="enter_valid_email">অনুগ্রহ করে একটি সঠিক ইমেইল দিন</string>
+    <string name="reset_email_sent_success">পাসওয়ার্ড রিসেট ইমেইল সফলভাবে পাঠানো হয়েছে</string>
+    <string name="reset_email_failed">রিসেট ইমেইল পাঠাতে ব্যর্থ হয়েছে</string>
+
+    <!-- Chat Screen -->
+    <string name="chat_placeholder">সেবা সম্পর্কে আমাকে যেকোনো কিছু জিজ্ঞাসা করুন</string>
+
 </resources>

@@ -190,15 +190,10 @@ fun ServiceRow(
     val cardColor = if (isDarkTheme) ServiceCardDark else ServiceCardLight
 
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .scale(scale)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onClick()
-            },
+            .scale(scale),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = cardColor

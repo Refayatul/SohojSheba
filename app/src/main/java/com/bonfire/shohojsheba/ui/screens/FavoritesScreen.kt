@@ -61,7 +61,7 @@ fun FavoritesScreen(navController: NavController) {
                         IconButton(onClick = { viewModel.clearFavorites() }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Clear All Favorites",
+                                contentDescription = stringResource(R.string.clear_all_favorites_content_desc),
                                 tint = MaterialTheme.colorScheme.error
                             )
                         }

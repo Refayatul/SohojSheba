@@ -53,7 +53,7 @@ fun ServiceListScreen(
     val context = LocalContext.current
     val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
-        key = category,
+        key = "$category-${locale.language}",
         factory = ViewModelFactory(context)
     )
 
@@ -125,7 +125,7 @@ fun ServiceListScreen(
                             onClick = { viewModel.loadServicesByCategory(category) },
                             modifier = Modifier.align(Alignment.Center)
                         ) {
-                            Text("Retry")
+                            Text(stringResource(R.string.retry))
                         }
                     }
                 }

@@ -240,11 +240,11 @@ fun HomeScreen(
                         
                         // "View All" link
                         TextButton(
-                            onClick = { navController.navigate(Routes.HISTORY) },
-                            modifier = Modifier.align(Alignment.End)
-                        ) {
-                            Text("View All History")
-                        }
+                    onClick = { navController.navigate(Routes.HISTORY) },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(stringResource(R.string.view_all_history))
+                }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 }

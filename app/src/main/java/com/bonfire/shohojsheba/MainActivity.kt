@@ -126,12 +126,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             val googleSignInState by authViewModel.googleSignInState.collectAsState()
             val isAuthCheckComplete by authViewModel.isAuthCheckComplete.collectAsState()
 
-            // Listen for toast messages from AuthViewModel
-            LaunchedEffect(Unit) {
-                authViewModel.toastMessage.collectLatest { message ->
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                }
-            }
+
 
             // Navigate when authentication succeeds
             LaunchedEffect(authState, googleSignInState) {
@@ -162,13 +157,13 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                             // Use authViewModel obtained at composable level
                             authViewModel.googleSignIn(idToken)
                         } else {
-                            Toast.makeText(context, "Google Sign-In failed: No ID token received", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "Google Sign-In failed: No account found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(context, "Google Sign-In failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -186,9 +181,15 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             ShohojShebaTheme(darkTheme = useDarkTheme) {
                 ProvideLocale(locale = locale) {
                     CompositionLocalProvider(
-                        LocalLocale provides locale,
                         LocalOnLocaleChange provides onLocaleChange
                     ) {
+                        val localizedContext = LocalContext.current
+                        // Listen for toast messages from AuthViewModel using localized context
+                        LaunchedEffect(Unit) {
+                            authViewModel.toastMessage.collectLatest { message ->
+                                Toast.makeText(localizedContext, message.asString(localizedContext), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                         if (!isAuthCheckComplete) {
                             // Show Splash Screen / Loading Indicator
                             Box(
@@ -205,7 +206,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                             val currentUser by authViewModel.currentUser.collectAsState()
 
                             // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
-                            val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER
+                            val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER || currentRoute == Routes.FORGOT_PASSWORD
                             val isSettingsScreen = currentRoute == Routes.SETTINGS
                             val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
                             val isHomeScreen = currentRoute == Routes.HOME
@@ -264,12 +265,14 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                     onSearchQueryChange = { searchQuery = it },
                                     onVoiceSearchClick = {
                                         try {
+                                            // Use current app locale for voice search
+                                            val voiceLocale = if (locale.language == "bn") "bn-BD" else "en-US"
                                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                                                 putExtra(
                                                     RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                                                     RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
                                                 )
-                                                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD")
+                                                putExtra(RecognizerIntent.EXTRA_LANGUAGE, voiceLocale)
                                             }
                                             voiceLauncher.launch(intent)
                                         } catch (e: Exception) {

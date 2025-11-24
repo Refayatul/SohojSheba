@@ -6,6 +6,7 @@ import com.bonfire.shohojsheba.BuildConfig
 import com.bonfire.shohojsheba.data.database.entities.Service
 import com.bonfire.shohojsheba.data.repositories.Repository
 import com.bonfire.shohojsheba.util.NetworkStatusTracker
+import com.bonfire.shohojsheba.utils.fuzzyFilter
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -109,7 +110,22 @@ class ServicesViewModel(
         
         searchJob = repository.searchServices(query)
             .onEach { services ->
-                if (services.isEmpty()) {
+                // Apply fuzzy matching to rank results by relevance
+                val fuzzyResults = services.fuzzyFilter(
+                    query = query,
+                    minScore = 0.3  // Minimum 30% similarity
+                ) { service ->
+                    // Search in multiple fields
+                    listOf(
+                        service.title.en,
+                        service.title.bn,
+                        service.subtitle.en,
+                        service.subtitle.bn,
+                        service.searchKeywords
+                    )
+                }
+                
+                if (fuzzyResults.isEmpty()) {
                     if (enableAI) {
                         // Auto-trigger AI search when no results found AND AI is enabled
                         // Stop listening to this flow to prevent overwriting AI results with empty list
@@ -119,7 +135,8 @@ class ServicesViewModel(
                          _uiState.value = ServicesUiState.Success(emptyList())
                     }
                 } else {
-                    _uiState.value = ServicesUiState.Success(services)
+                    // Return fuzzy-matched and sorted results
+                    _uiState.value = ServicesUiState.Success(fuzzyResults)
                 }
             }
             .catch { e -> _uiState.value = ServicesUiState.Error(e.message ?: "An unknown error occurred") }

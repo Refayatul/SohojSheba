@@ -681,7 +681,7 @@ fun EmptyChatState(onSuggestionClick: (String) -> Unit) {
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "Ask me anything about government services",
+            text = stringResource(R.string.chat_placeholder),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center

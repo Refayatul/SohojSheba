@@ -61,7 +61,7 @@ fun HistoryScreen(navController: NavController) {
                         IconButton(onClick = { viewModel.clearHistory() }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Clear All History",
+                                contentDescription = stringResource(R.string.clear_all_history_content_desc),
                                 tint = MaterialTheme.colorScheme.error
                             )
                         }

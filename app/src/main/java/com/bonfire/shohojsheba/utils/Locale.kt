@@ -15,11 +15,10 @@ val LocalOnLocaleChange = staticCompositionLocalOf<(Locale) -> Unit> { error("No
 @Composable
 fun ProvideLocale(locale: Locale, content: @Composable () -> Unit) {
     val context = LocalContext.current
-    val rememberLocale = remember { locale }
-    val localizedContext = remember(context, rememberLocale) {
-        context.createLocaleWrapper(rememberLocale)
+    val localizedContext = remember(context, locale) {
+        context.createLocaleWrapper(locale)
     }
-    CompositionLocalProvider(LocalContext provides localizedContext, LocalLocale provides rememberLocale) {
+    CompositionLocalProvider(LocalContext provides localizedContext, LocalLocale provides locale) {
         content()
     }
 }
