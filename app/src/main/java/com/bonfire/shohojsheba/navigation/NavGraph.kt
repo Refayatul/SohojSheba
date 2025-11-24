@@ -126,7 +126,8 @@ fun AppNavGraph(
                 navController = navController,
                 searchQuery = searchQuery,
                 onSearchQueryChange = onSearchQueryChange,
-                onVoiceSearchClick = onVoiceSearchClick
+                onVoiceSearchClick = onVoiceSearchClick,
+                locale = locale
             )
         }
 
@@ -237,7 +238,7 @@ fun AppNavGraph(
         ) { backStackEntry ->
             val serviceId = backStackEntry.arguments?.getString("serviceId")
             if (!serviceId.isNullOrBlank()) {
-                ServiceDetailScreen(navController = navController, serviceId = serviceId)
+                ServiceDetailScreen(navController = navController, serviceId = serviceId, locale = locale)
             }
         }
 
@@ -274,7 +275,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            HistoryScreen(navController = navController)
+            HistoryScreen(navController = navController, locale = locale)
         }
 
         composable(
@@ -292,7 +293,7 @@ fun AppNavGraph(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(500, easing = FastOutSlowInEasing)) + fadeOut(tween(500))
             }
         ) {
-            FavoritesScreen(navController = navController)
+            FavoritesScreen(navController = navController, locale = locale)
         }
 
         composable(

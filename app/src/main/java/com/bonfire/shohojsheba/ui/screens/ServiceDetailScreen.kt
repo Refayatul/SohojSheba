@@ -61,16 +61,16 @@ import kotlin.math.max
 @Composable
 fun ServiceDetailScreen(
     navController: NavController,
-    serviceId: String
+    serviceId: String,
+    locale: Locale  // Add locale parameter
 ) {
     // DEBUG: Log when screen is composed
     Log.d("ServiceDetailScreen", "=== COMPOSING ServiceDetailScreen ===")
     Log.d("ServiceDetailScreen", "Service ID: $serviceId")
     
     val context = LocalContext.current
-    val locale = LocalLocale.current
     
-    Log.d("ServiceDetailScreen", "Locale: ${locale.language} (${locale.displayLanguage})")
+   Log.d("ServiceDetailScreen", "Locale: ${locale.language} (${locale.displayLanguage})")
     
     val viewModelKey = "$serviceId-${locale.language}"
     Log.d("ServiceDetailScreen", "ViewModel Key: $viewModelKey")

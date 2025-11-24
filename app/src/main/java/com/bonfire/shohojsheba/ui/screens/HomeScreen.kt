@@ -46,6 +46,7 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesUiState
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -53,11 +54,11 @@ fun HomeScreen(
     navController: NavController,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onVoiceSearchClick: () -> Unit
+    onVoiceSearchClick: () -> Unit,
+    locale: Locale  // Add locale parameter
 ) {
     val context = LocalContext.current
     val appScope = rememberCoroutineScope()
-    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context, appScope = appScope)
     )

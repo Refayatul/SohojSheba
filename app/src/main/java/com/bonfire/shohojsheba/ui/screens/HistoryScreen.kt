@@ -37,12 +37,12 @@ import com.bonfire.shohojsheba.navigation.Routes
 import com.bonfire.shohojsheba.ui.components.ServiceRow
 import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen(navController: NavController) {
+fun HistoryScreen(navController: NavController, locale: Locale) {
     val context = LocalContext.current
-    val locale = LocalLocale.current
     val viewModel: ServicesViewModel = viewModel(
         factory = ViewModelFactory(context)
     )
