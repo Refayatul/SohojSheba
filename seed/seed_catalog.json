@@ -223,6 +223,164 @@
       ],
       "images": [],
       "imageNames": []
+    },
+    {
+      "id": "entrepreneur_trade_license",
+      "title": {
+        "en": "Trade License",
+        "bn": "ট্রেড লাইসেন্স"
+      },
+      "subtitle": {
+        "en": "Online application via prottoyon.gov.bd",
+        "bn": "prottoyon.gov.bd এর মাধ্যমে অনলাইন আবেদন"
+      },
+      "iconName": "ic_entrepreneur_trade_license",
+      "category": "entrepreneur",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "trade",
+        "license",
+        "business",
+        "shop",
+        "prottoyon",
+        "licence",
+        "ব্যবসা",
+        "লাইসেন্স"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_13.webp"
+      ],
+      "imageNames": [
+        "entrepreneur_trade_license_1",
+        "entrepreneur_trade_license_2",
+        "entrepreneur_trade_license_3",
+        "entrepreneur_trade_license_4",
+        "entrepreneur_trade_license_5",
+        "entrepreneur_trade_license_6",
+        "entrepreneur_trade_license_7",
+        "entrepreneur_trade_license_8",
+        "entrepreneur_trade_license_9",
+        "entrepreneur_trade_license_10",
+        "entrepreneur_trade_license_11",
+        "entrepreneur_trade_license_12",
+        "entrepreneur_trade_license_13"
+      ]
+    },
+    {
+      "id": "govt_office_btrc_complain",
+      "title": {
+        "en": "BTRC Complain",
+        "bn": "বিটিআরসিতে অভিযোগ"
+      },
+      "subtitle": {
+        "en": "File a complaint online",
+        "bn": "অনলাইনে অভিযোগ দায়ের করুন"
+      },
+      "iconName": "ic_govt_office_btrc_complain",
+      "category": "govt_office",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "btrc",
+        "complain",
+        "telecom",
+        "internet",
+        "mobile",
+        "অভিযোগ",
+        "বিটিআরসি"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_6.webp"
+      ],
+      "imageNames": [
+        "govt_office_btrc_reports_1",
+        "govt_office_btrc_reports_2",
+        "govt_office_btrc_reports_3",
+        "govt_office_btrc_reports_4",
+        "govt_office_btrc_reports_5",
+        "govt_office_btrc_reports_6"
+      ]
+    },
+
+    {
+      "id": "entrepreneur_ebin_vat_registration",
+      "title": {
+        "en": "e-BIN (VAT) Registration",
+        "bn": "ই-বিন (ভ্যাট) নিবন্ধন"
+      },
+      "subtitle": {
+        "en": "Online VAT registration steps",
+        "bn": "অনলাইনে ভ্যাট নিবন্ধনের ধাপসমূহ"
+      },
+      "iconName": "ic_entrepreneur_ebin_vat",
+      "category": "entrepreneur",
+      "versionAdded": 1,
+      "lastUpdated": 1730947200000,
+      "searchKeywords": [
+        "vat",
+        "bin",
+        "tax",
+        "business",
+        "nbr",
+        "ভ্যাট",
+        "ট্যাক্স"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_13.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_14.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_15.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_16.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_17.webp"
+      ],
+      "imageNames": [
+        "entrepreneur_e-BIN_Registration_1",
+        "entrepreneur_e-BIN_Registration_2",
+        "entrepreneur_e-BIN_Registration_3",
+        "entrepreneur_e-BIN_Registration_4",
+        "entrepreneur_e-BIN_Registration_5",
+        "entrepreneur_e-BIN_Registration_6",
+        "entrepreneur_e-BIN_Registration_7",
+        "entrepreneur_e-BIN_Registration_8",
+        "entrepreneur_e-BIN_Registration_9",
+        "entrepreneur_e-BIN_Registration_10",
+        "entrepreneur_e-BIN_Registration_11",
+        "entrepreneur_e-BIN_Registration_12",
+        "entrepreneur_e-BIN_Registration_13",
+        "entrepreneur_e-BIN_Registration_14",
+        "entrepreneur_e-BIN_Registration_15",
+        "entrepreneur_e-BIN_Registration_16",
+        "entrepreneur_e-BIN_Registration_17"
+      ]
     }
   ],
   "service_details": [
@@ -296,8 +454,7 @@
     {
       "serviceId": "citizen_renew_passport",
       "instructions": {
-        "en": "Step 1 — Search on Google\n● Type: epassport bd\n● Click the first result: “E-Passport Online Registration Portal”.\n\nStep 2 — Homepage, click “APPLY ONLINE”\n● Click the green APPLY ONLINE button on the left.\n\nStep 3 — Region/Office Availability\n● Question: “Are you applying from Bangladesh?” → Yes.\n● Select your district (example: Tangail).\n● Select your nearest police station (example: Ghatail).\n● Note the Regional Passport Office shown.\n● Click Continue.\n\nStep 4 — Enter Email\n● Enter your email address.\n● Check “I am human” (reCAPTCHA).\n● Click Continue.\n\nStep 5 — Email Verification Screen\n● Confirm email is correct.\n● Click Continue.\n\nStep 6 — Account Information\n● Enter Password (min 6 characters: uppercase, lowercase, numbers).\n● Enter Full Name (as per NID/BRC).\n● Optional: Given Name.\n● Surname: last/family name.\n\nStep 7 — Mobile Number\n● Select country code: +880.\n● Enter mobile number.\n● Check “I am human”.\n\nStep 8 — Create Account\n● Click Create Account button.\n● Note: Max 6 applications per account.\n\nStep 9 — Account Activation\n● Click the activation link sent to your email.\n● Resend if not received.\n\nStep 10 — Sign In\n● Enter Email and Password.\n● Check “I am human”.\n● Use Forgot Password? if needed.\n\nStep 11 — Sign In Confirm\n● Click Sign In.\n\nStep 12 — Dashboard\n● Click “Apply for a new e-Passport”.\n● Optional: Review profile under Account.\n\nStep 13 — Passport Type\n● Ordinary Passport for normal users.\n● Official Passport only for government officials.\n● Click Save and Continue.\n\nStep 14 — Personal Information\n● Select “I apply for myself”.\n● Select gender.\n● Enter Full Name / Given Name / Surname exactly.\n● Ensure spelling matches previous documents.\n\nStep 15 — Profession\n● Select profession (PRIVATE SERVICE / STUDENT / BUSINESS etc.).\n● Enter correct information for verification.\n\nStep 16 — Religion & Country Code\n● Select religion.\n● Country code +880.\n● Verify mobile number and other fields.\n\nStep 17 — Birth Information Part 1\n● Select country of birth.\n● Verify personal info matches documents.\n\nStep 18 — Birth Information Part 2 & Citizenship\n● Select district of birth.\n● Select date of birth (match NID/passport).\n● Citizenship type: By Birth.\n● Click Save and Continue.\n\nStep 19 — Permanent Address\n● Select district, City/Village/House, Road/Block/Sector (optional), Post office, Postal code, Police station.\n● If changed, police verification may be required.\n\nStep 20 — Present Address\n● Check “Same as Permanent” if applicable.\n● Otherwise, fill manually.\n● Regional Passport Office will appear.\n\nStep 21 — Regional Passport Office (RPO)\n● Select appropriate RPO.\n● Click Save and Continue.\n\nStep 22 — National ID Verification\n● Enter NID number.\n● Verify in NID system.\n● Indicate if you have previous passports (MRP/ePP/None).\n\nStep 23 — Reissue Reason & Old Passport Info\n● Select reason: EXPIRED, PAGES EXHAUSTED, DAMAGED, etc.\n● Enter previous passport number.\n● Enter issue and expiry dates.\n\nStep 24 — Other-country Passport (if any)\n● Indicate yes/no for other country passports.\n● Provide info if yes.\n\nStep 25 — Parental Information\n● Father: Name, Profession, Nationality, NID (optional).\n● Mother: Name, Profession, Nationality, NID (optional).\n● Legal Guardian info only if applicable.\n\nStep 26 — Spouse Information\n● Select marital status.\n● Enter spouse’s Name, Profession, Nationality, NID (optional).\n\nStep 27 — Emergency Contact\n● Select relationship.\n● Enter Name.\n● Fill Address fields: Country, District, City/Village/House, Road/Block/Sector (optional), Post office, Postal code, Police station.\n● Click Save and Continue.\n\nStep 28 — Passport Options\n● Select number of pages (48/64).\n● Select validity (5/10 years).\n● Review price.\n● Click Save and Continue.\n\nStep 29 — Delivery Options & Appointment\n● Choose Regular / Express / Super Express delivery.\n● Price updates automatically.\n● Click Save and Continue.\n\nStep 30 — Declaration & Payment\n● Check declaration box.\n● Click Confirm and proceed to payment.\n● Pay via EkPay/Card/bKash/Nagad/Rocket/Upay.\n● Complete OTP/PIN verification.\n● After payment, select appointment date/time.\n● Download summary/receipt.\n\nStep 31 — Confirm Submission\n● Review status (Submitted).\n● Download application form for printing.\n\nStep 32 — Review All Information\n● Double-check all entries.\n● Ensure names/dates match official documents.\n\nStep 33 — Passport Photos\n● Ensure photos match e-passport requirements.\n\nStep 34 — Supporting Documents\n● Upload all required documents.\n● Verify file format and size.\n\nStep 35 — Payment Confirmation\n● Confirm successful payment.\n● Retain transaction ID.\n\nStep 36 — Appointment Confirmation\n● Confirm selected date/time for passport collection.\n\nStep 37 — Track Application\n● Use portal to track status.\n\nStep 38 — Regional Passport Office Visit\n● Visit RPO as per appointment.\n\nStep 39 — Verification\n● Officials will verify all submitted info.\n\nStep 40 — Biometric Capture\n● Fingerprints and photo will be taken.\n\nStep 41 — Final Submission at RPO\n● Officials confirm all details.\n● Sign where necessary.\n\nStep 42 — Receive Acknowledgment\n● Obtain receipt of application submission.\n\nStep 43 — Passport Processing\n● Wait for processing (portal will update status).\n\nStep 44 — Payment Status Check\n● Verify transaction completed on portal.\n\nStep 45 — Passport Printed\n● Portal will notify when passport is printed.\n\nStep 46 — Passport Delivery\n● Passport will be delivered as per chosen method.\n\nStep 47 — Confirmation of Receipt\n● Confirm receipt of passport.\n● Sign acknowledgment.\n\nStep 48 — End of Process\n● Keep all documents for future reference.\n● Process complete.",
-        "bn": "ধাপ ১ — গুগলে সার্চ করুন\n● টাইপ করুন: epassport bd\n● প্রথম ফলাফলে ক্লিক করুন: “ই-পাসপোর্ট অনলাইন রেজিস্ট্রেশন পোর্টাল”।\n\nধাপ ২ — হোমপেজে “APPLY ONLINE” এ ক্লিক করুন\n● বাম দিকে সবুজ APPLY ONLINE বোতামে ক্লিক করুন।\n\nধাপ ৩ — অঞ্চল/অফিসের প্রাপ্যতা\n● প্রশ্ন: “আপনি কি বাংলাদেশ থেকে আবেদন করছেন?” → হ্যাঁ।\n● আপনার জেলা নির্বাচন করুন (উদাহরণ: টাঙ্গাইল)।\n● আপনার নিকটতম থানা নির্বাচন করুন (উদাহরণ: ঘাটাইল)।\n● প্রদর্শিত আঞ্চলিক পাসপোর্ট অফিস নোট করুন।\n● Continue ক্লিক করুন।\n\nধাপ ৪ — ইমেল লিখুন\n● আপনার ইমেল ঠিকানা লিখুন।\n● “I am human” (reCAPTCHA) চেক করুন।\n● Continue ক্লিক করুন।\n\nধাপ ৫ — ইমেল যাচাইকরণ স্ক্রিন\n● ইমেল সঠিক কিনা তা নিশ্চিত করুন।\n● Continue ক্লিক করুন।\n\nধাপ ৬ — অ্যাকাউন্টের তথ্য\n● পাসওয়ার্ড লিখুন (ন্যূনতম ৬ অক্ষর: বড় হাতের, ছোট হাতের, সংখ্যা)।\n● পুরো নাম লিখুন (এনআইডি/বিআরসি অনুযায়ী)।\n● ঐচ্ছিক: প্রদত্ত নাম।\n● বংশগত নাম: শেষ/পারিবারিক নাম।\n\nধাপ ৭ — মোবাইল নম্বর\n● দেশের কোড নির্বাচন করুন: +880।\n● মোবাইল নম্বর লিখুন।\n● “I am human” চেক করুন।\n\nধাপ ৮ — অ্যাকাউন্ট তৈরি করুন\n● Create Account বোতামে ক্লিক করুন।\n● দ্রষ্টব্য: প্রতি অ্যাকাউন্টে সর্বোচ্চ ৬টি আবেদন করা যাবে।\n\nধাপ ৯ — অ্যাকাউন্ট সক্রিয়করণ\n● আপনার ইমেলে পাঠানো অ্যাক্টিভেশন লিঙ্কে ক্লিক করুন।\n● না পেলে আবার পাঠান।\n\nধাপ ১০ — সাইন ইন করুন\n● ইমেল এবং পাসওয়ার্ড লিখুন।\n● “I am human” চেক করুন।\n● প্রয়োজনে Forgot Password? ব্যবহার করুন।\n\nধাপ ১১ — সাইন ইন নিশ্চিত করুন\n● Sign In এ ক্লিক করুন।\n\nধাপ ১২ — ড্যাশবোর্ড\n● “Apply for a new e-Passport” এ ক্লিক করুন।\n● ঐচ্ছিক: Account এর অধীনে প্রোফাইল পর্যালোচনা করুন।\n\nধাপ ১৩ — পাসপোর্টের ধরন\n● সাধারণ ব্যবহারকারীদের জন্য Ordinary Passport।\n● শুধুমাত্র সরকারি কর্মকর্তাদের জন্য Official Passport।\n● Save and Continue ক্লিক করুন।\n\nধাপ ১৪ — ব্যক্তিগত তথ্য\n● “I apply for myself” নির্বাচন করুন।\n● লিঙ্গ নির্বাচন করুন।\n● পুরো নাম / প্রদত্ত নাম / বংশগত নাম সঠিকভাবে লিখুন।\n● নিশ্চিত করুন যে বানান পূর্ববর্তী নথির সাথে মেলে।\n\nধাপ ১৫ — পেশা\n● পেশা নির্বাচন করুন (PRIVATE SERVICE / STUDENT / BUSINESS ইত্যাদি)।\n● যাচাইয়ের জন্য সঠিক তথ্য লিখুন।\n\nধাপ ১৬ — ধর্ম ও দেশের কোড\n● ধর্ম নির্বাচন করুন।\n● দেশের কোড +880।\n● মোবাইল নম্বর এবং অন্যান্য ক্ষেত্র যাচাই করুন।\n\nধাপ ১৭ — জন্ম তথ্য পর্ব ১\n● জন্মস্থান দেশ নির্বাচন করুন।\n● ব্যক্তিগত তথ্য নথির সাথে মেলে কিনা তা যাচাই করুন।\n\nধাপ ১৮ — জন্ম তথ্য পর্ব ২ ও নাগরিকত্ব\n● জন্মস্থান জেলা নির্বাচন করুন।\n● জন্ম তারিখ নির্বাচন করুন (এনআইডি/পাসপোর্টের সাথে মিলিয়ে)।\n● নাগরিকত্বের ধরন: By Birth।\n● Save and Continue ক্লিক করুন।\n\nধাপ ১৯ — স্থায়ী ঠিকানা\n● জেলা, শহর/গ্রাম/বাড়ি, রাস্তা/ব্লক/সেক্টর (ঐচ্ছিক), ডাকঘর, পোস্টাল কোড, থানা নির্বাচন করুন।\n● পরিবর্তন হলে পুলিশ ভেরিফিকেশনের প্রয়োজন হতে পারে।\n\nধাপ ২০ — বর্তমান ঠিকানা\n● প্রযোজ্য হলে “Same as Permanent” চেক করুন।\n● অন্যথায়, ম্যানুয়ালি পূরণ করুন।\n● আঞ্চলিক পাসপোর্ট অফিস প্রদর্শিত হবে।\n\nধাপ ২১ — আঞ্চলিক পাসপোর্ট অফিস (RPO)\n● উপযুক্ত RPO নির্বাচন করুন।\n● Save and Continue ক্লিক করুন।\n\nধাপ ২২ — জাতীয় পরিচয়পত্র যাচাইকরণ\n● এনআইডি নম্বর লিখুন।\n● এনআইডি সিস্টেমে যাচাই করুন।\n● আপনার পূর্ববর্তী পাসপোর্ট আছে কিনা তা উল্লেখ করুন (MRP/ePP/None)।\n\nধাপ ২৩ — পুনঃইস্যুর কারণ ও পুরনো পাসপোর্টের তথ্য\n● কারণ নির্বাচন করুন: EXPIRED, PAGES EXHAUSTED, DAMAGED, ইত্যাদি।\n● পূর্ববর্তী পাসপোর্ট নম্বর লিখুন।\n● ইস্যু এবং মেয়াদ শেষ হওয়ার তারিখ লিখুন।\n\nধাপ ২৪ — অন্য দেশের পাসপোর্ট (যদি থাকে)\n● অন্য দেশের পাসপোর্ট আছে কিনা তা হ্যাঁ/না দিয়ে উল্লেখ করুন।\n● হ্যাঁ হলে তথ্য প্রদান করুন।\n\nধাপ ২৫ — পিতামাতার তথ্য\n● পিতা: নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক)।\n● মাতা: নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক)।\n● শুধুমাত্র প্রযোজ্য হলে আইনি অভিভাবকের তথ্য দিন।\n\nধাপ ২৬ — স্ত্রীর তথ্য\n● বৈবাহিক অবস্থা নির্বাচন করুন।\n● স্ত্রীর নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক) লিখুন।\n\nধাপ ২৭ — জরুরি যোগাযোগ\n● সম্পর্ক নির্বাচন করুন।\n● নাম লিখুন।\n● ঠিকানা পূরণ করুন: দেশ, জেলা, শহর/গ্রাম/বাড়ি, রাস্তা/ব্লক/সেক্টর (ঐচ্ছিক), ডাকঘর, পোস্টাল কোড, থানা।\n● Save and Continue ক্লিক করুন।\n\nধাপ ২৮ — পাসপোর্টের বিকল্প\n● পৃষ্ঠার সংখ্যা নির্বাচন করুন (৪৮/৬৪)।\n● মেয়াদ নির্বাচন করুন (৫/১০ বছর)।\n● মূল্য পর্যালোচনা করুন।\n● Save and Continue ক্লিক করুন।\n\nধাপ ২৯ — ডেলিভারি বিকল্প ও অ্যাপয়েন্টমেন্ট\n● Regular / Express / Super Express ডেলিভারি বেছে নিন।\n● মূল্য স্বয়ংক্রিয়ভাবে আপডেট হবে।\n● Save and Continue ক্লিক করুন।\n\nধাপ ৩০ — ঘোষণা ও পেমেন্ট\n● ঘোষণা বক্সে চেক করুন।\n● Confirm and proceed to payment এ ক্লিক করুন।\n● EkPay/Card/bKash/Nagad/Rocket/Upay এর মাধ্যমে পেমেন্ট করুন।\n● OTP/PIN যাচাই সম্পন্ন করুন।\n● পেমেন্টের পর, অ্যাপয়েন্টমেন্টের তারিখ/সময় নির্বাচন করুন।\n● সারাংশ/রসিদ ডাউনলোড করুন।\n\nধাপ ৩১ — জমা নিশ্চিত করুন\n● স্ট্যাটাস পর্যালোচনা করুন (Submitted)।\n● প্রিন্ট করার জন্য আবেদনপত্র ডাউনলোড করুন।\n\nধাপ ৩২ — সমস্ত তথ্য পর্যালোচনা করুন\n● সমস্ত এন্ট্রি দুবার চেক করুন।\n● নিশ্চিত করুন নাম/তারিখ অফিসিয়াল নথির সাথে মেলে।\n\nধাপ ৩৩ — পাসপোর্টের ছবি\n● নিশ্চিত করুন ছবি ই-পাসপোর্টের প্রয়োজনীয়তা পূরণ করে।\n\nধাপ ৩৪ — সহায়ক নথি\n● সমস্ত প্রয়োজনীয় নথি আপলোড করুন।\n● ফাইলের ফরম্যাট এবং আকার যাচাই করুন।\n\nধাপ ৩৫ — পেমেন্ট নিশ্চিতকরণ\n● সফল পেমেন্ট নিশ্চিত করুন।\n● লেনদেন আইডি সংরক্ষণ করুন।\n\nধাপ ৩৬ — অ্যাপয়েন্টমেন্ট নিশ্চিতকরণ\n● পাসপোর্ট সংগ্রহের জন্য নির্বাচিত তারিখ/সময় নিশ্চিত করুন।\n\nধাপ ৩৭ — আবেদন ট্র্যাক করুন\n● স্ট্যাটাস ট্র্যাক করতে পোর্টাল ব্যবহার করুন।\n\nধাপ ৩৮ — আঞ্চলিক পাসপোর্ট অফিস দর্শন\n● অ্যাপয়েন্টমেন্ট অনুযায়ী RPO-তে যান।\n\nধাপ ৩৯ — যাচাইকরণ\n● কর্মকর্তারা সমস্ত জমা দেওয়া তথ্য যাচাই করবেন।\n\nধাপ ৪০ — বায়োমেট্রিক গ্রহণ\n● আঙুলের ছাপ এবং ছবি নেওয়া হবে।\n\nধাপ ৪১ — RPO-তে চূড়ান্ত জমা\n● কর্মকর্তারা সমস্ত বিবরণ নিশ্চিত করবেন।\n● প্রয়োজনে স্বাক্ষর করুন।\n\nধাপ ৪২ — প্রাপ্তি স্বীকার\n● আবেদন জমা দেওয়ার রসিদ নিন।\n\nধাপ ৪৩ — পাসপোর্ট প্রক্রিয়াকরণ\n● প্রক্রিয়াকরণের জন্য অপেক্ষা করুন (পোর্টাল স্ট্যাটাস আপডেট করবে)।\n\nধাপ ৪৪ — পেমেন্ট স্ট্যাটাস চেক\n● পোর্টালে লেনদেন সম্পন্ন হয়েছে কিনা যাচাই করুন।\n\nধাপ ৪৫ — পাসপোর্ট মুদ্রিত\n● পাসপোর্ট প্রিন্ট হলে পোর্টাল জানাবে।\n\nধাপ ৪৬ — পাসপোর্ট ডেলিভারি\n● নির্বাচিত পদ্ধতি অনুযায়ী পাসপোর্ট ডেলিভারি করা হবে।\n\nধাপ ৪৭ — প্রাপ্তি নিশ্চিতকরণ\n● পাসপোর্ট প্রাপ্তি নিশ্চিত করুন।\n● প্রাপ্তি স্বীকারে স্বাক্ষর করুন।\n\nধাপ ৪৮ — প্রক্রিয়ার সমাপ্তি\n● ভবিষ্যতের রেফারেন্সের জন্য সমস্ত নথি রাখুন।\n● প্রক্রিয়া সম্পন্ন। "
+        "en": "Step 1 — Search on Google\n● Type: epassport bd\n● Click the first result: “E-Passport Online Registration Portal”.\n\nStep 2 — Homepage, click “APPLY ONLINE”\n● Click the green APPLY ONLINE button on the left.\n\nStep 3 — Region/Office Availability\n● Question: “Are you applying from Bangladesh?” → Yes.\n● Select your district (example: Tangail).\n● Select your nearest police station (example: Ghatail).\n● Note the Regional Passport Office shown.\n● Click Continue.\n\nStep 4 — Enter Email\n● Enter your email address.\n● Check “I am human” (reCAPTCHA).\n● Click Continue.\n\nStep 5 — Email Verification Screen\n● Confirm email is correct.\n● Click Continue.\n\nStep 6 — Account Information\n● Enter Password (min 6 characters: uppercase, lowercase, numbers).\n● Enter Full Name (as per NID/BRC).\n● Optional: Given Name.\n● Surname: last/family name.\n\nStep 7 — Mobile Number\n● Select country code: +880.\n● Enter mobile number.\n● Check “I am human”.\n\nStep 8 — Create Account\n● Click Create Account button.\n● Note: Max 6 applications per account.\n\nStep 9 — Account Activation\n● Click the activation link sent to your email.\n● Resend if not received.\n\nStep 10 — Sign In\n● Enter Email and Password.\n● Check “I am human”.\n● Use Forgot Password? if needed.\n\nStep 11 — Sign In Confirm\n● Click Sign In.\n\nStep 12 — Dashboard\n● Click “Apply for a new e-Passport”.\n● Optional: Review profile under Account.\n\nStep 13 — Passport Type\n● Ordinary Passport for normal users.\n● Official Passport only for government officials.\n● Click Save and Continue.\n\nStep 14 — Personal Information\n● Select “I apply for myself”.\n● Select gender.\n● Enter Full Name / Given Name / Surname exactly.\n● Ensure spelling matches previous documents.\n\nStep 15 — Profession\n● Select profession (PRIVATE SERVICE / STUDENT / BUSINESS etc.).\n● Enter correct information for verification.\n\nStep 16 — Religion & Country Code\n● Select religion.\n● Country code +880.\n● Verify mobile number and other fields.\n\nStep 17 — Birth Information Part 1\n● Select country of birth.\n● Verify personal info matches documents.\n\nStep 18 — Birth Information Part 2 & Citizenship\n● Select district of birth.\n● Select date of birth (match NID/passport).\n● Citizenship type: By Birth.\n● Click Save and Continue.\n\nStep 19 — Permanent Address\n● Select district, City/Village/House, Road/Block/Sector (optional), Post office, Postal code, Police station.\n● If changed, police verification may be required.\n\nStep 20 — Present Address\n● Check “Same as Permanent” if applicable.\n● Otherwise, fill manually.\n● Regional Passport Office will appear.\n\nStep 21 — Regional Passport Office (RPO)\n● Select appropriate RPO.\n● Click Save and Continue.\n\nStep 22 — National ID Verification\n● Enter NID number.\n● Verify in NID system.\n● Indicate if you have previous passports (MRP/ePP/None).\n\nStep 23 — Reissue Reason & Old Passport Info\n● Select reason: EXPIRED, PAGES EXHAUSTED, DAMAGED, ইত্যাদি।\n● পূর্ববর্তী পাসপোর্ট নম্বর লিখুন।\n● ইস্যু এবং মেয়াদ শেষ হওয়ার তারিখ লিখুন।\n\nStep 24 — অন্য দেশের পাসপোর্ট (যদি থাকে)\n● অন্য দেশের পাসপোর্ট আছে কিনা তা হ্যাঁ/না দিয়ে উল্লেখ করুন।\n● হ্যাঁ হলে তথ্য প্রদান করুন।\n\nStep 25 — পিতামাতার তথ্য\n● পিতা: নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক)।\n● মাতা: নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক)।\n● শুধুমাত্র প্রযোজ্য হলে আইনি অভিভাবকের তথ্য দিন।\n\nStep 26 — স্ত্রীর তথ্য\n● বৈবাহিক অবস্থা নির্বাচন করুন।\n● স্ত্রীর নাম, পেশা, জাতীয়তা, এনআইডি (ঐচ্ছিক) লিখুন।\n\nStep 27 — জরুরি যোগাযোগ\n● সম্পর্ক নির্বাচন করুন।\n● নাম লিখুন।\n● ঠিকানা পূরণ করুন: দেশ, জেলা, শহর/গ্রাম/বাড়ি, রাস্তা/ব্লক/সেক্টর (ঐচ্ছিক), ডাকঘর, পোস্টাল কোড, থানা।\n● Save and Continue ক্লিক করুন।\n\nStep 28 — পাসপোর্টের বিকল্প\n● পৃষ্ঠার সংখ্যা নির্বাচন করুন (৪৮/৬৪)।\n● মেয়াদ নির্বাচন করুন (৫/১০ বছর)।\n● মূল্য পর্যালোচনা করুন।\n● Save and Continue ক্লিক করুন।\n\nStep 29 — ডেলিভারি বিকল্প ও অ্যাপয়েন্টমেন্ট\n● Regular / Express / Super Express ডেলিভারি বেছে নিন।\n● মূল্য স্বয়ংক্রিয়ভাবে আপডেট হবে।\n● Save and Continue ক্লিক করুন।\n\nStep 30 — ঘোষণা ও পেমেন্ট\n● ঘোষণা বক্সে চেক করুন।\n● Confirm and proceed to payment এ ক্লিক করুন।\n● EkPay/Card/bKash/Nagad/Rocket/Upay এর মাধ্যমে পেমেন্ট করুন।\n● OTP/PIN যাচাই সম্পন্ন করুন।\n● পেমেন্টের পর, অ্যাপয়েন্টমেন্টের তারিখ/সময় নির্বাচন করুন।\n● সারাংশ/রসিদ ডাউনলোড করুন।\n\nStep 31 — জমা নিশ্চিত করুন\n● স্ট্যাটাস পর্যালোচনা করুন (Submitted)।\n● প্রিন্ট করার জন্য আবেদনপত্র ডাউনলোড করুন।\n\nStep 32 — সমস্ত তথ্য পর্যালোচনা করুন\n● সমস্ত এন্ট্রি দুবার চেক করুন।\n● নিশ্চিত করুন নাম/তারিখ অফিসিয়াল নথির সাথে মেলে।\n\nStep 33 — পাসপোর্টের ছবি\n● নিশ্চিত করুন ছবি ই-পাসপোর্টের প্রয়োজনীয়তা পূরণ করে।\n\nStep 34 — সহায়ক নথি\n● সমস্ত প্রয়োজনীয় নথি আপলোড করুন।\n● ফাইলের ফরম্যাট এবং আকার যাচাই করুন।\n\nStep 35 — পেমেন্ট নিশ্চিতকরণ\n● সফল পেমেন্ট নিশ্চিত করুন।\n● লেনদেন আইডি সংরক্ষণ করুন।\n\nStep 36 — অ্যাপয়েন্টমেন্ট নিশ্চিতকরণ\n● পাসপোর্ট সংগ্রহের জন্য নির্বাচিত তারিখ/সময় নিশ্চিত করুন।\n\nStep 37 — আবেদন ট্র্যাক করুন\n● স্ট্যাটাস ট্র্যাক করতে পোর্টাল ব্যবহার করুন।\n\nStep 38 — আঞ্চলিক পাসপোর্ট অফিস দর্শন\n● অ্যাপয়েন্টমেন্ট অনুযায়ী RPO-তে যান।\n\nStep 39 — যাচাইকরণ\n● কর্মকর্তারা সমস্ত জমা দেওয়া তথ্য যাচাই করবেন।\n\nধাপ ৪০ — বায়োমেট্রিক গ্রহণ\n● আঙুলের ছাপ এবং ছবি নেওয়া হবে।\n\nধাপ ৪১ — RPO-তে চূড়ান্ত জমা\n● কর্মকর্তারা সমস্ত বিবরণ নিশ্চিত করবেন।\n● প্রয়োজনে স্বাক্ষর করুন।\n\nধাপ ৪২ — প্রাপ্তি স্বীকার\n● আবেদন জমা দেওয়ার রসিদ নিন।\n\nধাপ ৪৩ — পাসপোর্ট প্রক্রিয়াকরণ\n● প্রক্রিয়াকরণের জন্য অপেক্ষা করুন (পোর্টাল স্ট্যাটাস আপডেট করবে)।\n\nধাপ ৪৪ — পেমেন্ট স্ট্যাটাস চেক\n● পোর্টালে লেনদেন সম্পন্ন হয়েছে কিনা যাচাই করুন।\n\nধাপ ৪৫ — পাসপোর্ট মুদ্রিত\n● পাসপোর্ট প্রিন্ট হলে পোর্টাল জানাবে।\n\nধাপ ৪৬ — পাসপোর্ট ডেলিভারি\n● নির্বাচিত পদ্ধতি অনুযায়ী পাসপোর্ট ডেলিভারি করা হবে।\n\nধাপ ৪৭ — প্রাপ্তি নিশ্চিতকরণ\n● পাসপোর্ট প্রাপ্তি নিশ্চিত করুন।\n● প্রাপ্তি স্বীকারে স্বাক্ষর করুন।\n\nধাপ ৪৮ — প্রক্রিয়ার সমাপ্তি\n● ভবিষ্যতের রেফারেন্সের জন্য সমস্ত নথি রাখুন।\n● প্রক্রিয়া সম্পন্ন। "
       },
       "requiredDocuments": {
         "en": "- Old passport\n- NID\n- Payment receipt",
@@ -434,6 +591,155 @@
       "lastUpdated": 1730947200000,
       "imageNames": [],
       "images": []
+    },
+    {
+      "serviceId": "entrepreneur_trade_license",
+      "instructions": {
+        "en": "Step 1 — Go to the prottoyon.gov.bd website.\n\nStep 2 — Click on the \"Free Citizen Account\" button from the top-right corner of the website.\n\nStep 3 — Fill out the registration form with your National ID number, Date of Birth, and mobile number, then click the \"Register\" button.\n\nStep 4 — Enter the OTP code sent to your mobile phone in the designated field and click the \"Submit\" button.\n\nStep 5 — After completing the registration, log in using your mobile number and password.\n\nStep 6 — After entering the dashboard, click on the \"Complete Profile\" button.\n\nStep 7 — Fill in your present and permanent address details correctly and click the \"Next\" button.\n\nStep 8 — Upload your photo and a scanned copy of your National ID card, then \"Save\" the profile.\n\nStep 9 — From the services on the dashboard, find and click on the \"Trade License\" icon.\n\nStep 10 — Fill out the trade license application form with your business information and the owner's personal details.\n\nStep 11 — After saving the form, select your preferred payment gateway (e.g., ekpay) on the fee payment page.\n\nStep 12 — Complete the payment by paying the specified fee through mobile banking or a card.\n\nStep 13 — After successful payment, print the receipt with the application tracking number and contact your nearest Union Council/Municipality office.",
+        "bn": "ধাপ ১ — prottoyon.gov.bd ওয়েবসাইটে যান।\n\nধাপ ২ — ওয়েবসাইটের উপরের ডান দিক থেকে \"ফ্রি নাগরিক একাউন্ট\" বাটনে ক্লিক করুন।\n\nধাপ ৩ — জাতীয় পরিচয়পত্র নম্বর, জন্ম তারিখ ও মোবাইল নম্বর দিয়ে নিবন্ধন ফরমটি পূরণ করুন এবং \"নিবন্ধন করুন\" বাটনে ক্লিক করুন।\n\nধাপ ৪ — আপনার মোবাইলে পাঠানো ওটিপি (OTP) কোডটি নির্দিষ্ট ঘরে লিখে \"জমা দিন\" বাটনে ক্লিক করুন।\n\nধাপ ৫ — রেজিস্ট্রেশন সম্পন্ন হলে আপনার মোবাইল নম্বর এবং পাসওয়ার্ড ব্যবহার করে লগইন করুন।\n\nধাপ ৬ — ড্যাশবোর্ডে প্রবেশ করে \"প্রোফাইল সম্পূর্ণ করুন\" বাটনে ক্লিক করুন।\n\nধাপ ৭ — আপনার বর্তমান ও স্থায়ী ঠিকানা সঠিকভাবে পূরণ করুন এবং \"পরবর্তী\" বাটনে ক্লিক করুন।\n\nধাপ ৮ — আপনার ছবি এবং জাতীয় পরিচয়পত্রের স্ক্যান কপি আপলোড করে প্রোফাইল \"সংরক্ষণ করুন\"।\n\nধাপ ৯ — ড্যাশবোর্ডের সেবাসমূহ থেকে \"ট্রেড লাইসেন্স\" আইকনটি খুঁজে বের করে তাতে ক্লিক করুন।\n\nধাপ ১০ — ব্যবসা প্রতিষ্ঠানের তথ্য এবং মালিকের ব্যক্তিগত তথ্য দিয়ে ট্রেড লাইসেন্সের আবেদন ফরমটি পূরণ করুন।\n\nধাপ ১১ — ফরমটি সংরক্ষণ করার পর ফি প্রদানের পৃষ্ঠায় আপনার পছন্দের পেমেন্ট গেটওয়ে (যেমন: ekpay) নির্বাচন করুন।\n\nধাপ ১২ — মোবাইল ব্যাংকিং বা কার্ডের মাধ্যমে নির্ধারিত ফি প্রদান করে পেমেন্ট সম্পন্ন করুন।\n\nধাপ ১৩ — পেমেন্ট সফল হওয়ার পর অ্যাপ্লিকেশন ট্র্যাকিং নম্বরসহ রশিদটি প্রিন্ট করুন এবং আপনার নিকটস্থ ইউনিয়ন পরিষদ/পৌরসভা অফিসে যোগাযোগ করুন।"
+      },
+      "requiredDocuments": {
+        "en": "- Scanned copy of NID\n- Recent photo\n- Business address details",
+        "bn": "- জাতীয় পরিচয়পত্রের স্ক্যান কপি\n- সাম্প্রতিক ছবি\n- ব্যবসার ঠিকানা বিবরণ"
+      },
+      "processingTime": {
+        "en": "Varies by Union/Municipality",
+        "bn": "ইউনিয়ন/পৌরসভা অনুযায়ী ভিন্ন"
+      },
+      "contactInfo": {
+        "en": "Your local Union Council / Municipality office",
+        "bn": "আপনার স্থানীয় ইউনিয়ন পরিষদ / পৌরসভা অফিস"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "entrepreneur_trade_license_1",
+        "entrepreneur_trade_license_2",
+        "entrepreneur_trade_license_3",
+        "entrepreneur_trade_license_4",
+        "entrepreneur_trade_license_5",
+        "entrepreneur_trade_license_6",
+        "entrepreneur_trade_license_7",
+        "entrepreneur_trade_license_8",
+        "entrepreneur_trade_license_9",
+        "entrepreneur_trade_license_10",
+        "entrepreneur_trade_license_11",
+        "entrepreneur_trade_license_12",
+        "entrepreneur_trade_license_13"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_trade_license_13.webp"
+      ]
+    },
+    {
+      "serviceId": "govt_office_btrc_complain",
+      "instructions": {
+        "en": "Step 1: Visit the Website\nOpen your web browser and go to the official BTRC website: www.btrc.gov.bd.\n\nStep 2: Find the Help Desk\nLook for the \"Complaints/Help Desk\" section or select \"Complainbox\" from the menu.\n\nStep 3: Open the Form\nYou will see a list of options. Click on the \"Complainbox\" link to open the official complaint form.\n\nStep 4: Enter Your Details\nFill out the form carefully. You will need to select your operator (e.g., GP, Robi), your district, and the type of problem you are facing.\n\nStep 5: Operator Confirmation\nYou will be asked if you have already reported this to your mobile operator.\n- Select \"Yes\" if you have already told them.\n- Select \"No\" if this is your first time reporting it.\n\nStep 6: Submit\nIf you selected \"Yes,\" enter the ticket number or date given by the operator. Finally, check the \"I'm not a robot\" box and click the \"Submit Complain\" button.",
+        "bn": "১. ওয়েবসাইটে যান\nআপনার ব্রাউজার থেকে বিটিআরসি-এর অফিসিয়াল ওয়েবসাইট www.btrc.gov.bd-এ প্রবেশ করুন।\n\n২. হেল্প ডেস্ক খুঁজুন\nমেনু থেকে \"Complaints/Help Desk\" অথবা \"Complainbox\" অপশনটি খুঁজে বের করুন এবং ক্লিক করুন।\n\n৩. ফরমটি চালু করুন\nপরের পেজে একটি তালিকা আসবে। সেখান থেকে \"Complainbox\" লিঙ্কে ক্লিক করলে অভিযোগ ফরমটি ওপেন হবে।\n\n৪. তথ্য পূরণ করুন\nফরমটি সঠিক তথ্য দিয়ে পূরণ করুন। এখানে আপনার মোবাইল অপারেটরের নাম, আপনার জেলা এবং সমস্যার ধরণ নির্বাচন করতে হবে।\n\n৫. অপারেটরকে জানানো\nআপনাকে প্রশ্ন করা হবে আপনি আগে মোবাইল অপারেটরকে (যেমন গ্রামীণফোন বা রবি) এই বিষয়ে জানিয়েছেন কিনা।\n- জানিয়ে থাকলে \"Yes\" (হ্যাঁ) নির্বাচন করুন।\n- না জানিয়ে থাকলে \"No\" (না) নির্বাচন করুন।\n\n৬. জমা দিন\nআপনি যদি \"Yes\" নির্বাচন করেন, তবে অপারেটরের দেওয়া অভিযোগ নম্বর বা তারিখ উল্লেখ করুন। সবশেষে, \"I'm not a robot\" বক্সে টিক দিয়ে \"Submit Complain\" বাটনে ক্লিক করুন."
+      },
+      "requiredDocuments": {
+        "en": "- Phone number\n- Complaint details\n- Previous Operator Ticket ID (if applicable)",
+        "bn": "- ফোন নম্বর\n- অভিযোগের বিবরণ\n- পূর্ববর্তী অপারেটর টিকিট আইডি (যদি থাকে)"
+      },
+      "processingTime": {
+        "en": "Depends on the nature of the complaint",
+        "bn": "অভিযোগের ধরণ অনুযায়ী ভিন্ন হতে পারে"
+      },
+      "contactInfo": {
+        "en": "www.btrc.gov.bd",
+        "bn": "www.btrc.gov.bd"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "govt_office_btrc_reports_1",
+        "govt_office_btrc_reports_2",
+        "govt_office_btrc_reports_3",
+        "govt_office_btrc_reports_4",
+        "govt_office_btrc_reports_5",
+        "govt_office_btrc_reports_6"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_6.webp"
+      ]
+    },
+
+
+    {
+      "serviceId": "entrepreneur_ebin_vat_registration",
+      "instructions": {
+        "en": "Step 1: Go to the official VAT Online website: vat.gov.bd.\n\nStep 2: Click on the \"Sign-up\" button to create a new account.\n\nStep 3: Fill up the form with your personal details carefully.\n\nStep 4: Click submit. You will receive an OTP on your phone; enter it to verify.\n\nStep 5: Login to the system, change your password if asked, and enter the Captcha code.\n\nStep 6: After logging in, go to the \"Forms\" tab.\n\nStep 7: Click on \"Add Form\" and select the Registration Form.\n\nStep 8: Select the \"New Registration\" category.\n\nStep 9: Select your type of ownership (e.g., Proprietorship or Company).\n\nStep 10: Fill up the General Information section (Trade License, TIN, etc.).\n\nStep 11: Fill up the Contact Information section completely.\n\nStep 12: Click on the \"Bank Account Details\" section.\n\nStep 13: Click the \"Add\" button and enter your bank account information.\n\nStep 14: Provide information for the Authorized Person (who will manage this account).\n\nStep 15: Check all information one last time and click \"Submit\".\n\nStep 16: Go to the attachment section to add your documents.\n\nStep 17: Upload the previously scanned copies of your required documents here.",
+        "bn": "ধাপ ১: ভ্যাট অনলাইনের অফিসিয়াল ওয়েবসাইটে যান: vat.gov.bd।\n\nধাপ ২: নতুন অ্যাকাউন্ট খুলতে \"Sign-up\" বাটনে ক্লিক করুন।\n\nধাপ ৩: আপনার ব্যক্তিগত তথ্য দিয়ে ফরমটি সতর্কতার সাথে পূরণ করুন।\n\nধাপ ৪: সাবমিট করুন। আপনার মোবাইলে একটি ওটিপি (OTP) যাবে, সেটি দিয়ে ভেরিফাই করুন।\n\nধাপ ৫: সিস্টেমে লগইন করুন, প্রয়োজনে পাসওয়ার্ড পরিবর্তন করুন এবং ক্যাপচা কোড দিন।\n\nধাপ ৬: লগইন করার পর \"Forms\" অপশনে যান।\n\nধাপ ৭: \"Add Form\" এ ক্লিক করুন এবং রেজিস্ট্রেশন ফরমটি নির্বাচন করুন।\n\nধাপ ৮: \"New Registration\" বা নতুন নিবন্ধন ক্যাটাগরি নির্বাচন করুন।\n\nধাপ ৯: আপনার মালিকানার ধরণ (যেমন: প্রোপ্রাইটরশিপ বা কোম্পানি) নির্বাচন করুন।\n\nধাপ ১০: সাধারণ তথ্যাবলী (General Information) অংশটি পূরণ করুন (ট্রেড লাইসেন্স, টিন ইত্যাদি)।\n\nধাপ ১১: যোগাযোগের তথ্য (Contact Information) অংশটি সম্পূর্ণ পূরণ করুন।\n\nধাপ ১২: \"Bank Account Details\" সেকশনে ক্লিক করুন।\n\nধাপ ১৩: \"Add\" বাটনে ক্লিক করে আপনার ব্যাংক অ্যাকাউন্টের তথ্য দিন।\n\nধাপ ১৪: যিনি এই অ্যাকাউন্ট পরিচালনা করবেন, সেই অথরাইজড ব্যক্তির তথ্য দিন।\n\nধাপ ১৫: সব তথ্য যাচাই করে \"Submit\" বাটনে ক্লিক করুন।\n\nধাপ ১৬: কাগজপত্র জমা দিতে অ্যাটাচমেন্ট সেকশনে যান।\n\nধাপ ১৭: আপনার স্ক্যান করা প্রয়োজনীয় কাগজপত্রগুলো এখানে আপলোড করুন।"
+      },
+      "requiredDocuments": {
+        "en": "- Trade License\n- e-TIN of Owner\n- NID Copy\n- Bank Statement\n- Office Rent Agreement",
+        "bn": "- ট্রেড লাইসেন্স\n- মালিকের ই-টিন\n- এনআইডি কপি\n- ব্যাংক স্টেটমেন্ট\n- অফিসের ভাড়ার চুক্তিপত্র"
+      },
+      "processingTime": {
+        "en": "Usually 3-7 Working Days",
+        "bn": "সাধারণত ৩-৭ কার্যদিবস"
+      },
+      "contactInfo": {
+        "en": "VAT Online Call Center: 16555",
+        "bn": "ভ্যাট অনলাইন কল সেন্টার: ১৬৫৫৫"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1730947200000,
+      "imageNames": [
+        "entrepreneur_e-BIN_Registration_1",
+        "entrepreneur_e-BIN_Registration_2",
+        "entrepreneur_e-BIN_Registration_3",
+        "entrepreneur_e-BIN_Registration_4",
+        "entrepreneur_e-BIN_Registration_5",
+        "entrepreneur_e-BIN_Registration_6",
+        "entrepreneur_e-BIN_Registration_7",
+        "entrepreneur_e-BIN_Registration_8",
+        "entrepreneur_e-BIN_Registration_9",
+        "entrepreneur_e-BIN_Registration_10",
+        "entrepreneur_e-BIN_Registration_11",
+        "entrepreneur_e-BIN_Registration_12",
+        "entrepreneur_e-BIN_Registration_13",
+        "entrepreneur_e-BIN_Registration_14",
+        "entrepreneur_e-BIN_Registration_15",
+        "entrepreneur_e-BIN_Registration_16",
+        "entrepreneur_e-BIN_Registration_17"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_1.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_2.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_3.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_4.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_5.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_6.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_7.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_8.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_9.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_10.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_11.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_12.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_13.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_14.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_15.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_16.webp",
+        "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_17.webp"
+      ]
     }
   ]
 }
