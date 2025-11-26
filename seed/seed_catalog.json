@@ -408,10 +408,10 @@
       ],
       "images": [],
       "imageNames": [
-        "farmer_ Soil_fertilizer_recommendation_1",
-        "farmer_ Soil_fertilizer_recommendation_2",
-        "farmer_ Soil_fertilizer_recommendation_3",
-        "farmer_ Soil_fertilizer_recommendation_4"
+        "farmer_Soil_fertilizer_recommendation_1",
+        "farmer_Soil_fertilizer_recommendation_2",
+        "farmer_Soil_fertilizer_recommendation_3",
+        "farmer_Soil_fertilizer_recommendation_4"
       ]
     }
   ],
@@ -791,13 +791,13 @@
       },
       "youtubeLink": null,
       "lastUpdated": 1732400000000,
-      "imageNames": [],
-      "images": [
-        "farmer_ Soil_fertilizer_recommendation_1",
-        "farmer_ Soil_fertilizer_recommendation_2",
-        "farmer_ Soil_fertilizer_recommendation_3",
-        "farmer_ Soil_fertilizer_recommendation_4"
-      ]
+      "imageNames": [
+        "farmer_Soil_fertilizer_recommendation_1",
+        "farmer_Soil_fertilizer_recommendation_2",
+        "farmer_Soil_fertilizer_recommendation_3",
+        "farmer_Soil_fertilizer_recommendation_4"
+      ],
+      "images": []
     }
   ]
 }
