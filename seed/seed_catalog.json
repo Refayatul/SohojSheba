@@ -319,7 +319,6 @@
         "govt_office_btrc_reports_6"
       ]
     },
-
     {
       "id": "entrepreneur_ebin_vat_registration",
       "title": {
@@ -380,6 +379,39 @@
         "entrepreneur_e-BIN_Registration_15",
         "entrepreneur_e-BIN_Registration_16",
         "entrepreneur_e-BIN_Registration_17"
+      ]
+    },
+    {
+      "id": "agri_soil_fertilizer_recommendation",
+      "title": {
+        "en": "Soil & Fertilizer Recommendation",
+        "bn": "মাটি ও সার সুপারিশ"
+      },
+      "subtitle": {
+        "en": "Complete guide to online soil & fertilizer recommendation",
+        "bn": "অনলাইনে মাটি ও সার সুপারিশ পাওয়ার পূর্ণ নির্দেশিকা"
+      },
+      "iconName": "ic_agri_soil_fertilizer",
+      "category": "agriculture",
+      "versionAdded": 1,
+      "lastUpdated": 1732400000000,
+      "searchKeywords": [
+        "soil",
+        "fertilizer",
+        "recommendation",
+        "dae",
+        "frs bd",
+        "agriculture",
+        "মাটি",
+        "সার",
+        "সার সুপারিশ"
+      ],
+      "images": [],
+      "imageNames": [
+        "farmer_ Soil_fertilizer_recommendation_1",
+        "farmer_ Soil_fertilizer_recommendation_2",
+        "farmer_ Soil_fertilizer_recommendation_3",
+        "farmer_ Soil_fertilizer_recommendation_4"
       ]
     }
   ],
@@ -680,8 +712,6 @@
         "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/govt_office_btrc_reports_6.webp"
       ]
     },
-
-
     {
       "serviceId": "entrepreneur_ebin_vat_registration",
       "instructions": {
@@ -739,6 +769,34 @@
         "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_15.webp",
         "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_16.webp",
         "https://raw.githubusercontent.com/Refayatul/SohojSheba/firebaseMIgration/seed/images/entrepreneur_e-BIN_Registration_17.webp"
+      ]
+    },
+    {
+      "serviceId": "agri_soil_fertilizer_recommendation",
+      "instructions": {
+        "en": "Step 1 — Visit the DAE Website\n• Open dae.gov.bd in your browser.\n• Scroll to the “Agricultural Decision Support” section.\n• Tap the “Online Fertilizer Recommendation” link.\n• It will redirect you to frs-bd.com.\n• You may also directly open frs-bd.com for faster access.\n\nStep 2 — Fill Up the Form\nOn the frs-bd.com page (you will see 'Welcome, Guest'), fill in the required fields:\n• Division → District → Upazila → Union (select from dropdown)\n• Farmer Name\n• Village / Mahalla\n• Mobile Number\n• Soil Type (e.g., loam, clay-loam etc.)\n• Crop Season (Rabi / Kharif-1 / Kharif-2)\n• Crop Category (Paddy / Vegetables / Pulses / Oilseeds etc.)\n• Land Type (High / Medium / Low)\n• Crop Name (e.g., BRRI Dhan-**, Potato etc.)\n• Land Area (in decimal; field shows 'শতাংশ')\n• In some cases, a calendar icon appears — enter possible sowing/transplanting date (optional).\n\nStep 3 — View Recommendation\n• After filling all fields, press the 'Search' button.\n• A large text box will show N-P-K-S-Zn-B and other fertilizer dose recommendations automatically — per acre/hectare/decimal.\n\nStep 4 — Save or Print\n• If no dedicated print/card button appears, use browser Print/Share → Save as PDF.\n• This PDF will serve as your soil & fertilizer recommendation card.",
+        "bn": "ধাপ–১ — DAE সাইটে প্রবেশ\n• ব্রাউজারে dae.gov.bd খুলুন।\n• স্ক্রল করে “কৃষি সিদ্ধান্ত সহায়তা” সেকশনে যান।\n• “অনলাইন সার সুপারিশ” লিংকে ট্যাপ করুন।\n• এটি frs-bd.com ফর্মে নিয়ে যাবে।\n• চাইলে সরাসরি frs-bd.com খুলতে পারেন—সময় বাঁচবে।\n\nধাপ–২ — ফর্মের উপরের অংশ পূরণ\nfrs-bd.com পেজে 'Welcome, Guest' দেখাবে—এখানেই সব ফর্ম পূরণ করতে হবে:\n• বিভাগ → জেলা → উপজেলা → ইউনিয়ন (ড্রপডাউন থেকে নির্বাচন)\n• কৃষকের নাম\n• গ্রাম/মহল্লা\n• মোবাইল নম্বর\n• মাটির ধরন (যেমন দোঁআশ, দোআঁশ-এঁটেল ইত্যাদি)\n• ফসলের মৌসুম (রবি / খরিফ-১ / খরিফ-২)\n• ফসলের ক্যাটাগরি (ধান/সবজি/ডাল/তেলবীজ ইত্যাদি)\n• ভূমি শ্রেণী (উঁচু / মাঝারি / নিচু)\n• ফসল (যেমন BRRI ধান-**, আলু ইত্যাদি)\n• জমির পরিমাণ (শতাংশে লিখুন)\n• প্রয়োজনে বপন/রোপণের সম্ভাব্য তারিখ দিন (ঐচ্ছিক)।\n\nধাপ–৩ — রেকমেন্ডেশন দেখা\n• সব ফিল্ড পূরণ হলে “সার্চ” বাটনে চাপুন।\n• নিচের বড় টেক্সট বক্সে N-P-K-S-Zn-B ইত্যাদির পরিমিত ডোজ অটো-জেনারেট হবে।\n\nধাপ–৪ — সংরক্ষণ / প্রিন্ট\n• আলাদা প্রিন্ট বাটন না থাকলে ব্রাউজারের Share/Print → Save as PDF করুন।\n• এটিই আপনার ‘সার সুপারিশ কার্ড’ হিসেবে কাজে লাগবে।"
+      },
+      "requiredDocuments": {
+        "en": "- No documents required (information-only service)",
+        "bn": "- কোনো নথি প্রয়োজন নেই (তথ্য ভিত্তিক সেবা)"
+      },
+      "processingTime": {
+        "en": "Instant — results generated automatically",
+        "bn": "তাৎক্ষণিক — ফলাফল স্বয়ংক্রিয়ভাবে তৈরি হয়"
+      },
+      "contactInfo": {
+        "en": "Department of Agricultural Extension (DAE) — dae.gov.bd",
+        "bn": "কৃষি সম্প্রসারণ অধিদপ্তর (DAE) — dae.gov.bd"
+      },
+      "youtubeLink": null,
+      "lastUpdated": 1732400000000,
+      "imageNames": [],
+      "images": [
+        "farmer_ Soil_fertilizer_recommendation_1",
+        "farmer_ Soil_fertilizer_recommendation_2",
+        "farmer_ Soil_fertilizer_recommendation_3",
+        "farmer_ Soil_fertilizer_recommendation_4"
       ]
     }
   ]
