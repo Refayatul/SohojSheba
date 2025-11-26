@@ -38,6 +38,33 @@ import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * =========================================================================================
+ *                                    SPLASH SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Initialization**:
+ *     -   This is the first screen the user sees when launching the app.
+ *     -   It displays the app branding while background initialization tasks occur (simulated here).
+ * 
+ * 2.  **Navigation Logic**:
+ *     -   Uses `LaunchedEffect` to trigger a 2-second delay (`delay(2000)`).
+ *     -   After the delay, it navigates to the `home` route.
+ *     -   `popUpTo("splash") { inclusive = true }` ensures the user cannot go back to the splash screen.
+ * 
+ * 3.  **Custom Graphics (Canvas)**:
+ *     -   `AppLogoCanvas` draws the logo programmatically using `Canvas`.
+ *     -   Draws an outer green ring (`drawCircle` with `Stroke`).
+ *     -   Draws a filled green pentagon (`drawPath`) inside the circle.
+ *     -   Uses trigonometry (`sin`, `cos`) to calculate the pentagon's vertices.
+ * 
+ * 4.  **UI Layout**:
+ *     -   Displays the App Name and Tagline centered on the screen.
+ *     -   Shows the Version Number at the bottom using `buildAnnotatedString` for superscript styling.
+ * =========================================================================================
+ */
+
 @Composable
 fun SplashScreen(navController: NavController) {
     LaunchedEffect(true) {

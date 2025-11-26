@@ -15,6 +15,7 @@ class LocaleSetupApplication : Application() {
         super.onCreate()
 
         // Start the network status tracker
+        // This runs once when the app starts and keeps watching for internet connection changes.
         networkStatusTracker = NetworkStatusTracker(this)
         networkStatusTracker.start()
 

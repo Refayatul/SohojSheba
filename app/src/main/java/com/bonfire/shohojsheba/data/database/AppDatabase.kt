@@ -40,8 +40,10 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "shohoj_sheba_database"
                 )
-                .fallbackToDestructiveMigration() // This will solve any migration errors during development
+                .fallbackToDestructiveMigration() // WARNING: This deletes data if you change the database schema. Good for dev, bad for prod.
                 .addCallback(object : Callback() {
+                    // This callback runs when the database is opened.
+                    // We use it to trigger a background worker (CatalogRefreshWorker) to update data from the cloud.
                     override fun onOpen(db: SupportSQLiteDatabase) {
                         super.onOpen(db)
                         WorkManager.getInstance(context).enqueueUniqueWork(

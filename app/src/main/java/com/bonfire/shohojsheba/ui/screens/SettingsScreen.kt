@@ -40,6 +40,32 @@ import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import com.bonfire.shohojsheba.utils.AppLocaleManager
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * =========================================================================================
+ *                                   SETTINGS SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **User Profile Management**:
+ *     -   Displays current user's name and email.
+ *     -   Allows editing the display name via `EditProfileDialog`.
+ *     -   Handles logout with a confirmation dialog (`LogoutConfirmDialog`).
+ * 
+ * 2.  **App Preferences**:
+ *     -   **Theme**: Switches between System, Light, and Dark modes using `ThemeChip`.
+ *     -   **Language**: Toggles between English and Bangla using `AppLocaleManager`.
+ * 
+ * 3.  **Support & Feedback**:
+ *     -   **Contact Us**: Launches an email intent to send feedback to the developers.
+ *     -   **About**: Displays version info and links to the GitHub repository.
+ *     -   **Developers**: Shows a dialog with links to the team's GitHub profiles.
+ * 
+ * 4.  **UI Structure**:
+ *     -   Uses a `Scaffold` with `EnhancedTopAppBar`.
+ *     -   Content is a scrollable `Column` with distinct sections (Profile, Appearance, Language, etc.).
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -247,7 +273,7 @@ private fun LanguageSection() {
                     onCheckedChange = { isBangla ->
                         val newLanguage = if (isBangla) "bn" else "en"
                         val newLocale = if (newLanguage == "bn") java.util.Locale("bn", "BD") else java.util.Locale("en", "US")
-                        onLocaleChange(newLocale)
+                        onLocaleChange(newLocale, com.bonfire.shohojsheba.navigation.Routes.SETTINGS)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
@@ -261,17 +287,41 @@ private fun LanguageSection() {
 
 @Composable
 private fun SupportSection() {
+    val context = LocalContext.current
+    
+    // Function to open email client
+    val openEmailIntent: () -> Unit = {
+        val emailIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+            type = "message/rfc822" // This ensures only email apps are shown
+            putExtra(android.content.Intent.EXTRA_EMAIL, arrayOf("bonfire.cse@gmail.com"))
+            putExtra(android.content.Intent.EXTRA_SUBJECT, "Help & Feedback - Sohoj Sheba")
+            putExtra(android.content.Intent.EXTRA_TEXT, "Please describe your issue or feedback:\n\n")
+        }
+        
+        try {
+            // Use chooser to let user select email app
+            val chooser = android.content.Intent.createChooser(emailIntent, "Send Email").apply {
+                // CRITICAL: Add NEW_TASK flag to launch from Compose context
+                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(chooser)
+        } catch (e: Exception) {
+            Toast.makeText(context, "Unable to send email", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
     Column {
         SectionTitle(title = stringResource(id = R.string.section_support))
         Spacer(modifier = Modifier.height(8.dp))
-        Column(
+        Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface) // Fix: use surface
+                .background(MaterialTheme.colorScheme.surface)
         ) {
-            SettingsRow(title = stringResource(id = R.string.report_a_problem), onClick = {})
-            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
-            SettingsRow(title = stringResource(id = R.string.provide_feedback), onClick = {})
+            SettingsRow(
+                title = stringResource(id = R.string.contact_us), 
+                onClick = openEmailIntent
+            )
         }
     }
 }
@@ -282,19 +332,24 @@ private fun AboutSection() {
     val uriHandler = LocalUriHandler.current
     val githubUrl = "https://github.com/Refayatul/SohojSheba"
 
+    // Show developer dialog when triggered
     if (showDevDialog) {
         DeveloperDialog(onDismiss = { showDevDialog = false })
     }
 
+    // --- Version String with Superscript Beta ---
+    // Build an annotated string to show version with small "Beta" text
     val versionNumber = stringResource(id = R.string.version_number)
     val versionName = stringResource(id = R.string.version_name)
     val annotatedVersionString = buildAnnotatedString {
-        append(versionNumber)
+        append(versionNumber) // e.g., "1.0.0"
         withStyle(style = SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 12.sp)) {
-            append(versionName)
+            append(versionName) // e.g., "Beta" - shown as superscript
         }
     }
 
+    val context = LocalContext.current
+    
     Column {
         SectionTitle(title = stringResource(id = R.string.section_about))
         Spacer(modifier = Modifier.height(8.dp))
@@ -303,7 +358,16 @@ private fun AboutSection() {
                 .clip(RoundedCornerShape(12.dp))
                 .background(MaterialTheme.colorScheme.surface) // Fix: use surface
         ) {
-            SettingsRow(title = stringResource(id = R.string.app_name), onClick = { })
+            SettingsRow(
+                title = stringResource(id = R.string.app_name), 
+                onClick = { 
+                    Toast.makeText(
+                        context,
+                        "Sohoj Sheba - Making Government Services Accessible",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            )
             Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
             SettingsRow(
                 title = stringResource(id = R.string.github),
@@ -319,15 +383,58 @@ private fun AboutSection() {
 
 @Composable
 private fun DeveloperDialog(onDismiss: () -> Unit) {
-    val developers = listOf("Meghla", "Paromita", "Galib", "Refayatul")
+    // UriHandler to open GitHub profiles in browser
+    val uriHandler = LocalUriHandler.current
+    
+    // --- Developer GitHub Links ---
+    // Map of developer names to their GitHub profile URLs
+    val developers = listOf(
+        "Paromita" to "https://github.com/Paromita22",
+        "Meghla" to "https://github.com/MeghlaAkter",
+        "Galib" to "https://github.com/ZackSid07",
+        "Refayatul" to "https://github.com/Refayatul/"
+    )
+    
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(id = R.string.dev_dialog_title)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                developers.forEach { name ->
-                    Text(text = name, fontSize = 16.sp)
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                // Create a clickable card for each developer
+                developers.forEach { (name, githubUrl) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable { uriHandler.openUri(githubUrl) } // Open GitHub on click
+                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = name, 
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        // Arrow icon indicates it's clickable
+                        Icon(
+                            imageVector = Icons.Filled.ArrowForward,
+                            contentDescription = "Open GitHub",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
                 }
+            }
+                
+                // Hint text to tell users the names are tappable
+                Text(
+                    text = "Tap to open GitHub profile",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(top = 4.dp)
+                )
             }
         },
         confirmButton = {

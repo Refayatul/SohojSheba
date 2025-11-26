@@ -39,6 +39,28 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import java.util.Locale
 
+/**
+ * =========================================================================================
+ *                                   HISTORY SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Data Management**:
+ *     -   Observes `allServices` and `history` from `ServicesViewModel`.
+ *     -   Filters `allServices` to find services visited by the user.
+ *     -   **Sorting**: Crucially, it sorts the list by `accessedDate` descending, so the most recently viewed services appear at the top.
+ * 
+ * 2.  **UI Layout**:
+ *     -   **Empty State**: Shows "No history yet" if the list is empty.
+ *     -   **List View**: Uses `LazyColumn` to display the sorted list of services.
+ *     -   **Service Row**: Reuses `ServiceRow` for consistent styling.
+ * 
+ * 3.  **Actions**:
+ *     -   **Clear All**: Provides a trash icon in the top bar to wipe the entire history.
+ *     -   **Navigation**: Clicking a service navigates to its details page.
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(navController: NavController, locale: Locale) {

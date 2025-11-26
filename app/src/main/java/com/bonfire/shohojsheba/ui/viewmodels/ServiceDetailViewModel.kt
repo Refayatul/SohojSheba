@@ -18,8 +18,11 @@ class ServiceDetailViewModel(private val repository: Repository, private val ser
 
     init {
         viewModelScope.launch {
+            // Ensure we have the full details (instructions, etc.) for this service.
+            // If not locally available, it will try to fetch from Firestore.
             repository.ensureDetail(serviceId)
-            // Add to history
+            
+            // Add this service to the user's history
             repository.addHistory(UserHistory(serviceId = serviceId, accessedDate = System.currentTimeMillis()))
             
             // Sync AI-generated service to Firestore if it exists locally

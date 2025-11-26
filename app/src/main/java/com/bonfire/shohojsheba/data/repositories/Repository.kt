@@ -39,6 +39,9 @@ class Repository(
         }
     }
 
+    // This function checks if we need to download new data from Firebase.
+    // It compares the local version number with the remote version number.
+    // If they are different (or if local is empty), it downloads everything and updates the local database.
     suspend fun refreshIfNeeded(): String {
         if (!context.isNetworkAvailable()) {
             return "Offline"
@@ -132,6 +135,8 @@ class Repository(
             
             remoteFavorites.forEach { serviceId ->
                 // FIRST: Fetch the service data from Firestore if not in local DB
+                // This ensures that if a user favorites a service on another device,
+                // this device will download that service's data so it can be displayed.
                 val localService = serviceDao.getServiceByIdOnce(serviceId)
                 if (localService == null) {
                     try {

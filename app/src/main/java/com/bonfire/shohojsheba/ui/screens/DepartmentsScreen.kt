@@ -35,6 +35,27 @@ import com.bonfire.shohojsheba.ui.components.CategoryCard
 import com.bonfire.shohojsheba.ui.components.DecorativeBackground
 import com.bonfire.shohojsheba.ui.theme.*
 
+/**
+ * =========================================================================================
+ *                                 DEPARTMENTS SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Purpose**:
+ *     -   Acts as a central hub for browsing services by category (Citizen, Farmer, etc.).
+ *     -   Provides a visual, grid-based navigation menu.
+ * 
+ * 2.  **UI Layout**:
+ *     -   **Grid System**: Uses nested `Column` and `Row` composables to create a 2x2 grid.
+ *     -   **Category Cards**: Each item is a `CategoryCard` with a distinct icon, color, and label.
+ *     -   **Decorative Background**: Wraps the content in `DecorativeBackground` for visual consistency.
+ * 
+ * 3.  **Navigation**:
+ *     -   Each card navigates to a specific service list route (e.g., `Routes.CITIZEN_SERVICES`).
+ *     -   Includes a top bar with a back button to return to the previous screen.
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepartmentsScreen(navController: NavController) {

@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
 
 val LocalLocale = staticCompositionLocalOf<Locale> { error("No Locale provided") }
-val LocalOnLocaleChange = staticCompositionLocalOf<(Locale) -> Unit> { error("No onLocaleChange provided") }
+val LocalOnLocaleChange = staticCompositionLocalOf<(Locale, String?) -> Unit> { error("No onLocaleChange provided") }
 
 @Composable
 fun ProvideLocale(locale: Locale, content: @Composable () -> Unit) {

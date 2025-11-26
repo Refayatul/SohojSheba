@@ -57,6 +57,34 @@ import java.util.Locale
 import java.util.regex.Pattern
 import kotlin.math.max
 
+/**
+ * =========================================================================================
+ *                                SERVICE DETAIL SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Data Loading**:
+ *     -   Fetches `Service` (basic info) and `ServiceDetail` (instructions, docs) by ID.
+ *     -   Checks if the service is in the user's favorites list.
+ *     -   **Locale Aware**: Fetches and displays content in the selected language (English/Bangla).
+ * 
+ * 2.  **Rich Content Rendering**:
+ *     -   **Step-by-Step Instructions**: Splits the instruction text into paragraphs and renders them as cards.
+ *     -   **Images**: Loads step-specific images using Coil (`AsyncImage`) if available.
+ *     -   **Markdown Support**: Custom logic (`appendMarkdownAndLinks`) parses `**bold**` text and `[Link](url)` patterns.
+ *     -   **Auto-Linking**: Automatically detects and links URLs, Email addresses, and Phone numbers.
+ * 
+ * 3.  **Interaction**:
+ *     -   **Favorites**: Floating action button to toggle favorite status.
+ *     -   **Clickable Text**: Users can tap on links, emails, or phone numbers to open the respective apps.
+ * 
+ * 4.  **UI Layout**:
+ *     -   **Header**: Title and subtitle.
+ *     -   **Body**: List of instruction cards.
+ *     -   **Footer**: Required documents, processing time, and contact info.
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetailScreen(
@@ -197,10 +225,17 @@ private fun ServiceHeader(service: Service, locale: Locale) {
 private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale: Locale) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
+    // We split the instructions into blocks (paragraphs) and filter out empty ones.
+    // We also split the image URLs.
+    // 'max' ensures we loop enough times to show all text blocks OR all images, whichever is longer.
     val imageUrls = detail.images.split(",").filter { it.isNotBlank() }
+    
+    // 2. Split instructions into paragraphs (double newline)
+    // This allows us to render each step as a separate card or block
     val instructionBlocks = (if (locale.language == "bn") detail.instructions.bn else detail.instructions.en)
         .split("\n\n").filter { it.isNotBlank() }
 
+    // Determine total items to render (whichever list is longer)
     val stepCount = max(instructionBlocks.size, imageUrls.size)
 
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) { // Increased spacing
@@ -236,9 +271,13 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
+                    // --- Text Rendering with Markdown & Links ---
                     if (index < instructionBlocks.size) {
                         val blockText = instructionBlocks[index].trim()
+                        
+                        // Build a rich text string that supports Bold (**text**) and Links
                         val annotatedText = buildAnnotatedString {
+                            // Special handling for "Step X" headers to make them bold and colored
                             val stepKeyword = stringResource(R.string.step_label)
                             val delimiter = "—"
                             val stepRegex = Regex("^($stepKeyword\\s*\\d+\\s*[$delimiter:-])")
@@ -247,6 +286,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                             if (match != null) {
                                 val stepHeader = match.value
                                 val restOfText = blockText.substring(stepHeader.length)
+                                // Style the header (e.g., "Step 1:")
                                 withStyle(
                                     style = SpanStyle(
                                         fontWeight = FontWeight.Bold,
@@ -263,6 +303,8 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                             }
                         }
                         
+                        // 'ClickableText' allows us to detect clicks on specific parts of the text (like links).
+                        // We use 'annotatedText' which contains the styling and the URL tags.
                         ClickableText(
                             text = annotatedText,
                             style = MaterialTheme.typography.bodyLarge.copy(
@@ -271,6 +313,7 @@ private fun ServiceDetailContent(service: Service, detail: ServiceDetail, locale
                                 letterSpacing = 0.5.sp
                             ),
                             onClick = { offset ->
+                                // When clicked, we check if the click was on a URL, Email, or Phone number
                                 annotatedText.handleLinkClick(offset, context, uriHandler)
                             }
                         )
@@ -392,11 +435,14 @@ private fun InfoRow(
     }
 }
 
-// Helper to handle link clicks
+// --- Link Click Handler ---
+// Checks if the clicked character offset corresponds to a URL, Email, or Phone annotation
 fun AnnotatedString.handleLinkClick(offset: Int, context: Context, uriHandler: UriHandler) {
+    // 1. Check for URL
     getStringAnnotations(tag = "URL", start = offset, end = offset).firstOrNull()?.let { 
         try { uriHandler.openUri(it.item) } catch(e: Exception) { e.printStackTrace() }
     }
+    // 2. Check for Email (mailto:)
     getStringAnnotations(tag = "EMAIL", start = offset, end = offset).firstOrNull()?.let { 
         try {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -409,6 +455,7 @@ fun AnnotatedString.handleLinkClick(offset: Int, context: Context, uriHandler: U
             e.printStackTrace() 
         }
     }
+    // 3. Check for Phone (tel:)
     getStringAnnotations(tag = "PHONE", start = offset, end = offset).firstOrNull()?.let { 
         try {
             val intent = Intent(Intent.ACTION_DIAL).apply {

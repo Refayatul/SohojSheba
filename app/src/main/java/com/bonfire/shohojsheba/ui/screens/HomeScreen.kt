@@ -52,6 +52,33 @@ import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
+/**
+ * =========================================================================================
+ *                                     HOME SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Search Functionality**:
+ *     -   **Live Search**: As the user types, `LaunchedEffect(searchQuery)` debounces the input (waits 300ms) and triggers a local database search.
+ *     -   **AI Search**: Pressing "Enter" triggers `viewModel.searchServices(..., enableAI = true)`, which queries the Gemini API if no local results are found.
+ *     -   **Voice Search**: Tapping the mic icon triggers the system's speech recognizer (handled by `MainActivity`), which updates `searchQuery`.
+ * 
+ * 2.  **Content Sections**:
+ *     -   **Categories**: A 2x2 grid of main service categories (Citizen, Farmer, etc.).
+ *     -   **Recent History**: Displays the last 2 visited services for quick access.
+ *     -   **Favorites Link**: A shortcut to the Favorites screen.
+ * 
+ * 3.  **State Management**:
+ *     -   `uiState`: Toggles between displaying the default content (categories/history) and search results.
+ *     -   `aiResponse`: Listens for AI completion to hide the keyboard.
+ *     -   `toastMessage`: Shows feedback (e.g., "No results found") to the user.
+ * 
+ * 4.  **UI Components**:
+ *     -   **Search Bar**: Custom `TextField` with rounded corners, shadow, and icons.
+ *     -   **ServiceRow**: Reusable component to display individual service items in search results or history.
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomeScreen(
@@ -79,19 +106,26 @@ fun HomeScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     // Listen for toast messages
+    // 'LaunchedEffect' is a side-effect handler.
+    // It runs the code inside it safely without blocking the UI.
+    // Here, it listens for toast messages from the ViewModel and shows them.
     LaunchedEffect(key1 = Unit) {
         viewModel.toastMessage.collectLatest {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
 
+    // 2. AI Response Handler
+    // When AI generates a response, hide the keyboard so the user can see the result
     LaunchedEffect(aiResponse) {
         if (aiResponse != null) {
             keyboardController?.hide()
         }
     }
 
-    // Debounced live search for manual typing (not for voice input)
+    // 3. Search Debouncing (Live Search)
+    // Why debounce? To prevent searching on every single keystroke (e.g., "P", "Pl", "Plu").
+    // We wait 300ms after the user STOPS typing before triggering the local search.
     LaunchedEffect(searchQuery) {
         if (searchQuery.isBlank()) {
             viewModel.clearSearch()
@@ -136,67 +170,73 @@ fun HomeScreen(
                 .padding(16.dp)
         ) {
             // 🔍 Search bar with voice mic
+            // 🔍 Search Bar Configuration
             TextField(
                 value = textFieldValueState,
                 onValueChange = { newValue ->
                     textFieldValueState = newValue
                     onSearchQueryChange(newValue.text)
-                    // No auto-search here! Debounced LaunchedEffect handles it
+                    // Note: We do NOT call search here directly. 
+                    // The 'LaunchedEffect(searchQuery)' above handles the debouncing.
                 },
                 shape = RoundedCornerShape(50),
-
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            },
-            trailingIcon = {
-                IconButton(onClick = onVoiceSearchClick) {
+                
+                // Leading Icon: Search Magnifying Glass
+                leadingIcon = {
                     Icon(
-                        imageVector = Icons.Default.Mic,
-                        contentDescription = "Voice Search",
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search",
                         tint = MaterialTheme.colorScheme.secondary
                     )
-                }
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(id = R.string.search_hint),
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    if (searchQuery.isNotBlank()) {
-                        // AI search on Enter (enableAI = true)
-                        viewModel.searchServices(searchQuery, enableAI = true)
-                        keyboardController?.hide()
+                },
+                // Trailing Icon: Voice Search Microphone
+                trailingIcon = {
+                    IconButton(onClick = onVoiceSearchClick) {
+                        Icon(
+                            imageVector = Icons.Default.Mic,
+                            contentDescription = "Voice Search",
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
                     }
-                }
-            ),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRequester(focusRequester)
-                .padding(top = 16.dp)
-                .shadow(
-                    elevation = 8.dp, 
-                    shape = RoundedCornerShape(50), 
-                    clip = false,
-                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                )
-        )
+                },
+                placeholder = {
+                    Text(
+                        text = stringResource(id = R.string.search_hint),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                },
+                // Keyboard Actions: Handle "Enter" / "Search" key press
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        if (searchQuery.isNotBlank()) {
+                            // User pressed Enter -> Trigger AI Search
+                            // We set enableAI = true to bypass the cache and force an AI lookup
+                            viewModel.searchServices(searchQuery, enableAI = true)
+                            keyboardController?.hide()
+                        }
+                    }
+                ),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester) // Allows us to programmatically focus this field
+                    .padding(top = 16.dp)
+                    .shadow(
+                        elevation = 8.dp, 
+                        shape = RoundedCornerShape(50), 
+                        clip = false,
+                        spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                    )
+            )
         
         // Hint text below search bar
         Text(
@@ -363,6 +403,9 @@ fun HomeScreen(
                             }
                         }
                     } else {
+                        // 'LazyColumn' is like a RecyclerView.
+                        // It only renders the items that are currently visible on screen.
+                        // This makes it very efficient for long lists.
                         LazyColumn(
                             modifier = Modifier.padding(top = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
