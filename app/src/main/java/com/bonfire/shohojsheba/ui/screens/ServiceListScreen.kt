@@ -46,6 +46,31 @@ import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
+/**
+ * =========================================================================================
+ *                                SERVICE LIST SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Dynamic Data Loading**:
+ *     -   Fetches services based on the `category` parameter (e.g., "citizen", "farmer").
+ *     -   **Locale Awareness**: Re-fetches data whenever the `locale` changes to ensure the correct language is displayed.
+ *     -   Uses a unique `viewModelKey` ("$category-${locale.language}") to ensure separate ViewModel instances for different categories/languages.
+ * 
+ * 2.  **State Management**:
+ *     -   `uiState`: Tracks Loading, Success (with list of services), and Error states.
+ *     -   `dataSource`: Debug info showing where data came from (e.g., "Cache", "Network").
+ * 
+ * 3.  **UI Layout**:
+ *     -   **Loading**: Shows a centered `CircularProgressIndicator`.
+ *     -   **Success**: Displays a `LazyColumn` of `ServiceRow` items.
+ *     -   **Error**: Shows an error message and a "Retry" button.
+ * 
+ * 4.  **Navigation**:
+ *     -   Clicking a service navigates to `ServiceDetailScreen` with the service ID.
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceListScreen(
@@ -77,6 +102,8 @@ fun ServiceListScreen(
     }
 
     // Re-fetch services when locale changes
+    // 'LaunchedEffect' with keys (category, locale) means this code runs whenever category OR locale changes.
+    // This ensures the list updates if the user switches language while on this screen.
     LaunchedEffect(category, locale) {
         Log.d("ServiceListScreen", "LaunchedEffect triggered - Category: $category, Locale: ${locale.language}")
         viewModel.loadServicesByCategory(category)
@@ -123,6 +150,9 @@ fun ServiceListScreen(
                                 contentPadding = PaddingValues(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
+                                // 'items' creates a row for each service in the list.
+                                // 'key' is crucial for performance and correct animations. 
+                                // It tells Compose which item is which, so it doesn't redraw everything when one item changes.
                                 items(
                                     items = state.services,
                                     key = { it.id + locale.language }

@@ -10,6 +10,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.res.stringResource
 
+/**
+ * =========================================================================================
+ *                                SERVICE GUIDE SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Purpose**:
+ *     -   A static screen providing a step-by-step guide for a specific service (e.g., Passport Application).
+ *     -   Likely serves as a prototype or a hardcoded help page for common tasks.
+ * 
+ * 2.  **UI Layout**:
+ *     -   **Title**: Large primary-colored text.
+ *     -   **Steps**: A list of text elements describing the process.
+ *     -   **Action**: A button to navigate to an "offline" mode or related screen.
+ * =========================================================================================
+ */
+
 @Composable
 fun ServiceGuideScreen(navController: NavController) {
     Column(modifier = Modifier.padding(16.dp)) {

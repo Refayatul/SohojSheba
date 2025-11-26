@@ -39,6 +39,27 @@ import com.bonfire.shohojsheba.ui.viewmodels.ServicesViewModel
 import com.bonfire.shohojsheba.ui.viewmodels.ViewModelFactory
 import java.util.Locale
 
+/**
+ * =========================================================================================
+ *                                  FAVORITES SCREEN
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **Data Management**:
+ *     -   Observes `allServices` (list of all available services) and `favorites` (list of saved IDs) from `ServicesViewModel`.
+ *     -   Filters `allServices` to show only those whose IDs are present in the `favorites` list.
+ * 
+ * 2.  **UI Layout**:
+ *     -   **Empty State**: Shows "No favorites yet" if the list is empty.
+ *     -   **List View**: Uses `LazyColumn` to efficiently display the list of favorite services.
+ *     -   **Service Row**: Reuses the `ServiceRow` component for consistent styling with other lists.
+ * 
+ * 3.  **Actions**:
+ *     -   **Clear All**: Provides a trash icon in the top bar to remove all favorites at once.
+ *     -   **Navigation**: Clicking a service navigates to its details page.
+ * =========================================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(navController: NavController, locale: Locale) {

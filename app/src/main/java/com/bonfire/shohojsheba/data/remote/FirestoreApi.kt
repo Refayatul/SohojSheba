@@ -52,9 +52,12 @@ object FirestoreApi {
     suspend fun allServices(): List<ServiceSummary> =
         fs.collection("services").get().await().documents.mapNotNull { it.toObject(ServiceSummary::class.java) }
 
+    // Fetch all service details (heavy operation, usually we fetch by ID)
     suspend fun allDetails(): List<ServiceDetails> =
         fs.collection("service_details").get().await().documents.mapNotNull { it.toObject(ServiceDetails::class.java) }
 
+    // Fetch a specific service detail by its ID
+    // This is efficient because we only get the document we need.
     suspend fun detailById(serviceId: String): ServiceDetails? =
         fs.collection("service_details").document(serviceId).get().await().toObject(ServiceDetails::class.java)
 
@@ -75,6 +78,8 @@ object FirestoreApi {
     }
     
     // User data sync methods
+    // Sync a favorite service ID to the user's document in Firestore.
+    // We use 'arrayUnion' which adds the element only if it doesn't already exist (prevents duplicates).
     suspend fun syncFavoriteToFirestore(serviceId: String) {
         try {
             val uid = auth.currentUser?.uid ?: return

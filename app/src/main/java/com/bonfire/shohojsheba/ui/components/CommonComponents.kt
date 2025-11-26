@@ -70,6 +70,8 @@ fun CategoryCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // 'animateFloatAsState' creates a smooth animation when the value changes.
+    // Here, we use it for a 'spring' animation (bouncy effect) when the card is pressed.
     val scale by animateFloatAsState(
         targetValue = 1f,
         animationSpec = spring(
@@ -233,6 +235,8 @@ fun ServiceRow(
     }
 }
 
+// This helper function maps a string name (like "farmer") to a Material Design icon.
+// It allows us to store icon names in the database and show the correct icon in the app.
 fun getIconByName(name: String): ImageVector {
     return when (name.lowercase().trim()) {
         "person", "citizen" -> Icons.Outlined.Person

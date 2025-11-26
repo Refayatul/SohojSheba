@@ -37,6 +37,11 @@ interface ServiceDao {
     @Query("SELECT COUNT(*) FROM services")
     suspend fun getServiceCount(): Int
 
+    // The SQL Query for searching.
+    // 'LIKE' allows partial matching.
+    // '%' is a wildcard that matches any sequence of characters.
+    // So '%q%' means "contains q anywhere".
+    // We check Title, Subtitle, and Keywords.
     @Query("""
     SELECT * FROM services
     WHERE title LIKE '%' || :q || '%'

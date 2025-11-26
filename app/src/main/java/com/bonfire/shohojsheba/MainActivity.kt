@@ -47,13 +47,53 @@ import java.util.Locale
 
 import android.content.res.Configuration
 
+/**
+ * =========================================================================================
+ *                                    MAIN ACTIVITY
+ * =========================================================================================
+ * 
+ * HOW IT WORKS:
+ * 1.  **App Entry Point**:
+ *     -   This is the root Activity where the app starts.
+ *     -   It sets up the Jetpack Compose environment (`setContent`).
+ * 
+ * 2.  **Global Configuration**:
+ *     -   **Locale Management**: Uses `AppLocaleManager` to handle language switching (English/Bangla).
+ *         It forces an activity recreation when the language changes to apply resources correctly.
+ *     -   **Theme Management**: Reads the saved theme preference (Light/Dark/System) from `SharedPreferences`
+ *         and applies it via `ShohojShebaTheme`.
+ * 
+ * 3.  **Authentication Setup**:
+ *     -   Configures the `GoogleSignInClient` for OAuth 2.0.
+ *     -   Initializes `AuthViewModel` to manage login/registration state globally.
+ *     -   Observes `authState` to automatically navigate to the Home screen upon successful login.
+ * 
+ * 4.  **Navigation Structure**:
+ *     -   Sets up the main `Scaffold` which holds the `TopAppBar`, `BottomNavBar`, and the content area.
+ *     -   Uses `AppNavGraph` to handle screen transitions.
+ *     -   Conditionally shows/hides UI elements (like the Bottom Bar) based on the current route (e.g., hidden on Login screen).
+ * 
+ * 5.  **Feature Integration**:
+ *     -   **Voice Search**: Initializes the `ActivityResultLauncher` for speech recognition and passes it to the Home screen.
+ * =========================================================================================
+ */
+
+// Material3 API is experimental, so we need to opt-in to use it
 @OptIn(ExperimentalMaterial3Api::class)
+// MainActivity is the entry point of our app - it's created when the app launches
 class MainActivity : androidx.appcompat.app.AppCompatActivity() {
 
+    // onCreate is called when the activity is first created
+    // savedInstanceState contains data from a previous instance if the app was killed by the system
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 'setContent' is the doorway to Jetpack Compose.
+        // Everything inside here is UI code written in Kotlin, not XML.
         setContent {
+            // We use SharedPreferences to save simple settings like Theme and Language.
             val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            
+            // 'remember' keeps this object alive across recompositions (screen updates).
             val appLocaleManager = remember { AppLocaleManager(applicationContext) }
 
             // ------------------------------------------------------------
@@ -69,13 +109,32 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             
             Log.d("MainActivity", "Locale object: ${locale.language} (${locale.displayLanguage})")
             
-            val onLocaleChange: (Locale) -> Unit = { newLocale ->
+            
+            // Track current route for restoration after locale change
+            var currentRouteBeforeLocaleChange by remember { mutableStateOf<String?>(null) }
+            
+            val onLocaleChange: (Locale, String?) -> Unit = { newLocale, currentRoute ->
                 Log.d("MainActivity", "=== LOCALE CHANGE REQUESTED ===")
                 Log.d("MainActivity", "New locale: ${newLocale.language} (${newLocale.displayLanguage})")
+                Log.d("MainActivity", "Current route: $currentRoute")
+                
+                // Save current route to SharedPreferences so we can restore it after recreation
+                sharedPreferences.edit().putString("route_before_locale_change", currentRoute).apply()
+                
                 // AppCompatDelegate.setApplicationLocales() will recreate the activity
                 // and the new locale will be read when onCreate runs again
                 appLocaleManager.changeLanguage(newLocale.language)
                 Log.d("MainActivity", "Activity will now recreate...")
+            }
+
+            // Check if we're returning from a locale change and restore the route
+            val savedRoute = remember { 
+                val route = sharedPreferences.getString("route_before_locale_change", null)
+                // Clear the saved route so it doesn't affect future navigations
+                if (route != null) {
+                    sharedPreferences.edit().remove("route_before_locale_change").apply()
+                }
+                route
             }
 
 
@@ -106,32 +165,46 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             // ------------------------------------------------------------
             // 3. APP CONTENT
             // ------------------------------------------------------------
+            // State for search query - 'by remember' makes it persist across recompositions
+            // 'mutableStateOf' means this value can change and trigger UI updates
             var searchQuery by remember { mutableStateOf("") }
+            // Get the Android context (needed for accessing system resources, services, etc.)
             val context = LocalContext.current
+            // Navigation controller - manages screen transitions and back stack
             val navController = rememberNavController()
 
-            // Google Sign-In Setup
+            // --- Google Sign-In Configuration ---
+            // This sets up Google Sign-In with our OAuth 2.0 client ID
+            // The ID token is used to authenticate with Firebase
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("187859520695-03dpjg2k339oi3if24ts12ioip830a79.apps.googleusercontent.com")
-                .requestEmail()
+                .requestIdToken("187859520695-03dpjg2k339oi3if24ts12ioip830a79.apps.googleusercontent.com") // Our Google Cloud Project ID
+                .requestEmail() // We need email for user identification
                 .build()
+            // Create the Google Sign-In client with our configuration
             val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-            // Get AuthViewModel at composable level (before launcher)
+            // --- ViewModel Setup ---
+            // AuthViewModel handles all authentication logic (login, register, Google Sign-In)
+            // We create it at the Activity level so it persists across navigation
             val authViewModel: AuthViewModel = viewModel(factory = ViewModelFactory(context))
 
-            // Observe auth state changes for navigation
-            val authState by authViewModel.authState.collectAsState()
-            val googleSignInState by authViewModel.googleSignInState.collectAsState()
-            val isAuthCheckComplete by authViewModel.isAuthCheckComplete.collectAsState()
+            // --- Observing Authentication State ---
+            // These 'collectAsState()' calls convert Kotlin Flows to Compose State
+            // When the Flow emits a new value, the UI automatically recomposes
+            val authState by authViewModel.authState.collectAsState() // Email/password auth state
+            val googleSignInState by authViewModel.googleSignInState.collectAsState() // Google Sign-In state
+            val isAuthCheckComplete by authViewModel.isAuthCheckComplete.collectAsState() // Has initial auth check finished?
 
 
 
+            // --- Auto-Navigation After Successful Login ---
             // Navigate when authentication succeeds
+            // 'LaunchedEffect' runs a side-effect (navigation) when 'authState' changes.
             LaunchedEffect(authState, googleSignInState) {
                 val isAuthSuccess = authState is AuthUiState.Success || googleSignInState is AuthUiState.Success
                 
                 if (isAuthSuccess) {
+                    // Navigate to Home and clear the back stack so user can't go back to Login.
                     navController.navigate(Routes.HOME) {
                         popUpTo(0) // Pop entire back stack
                     }
@@ -143,43 +216,75 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                 }
             }
 
-            // Google Sign-In Launcher - Created at MainActivity level to avoid ActivityResultRegistryOwner issues
+            // --- Google Sign-In Result Handler ---
+            // This launcher starts the Google Sign-In flow and handles the result
+            // Created at MainActivity level to avoid ActivityResultRegistryOwner issues
             val googleSignInLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.StartActivityForResult()
+                contract = ActivityResultContracts.StartActivityForResult() // Contract for starting an activity and getting result
             ) { result ->
+                Log.d("GoogleSignIn", "Result code: ${result.resultCode}")
+                Log.d("GoogleSignIn", "Result data: ${result.data}")
+                
                 try {
+                    // Extract the Google account from the result intent
                     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                    val account = task.getResult(Exception::class.java)
-                    if (account != null) {
-                        val idToken = account.idToken
-                        if (idToken != null) {
-                            // Use authViewModel obtained at composable level
-                            authViewModel.googleSignIn(idToken)
+                    
+                    // Check if task was successful
+                    if (task.isSuccessful) {
+                        val account = task.result
+                        Log.d("GoogleSignIn", "Account: ${account?.email}")
+                        
+                        if (account != null) {
+                            // Get the ID token (JWT) that Firebase needs for authentication
+                            val idToken = account.idToken
+                            Log.d("GoogleSignIn", "ID Token present: ${idToken != null}")
+                            
+                            if (idToken != null) {
+                                // Send the ID token to our backend (Firebase) to create a session
+                                authViewModel.googleSignIn(idToken)
+                            } else {
+                                // No ID token means authentication failed
+                                Log.e("GoogleSignIn", "ID token is null")
+                                Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
+                            }
                         } else {
+                            // User cancelled or sign-in failed
+                            Log.e("GoogleSignIn", "Account is null")
                             Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
+                        // Task failed - log the exception
+                        val exception = task.exception
+                        Log.e("GoogleSignIn", "Sign-in failed", exception)
+                        Toast.makeText(context, "Sign-in failed: ${exception?.message}", Toast.LENGTH_LONG).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(context, context.getString(R.string.google_signin_failed), Toast.LENGTH_SHORT).show()
+                    // Handle any unexpected errors
+                    Log.e("GoogleSignIn", "Unexpected error", e)
+                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
 
+            // --- Voice Input Setup ---
+            // Flag to track if the current search query came from voice input
+            // This helps us provide appropriate feedback to the user
             var isVoiceInput by remember { mutableStateOf(false) }
 
+            // Launcher for voice recognition (speech-to-text)
             val voiceLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) { result ->
                 val data: Intent? = result.data
+                // Extract the recognized text from the speech recognizer
                 val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 results?.firstOrNull()?.let {
-                    searchQuery = it
-                    isVoiceInput = true // Flag that this update came from voice
+                    searchQuery = it // Update search bar with spoken text
+                    isVoiceInput = true // Mark this as voice input so we can trigger AI search automatically
                 }
             }
 
             // Pass the calculated 'useDarkTheme' here
+            // 'ShohojShebaTheme' wraps the whole app to apply colors and fonts.
             ShohojShebaTheme(darkTheme = useDarkTheme) {
                 ProvideLocale(locale = locale) {
                     CompositionLocalProvider(
@@ -192,6 +297,9 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                 Toast.makeText(localizedContext, message.asString(localizedContext), Toast.LENGTH_SHORT).show()
                             }
                         }
+                        // --- Initial Auth Check ---
+                        // While checking if user is already logged in, show a loading indicator
+                        // This prevents flickering between login and home screens
                         if (!isAuthCheckComplete) {
                             // Show Splash Screen / Loading Indicator
                             Box(
@@ -201,19 +309,25 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                             }
                         } else {
+                            // --- Navigation State ---
+                            // Track which screen we're currently on
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentRoute = navBackStackEntry?.destination?.route
 
-                            // Get currentUser to check auth
+                            // Check if user is logged in
                             val currentUser by authViewModel.currentUser.collectAsState()
 
+                            // --- Conditional UI Elements ---
+                            // We show/hide bottom navigation and top bar based on which screen is active
                             // Hide bottom nav and top bar on auth screens (login, register), settings, and service detail screens
                             val isAuthScreen = currentRoute == Routes.LOGIN || currentRoute == Routes.REGISTER || currentRoute == Routes.FORGOT_PASSWORD
                             val isSettingsScreen = currentRoute == Routes.SETTINGS
                             val isServiceDetailScreen = currentRoute?.startsWith(Routes.SERVICE_DETAIL) == true
                             val isHomeScreen = currentRoute == Routes.HOME
 
+                            // Only show bottom nav when logged in and not on special screens
                             val showBottomNav = !isAuthScreen && !isSettingsScreen && !isServiceDetailScreen && currentUser != null
+                            // Only show top bar on home screen
                             val showTopBar = isHomeScreen
 
                             Scaffold(
