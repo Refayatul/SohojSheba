@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "187859520695",
+    "project_id": "sohojsheba-1",
+    "storage_bucket": "sohojsheba-1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187859520695:android:ff0c917c183ba1db0c5132",
+        "android_client_info": {
+          "package_name": "com.bonfire.shohojsheba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187859520695-6olp2j7ja692im42kdd9spheoprf558n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bonfire.shohojsheba",
+            "certificate_hash": "2c5bd08a6620bad0a6e2e264d8696434d1538659"
+          }
+        },
+        {
+          "client_id": "187859520695-03dpjg2k339oi3if24ts12ioip830a79.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7sVfO6jg0_A_3ZWvYyjVi-u0gdxwMv2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187859520695-03dpjg2k339oi3if24ts12ioip830a79.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

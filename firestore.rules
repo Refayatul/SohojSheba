@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection - allow authenticated users to read/write their own data
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId;
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId;
+      allow delete: if request.auth.uid == userId;
+    }
+
+    // Public catalog: services (Auth users can add new AI-generated services)
+    match /services/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Public catalog: service_details (Auth users can add new AI-generated details)
+    match /service_details/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Read-only public catalog: config
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+  }
+}
+

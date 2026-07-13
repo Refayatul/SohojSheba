@@ -13,3 +13,13 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Seed JS script dependencies
+seed/node_modules/
+
+# Sensitive credentials
+seed/serviceAccount.json
+seed/serviceAccount*.json
+
+# IDE settings
+.idea/appInsightsSettings.xml
